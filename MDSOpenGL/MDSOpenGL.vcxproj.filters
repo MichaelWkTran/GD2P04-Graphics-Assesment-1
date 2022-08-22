@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Classes\VertexArray.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Mesh.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\MeshTris.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\ElementBuffer.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateMesh.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\LightManager.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Font.cpp">
+      <Filter>Engine\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\TextLabel.cpp">
+      <Filter>Engine\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Shader.cpp">
+      <Filter>Engine\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Texture.cpp">
+      <Filter>Engine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\GameManager.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Transform.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Camera.cpp">
+      <Filter>Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\CubeSkybox.cpp">
+      <Filter>Engine\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\TinyObjectLoader.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\FreePlayerCamera.cpp">
+      <Filter>Engine\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\GameObject.cpp">
+      <Filter>Engine\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\AssesmentGameManager.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\OutlinedObject.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Classes\VertexBuffer.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\VertexArray.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Mesh.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\MeshTris.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\ElementBuffer.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateMesh.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\LightManager.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Font.h">
+      <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\TextLabel.h">
+      <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Shader.h">
+      <Filter>Engine\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Texture.h">
+      <Filter>Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\UpdatedObject.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\GameManager.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Transform.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Camera.h">
+      <Filter>Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\CubeSkybox.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\TinyObjectLoader.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\FreePlayerCamera.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\GameObject.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\AssesmentGameManager.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\OutlinedObject.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{dfda56c0-d5eb-4c6c-a787-206d3acf473b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Light">
+      <UniqueIdentifier>{db8b617e-4dae-4ae4-8d41-1baf73bc192c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Mesh">
+      <UniqueIdentifier>{807c5d9f-9855-4727-b79e-9fd71a918d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Text">
+      <UniqueIdentifier>{e2e526ca-0533-4292-963a-6b96f3a82707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resources">
+      <UniqueIdentifier>{33a8b798-166c-46c6-806e-3d5cd89140d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resources\Textures">
+      <UniqueIdentifier>{95ccdaf6-bc7b-4b3a-b066-d34f1e2ec56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resources\Shaders">
+      <UniqueIdentifier>{3e8ed353-3c09-4e4b-900e-57befa3e62f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader">
+      <UniqueIdentifier>{fb5e9c9a-69c5-4c59-a81a-911ac13f475f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Texture">
+      <UniqueIdentifier>{b6963b3b-ec56-4f62-8986-9b7e534e4946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game">
+      <UniqueIdentifier>{164b9494-2cc6-4087-a369-70aab56b58ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{b3441da5-1cd1-4861-8059-cf38e1a8c6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game Objects">
+      <UniqueIdentifier>{5a9b6da6-0f9f-4d0d-a1cd-f99bde4af914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assesment">
+      <UniqueIdentifier>{a5203cb1-8606-4433-88e8-63cb098e3a2a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Diffuse.frag">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Diffuse.vert">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\CubeMap.frag">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\CubeMap.vert">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Unlit.vert">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Unlit.frag">
+      <Filter>Engine\Resources\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\Planks.png">
+      <Filter>Engine\Resources\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Textures\PlanksSpecular.png">
+      <Filter>Engine\Resources\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Textures\Crate.png">
+      <Filter>Engine\Resources\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Textures\Crate-Reflection.png">
+      <Filter>Engine\Resources\Textures</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
