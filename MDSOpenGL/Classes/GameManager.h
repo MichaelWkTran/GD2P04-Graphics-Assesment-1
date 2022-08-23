@@ -11,12 +11,12 @@ private:
 	static CGameManager* m_pSingleton;
 
 protected:
-	~CGameManager();
 	std::deque<CUpdatedObject*> m_dequeUpdatedObject;
+	
+	~CGameManager();
 
 public:
-	static CGameManager& GetSingleton();
-
+	//Methods
 	CGameManager();
 	CGameManager(const CGameManager&) = delete;
 	CGameManager& operator= (const CGameManager&) = delete;
@@ -26,6 +26,9 @@ public:
 	void Clear();
 
 	virtual void Update();
+
+	//Get Set Methods
+	static CGameManager& GetSingleton();
 };
 
 template<class T>

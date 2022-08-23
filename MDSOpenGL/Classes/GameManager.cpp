@@ -7,14 +7,8 @@ CGameManager* CGameManager::m_pSingleton = nullptr;
 
 CGameManager::CGameManager()
 {
-	if (m_pSingleton == nullptr)
-	{
-		m_pSingleton = this;
-	}
-	else if (m_pSingleton != this)
-	{
-		delete this;
-	}
+	if (m_pSingleton == nullptr) { m_pSingleton = this; }
+	else if (m_pSingleton != this) delete this;
 }
 
 CGameManager& CGameManager::GetSingleton()
