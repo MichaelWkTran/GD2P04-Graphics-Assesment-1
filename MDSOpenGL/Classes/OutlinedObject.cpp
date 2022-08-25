@@ -21,7 +21,6 @@ void COutlinedObject::Draw()
 	glStencilMask(0xFF);
 
 	//Draw regular sized mesh
-	m_Mesh.m_pShader->Uniform3f("uni_v3Colour", glm::vec3(1.0f, 1.0f, 1.0f));
 	m_Mesh.Draw(GetMainCamera());
 
 	//2nd pass
@@ -29,8 +28,7 @@ void COutlinedObject::Draw()
 	glStencilMask(0x00);
 
 	//Set Outline Uniforms
-	CShader* m_pUnlitShader = CShaderManager::Find("Unlit");
-	
+	CShader* m_pUnlitShader = CShader::Find("Unlit");
 	glm::mat4 mat4Model = glm::scale(m_Transform.GetModel(), (1.0f + m_fOutLineThickness) * glm::vec3(1.0f, 1.0f, 1.0f));
 	m_pUnlitShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, mat4Model);
 	m_pUnlitShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());

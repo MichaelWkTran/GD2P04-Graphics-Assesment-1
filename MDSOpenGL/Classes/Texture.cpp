@@ -48,18 +48,18 @@ CTexture* CTextureManager::Find(const char* _strName)
 	return m_mapTextures.at(_strName);
 }
 
-CTexture* CTextureManager::Insert(const char* _pName, const char* _pType, unsigned int&& _uiSlot, GLenum&& _GLeTarget)
+CTexture* CTextureManager::Insert(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget)
 {
-	CTexture* pTexture = new CTexture(_pType, std::move(_GLeTarget), std::move(_uiSlot));
+	CTexture* pTexture = new CTexture(std::move(_GLeTarget), std::move(_uiSlot));
 	if (_pName == "") _pName = std::to_string(pTexture->GetID()).c_str();
 	m_mapTextures.insert(std::pair<const char*, CTexture*>(_pName, pTexture));
 
 	return pTexture;
 }
 
-CTexture* CTextureManager::Insert(const char* _pName, const char* _pImage, const char* _pType, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
+CTexture* CTextureManager::Insert(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
-	CTexture* pTexture = new CTexture(_pType, GL_TEXTURE_2D, std::move(_uiSlot));
+	CTexture* pTexture = new CTexture(GL_TEXTURE_2D, std::move(_uiSlot));
 	if (_pName == "") _pName = std::to_string(pTexture->GetID()).c_str();
 	m_mapTextures.insert(std::pair<const char*, CTexture*>(_pName, pTexture));
 
@@ -140,10 +140,9 @@ void CTextureManager::Unbind()
 
 #pragma region CTexture functions
 
-CTexture::CTexture(const char* _pType, GLenum&& _GLeTarget, unsigned int&& _uiSlot)
+CTexture::CTexture(GLenum&& _GLeTarget, unsigned int&& _uiSlot)
 {
 	glGenTextures(1, &m_uiID);
-	m_pType = _pType;
 	m_GLeTarget = _GLeTarget;
 	m_uiUnit = _uiSlot;
 
@@ -171,19 +170,10 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, std::string _strUniformName)
+void CTexture::Uniform(unsigned int _uiShaderID, const char* _strUniformName)
 {
 	Bind();
-
-	std::string strUniform = "uni_samp";
-	
-	if (m_GLeTarget == GL_TEXTURE_1D) strUniform += "1D";
-	else if (m_GLeTarget == GL_TEXTURE_2D)  strUniform += "2D";
-	else if (m_GLeTarget == GL_TEXTURE_3D)  strUniform += "3D";
-	else if (m_GLeTarget == GL_TEXTURE_CUBE_MAP)  strUniform += "Cube";
-
-	strUniform += _strUniformName;
-	glUniform1i(glGetUniformLocation(_uiShaderID, strUniform.c_str()), m_uiUnit + 1);
+	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName), m_uiUnit + 1);
 }
 
 void CTexture::Bind() const

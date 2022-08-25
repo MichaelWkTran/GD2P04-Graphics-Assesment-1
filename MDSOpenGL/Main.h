@@ -22,6 +22,7 @@ extern char e_charCodePoint;
 extern bool e_bCodePointFound;
 
 extern glm::vec2 e_v2MousePosition;
+extern glm::vec2 e_v2MouseNDCPosition;
 extern int e_iMouseButton;
 extern int e_iMouseAction;
 extern int e_iMouseMods;
@@ -30,7 +31,7 @@ extern bool e_bMousePressed;
 extern bool e_bTextInputEnabled;
 
 void KeyFunction(GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods);
-void UpdateMousePosition(GLFWwindow* _pWindow);
+void UpdateMousePosition();
 void MouseButtonFunction(GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods);
 void UpdateInputPressed();
 void TextInput(GLFWwindow* _pWindow, unsigned int _iCodePoint);

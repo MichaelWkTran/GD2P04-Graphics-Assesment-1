@@ -29,6 +29,7 @@ char e_charCodePoint = 0;
 bool e_bCodePointFound = false;
 
 glm::vec2 e_v2MousePosition;
+glm::vec2 e_v2MouseNDCPosition;
 int e_iMouseButton = 0;
 int e_iMouseAction = 0;
 int e_iMouseMods = 0;
@@ -44,13 +45,34 @@ void KeyFunction(GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, 
     e_iKeyMods = _iMods;
 }
 
-void UpdateMousePosition(GLFWwindow* _pWindow)
+void UpdateMousePosition()
 {
     double XPos, YPos;
-    glfwGetCursorPos(_pWindow, &XPos, &YPos);
+    glfwGetCursorPos(e_pMainWindow, &XPos, &YPos);
 
     e_v2MousePosition.x = (float)XPos;
     e_v2MousePosition.y = (float)YPos;
+
+    //Update Mouse NDC Position
+    e_v2MouseNDCPosition = glm::vec2
+    (
+        (2.0f * e_v2MousePosition.x) / ((float)e_uViewPortW - 1.0f),
+        (1.0f - (2.0f * e_v2MousePosition.y)) / (float)e_uViewPortH
+    );
+    
+    glm::vec4 v4ClipCoord = glm::vec4(e_v2MouseNDCPosition.x, e_v2MouseNDCPosition.y, -1.0f, 1.0f);
+
+    //Homogeneous Clip Space to Eye space
+    glm::mat4 invProjMat = glm::inverse(GetMainCamera().GetProjectionMatrix());
+    glm::vec4 eyeCoords = invProjMat * v4ClipCoord;
+
+    // Manually set z and w to mean forward direction and a vector and not a point.
+    eyeCoords = glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
+
+    //Eyespace to World space
+    glm::mat4 invViewMat = glm::inverse(GetMainCamera().GetViewMatrix());
+    glm::vec4 rayWorld = invViewMat * eyeCoords;
+    rayDirection = glm::normalize(glm::vec3(rayWorld));
 }
 
 void MouseButtonFunction(GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods)
@@ -139,7 +161,7 @@ int main()
         e_fPreviousTimestep = fCurrentTimestep;
         
         //Inputs
-        UpdateMousePosition(e_pMainWindow);
+        UpdateMousePosition();
 
         //Clear Screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

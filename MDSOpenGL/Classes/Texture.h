@@ -22,8 +22,8 @@ public:
 	static CTexture* At(unsigned int _uiID);
 	static CTexture* Find(const char* _strName);
 
-	static CTexture* Insert(const char* _pName, const char* _pType, unsigned int&& _uiSlot, GLenum&& _GLeTarget = GL_TEXTURE_2D);
-	static CTexture* Insert(const char* _pName, const char* _pImage, const char* _pType, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
+	static CTexture* Insert(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget = GL_TEXTURE_2D);
+	static CTexture* Insert(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
 	static void Erase(unsigned int _uiID);
 	static void Erase(const char* _strName);
 	static void Clear();
@@ -39,11 +39,10 @@ class CTexture
 private:
 	unsigned int m_uiID;
 	
-	CTexture(const char* _pType, GLenum&& _GLeTarget, unsigned int&& _uiSlot);
+	CTexture(GLenum&& _GLeTarget, unsigned int&& _uiSlot);
 	~CTexture();
 
 public:
-	const char* m_pType;
 	GLenum m_GLeTarget;
 	unsigned int m_uiUnit;
 	
@@ -53,7 +52,7 @@ public:
 	operator int() const;
 	explicit operator int* ();
 	const unsigned int GetID() const;
-	void Uniform(unsigned int _uiShaderID, std::string _strUniformName);
+	void Uniform(unsigned int _uiShaderID, const char* _strUniformName);
 	void Bind() const;
 	static void Unbind();
 };

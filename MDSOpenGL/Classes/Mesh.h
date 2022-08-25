@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "ElementBuffer.h"
+#include <map>
 
 class CTransform;
 class CTexture;
@@ -39,12 +40,12 @@ protected:
 
 public:
 	CTransform* m_pTransform;
-	std::vector<CTexture*> m_vTextures;
+	std::map<const char* /*Uniform Name*/, CTexture*> m_mapTextures;
 	CShader* m_pShader;
 	void (*m_pDrawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
-	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::vector<CTexture*>& _vTextures, CShader* _pShader);
+	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _mapTextures, CShader* _pShader);
 
 	void BindVertexArray();
 	void UnbindVertexArray();

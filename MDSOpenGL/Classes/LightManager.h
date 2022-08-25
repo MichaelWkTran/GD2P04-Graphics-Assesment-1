@@ -8,12 +8,16 @@ class CShader;
 
 struct stInfinitePointLight
 {
+	static unsigned int uiMaxNumber;
+
 	glm::vec3 v3LightPosition;
 	glm::vec4 v4LightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 struct stPointLight
 {
+	static unsigned int uiMaxNumber;
+
 	glm::vec3 v3LightPosition;
 	glm::vec4 v4LightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	float fAttenuationExponent = 3.0f;
@@ -23,12 +27,16 @@ struct stPointLight
 
 struct stDirectionalLight
 {
+	static unsigned int uiMaxNumber;
+
 	glm::vec3 v3LightDirection = glm::vec3(-1.0f, -1.0f, 1.0f);
 	glm::vec4 v4LightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 struct stSpotLight
 {
+	static unsigned int uiMaxNumber;
+
 	glm::vec3 v3LightPosition;
 	glm::vec3 v3LightDirection = glm::vec3(0.0f, -1.0f, 0.0f);
 	glm::vec4 v4LightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

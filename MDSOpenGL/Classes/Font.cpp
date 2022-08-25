@@ -36,7 +36,7 @@ CFont::CFont(const char* _pFont, glm::ivec2 _v2iPixelSize)
 
 		auto GenerateTexture = [&]() -> CTexture*
 		{
-			CTexture* pTexture = CTextureManager::Insert("", "Glyph", 0);
+			CTexture* pTexture = CTextureManager::Insert("", 0);
 			pTexture->Bind();
 
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, FontFace->glyph->bitmap.width, FontFace->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, FontFace->glyph->bitmap.buffer);
