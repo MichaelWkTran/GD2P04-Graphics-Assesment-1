@@ -8,16 +8,8 @@ private:
 	bool m_bDeleteUpdatedObject;
 
 public:
-	CGameManager* m_pGameManager = nullptr;
+	CUpdatedObject();
 	
-	CUpdatedObject()
-	{
-		m_bStartCalled = false;
-		m_bDeleteUpdatedObject = false;
-		m_pGameManager = nullptr;
-	}
-	~CUpdatedObject() {}
-
 	const bool GetDeleteUpdatedObject() const
 	{
 		return m_bDeleteUpdatedObject;

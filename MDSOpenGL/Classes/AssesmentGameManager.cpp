@@ -46,8 +46,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 	
 	//Draw Terrain
 	{
-		CTerrain* pSuperman = CreateObject<CTerrain>();
-		pSuperman->Initalise("Resources/Height Maps/coastMountain513.raw", 513U, 513U);
+		CTerrain* pSuperman = new CTerrain("Resources/Height Maps/coastMountain513.raw", 513U, 513U);
 		pSuperman->m_Mesh.m_pShader = pDiffuse;
 		pSuperman->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuse0", CTextureManager::Insert("Grass", "Resources/Textures/Grass.png", 0, GL_RGBA, GL_UNSIGNED_BYTE));
 	}

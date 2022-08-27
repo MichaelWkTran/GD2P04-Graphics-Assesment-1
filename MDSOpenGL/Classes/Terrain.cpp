@@ -3,11 +3,6 @@
 
 CTerrain::CTerrain(const char* _strHeightmapDirectory, unsigned int _uiNumRows, unsigned int _uiNumCols, float _fHeightScaleFactor)
 {
-	Initalise(_strHeightmapDirectory, _uiNumRows, _uiNumCols, _fHeightScaleFactor);
-}
-
-void CTerrain::Initalise(const char* _strHeightmapDirectory, unsigned int _uiNumRows, unsigned int _uiNumCols, float _fHeightScaleFactor)
-{
 	m_Transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f) * 0.1f);
 	unsigned int uiVertexCount = _uiNumRows * _uiNumCols;
 	std::vector<float> vHeightmap(uiVertexCount);
@@ -92,7 +87,7 @@ void CTerrain::Initalise(const char* _strHeightmapDirectory, unsigned int _uiNum
 				vIndices[k] = (i * _uiNumCols) + j;
 				vIndices[k + 1] = ((i + 1) * _uiNumCols) + j;
 				vIndices[k + 2] = (i * _uiNumCols) + j + 1;
-				
+
 				vIndices[k + 3] = ((i + 1) * _uiNumCols) + j;
 				vIndices[k + 4] = ((i + 1) * _uiNumCols) + j + 1;
 				vIndices[k + 5] = (i * _uiNumCols) + j + 1;

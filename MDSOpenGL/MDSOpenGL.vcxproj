@@ -162,6 +162,7 @@
     <ClCompile Include="Classes\GameObject.cpp" />
     <ClCompile Include="Classes\Mesh.cpp" />
     <ClCompile Include="Classes\OutlinedObject.cpp" />
+    <ClCompile Include="Classes\Terrain.cpp" />
     <ClCompile Include="Classes\TinyObjectLoader.cpp" />
     <ClCompile Include="Classes\Transform.cpp" />
     <ClCompile Include="Classes\LightManager.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Classes\Shader.cpp" />
     <ClCompile Include="Classes\TextLabel.cpp" />
     <ClCompile Include="Classes\Texture.cpp" />
+    <ClCompile Include="Classes\UpdatedObject.cpp" />
     <ClCompile Include="Classes\VertexArray.cpp" />
     <ClCompile Include="GenerateMesh.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -184,6 +186,7 @@
     <ClInclude Include="Classes\FreePlayerCamera.h" />
     <ClInclude Include="Classes\GameManager.h" />
     <ClInclude Include="Classes\OutlinedObject.h" />
+    <ClInclude Include="Classes\Terrain.h" />
     <ClInclude Include="Classes\TinyObjectLoader.h" />
     <ClInclude Include="Classes\Transform.h" />
     <ClInclude Include="Classes\UpdatedObject.h" />

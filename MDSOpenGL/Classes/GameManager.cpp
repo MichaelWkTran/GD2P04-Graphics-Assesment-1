@@ -27,6 +27,45 @@ CGameManager::~CGameManager()
 	Clear();
 }
 
+void CGameManager::DestroyImmediate(CUpdatedObject* _pUpdatedObject)
+{
+	if (_pUpdatedObject == nullptr)
+	{
+		std::cout << "ERROR: Can not use DestroyImmediate on nullptr";
+		return;
+	}
+
+	for (int i = 0; i < (int)m_dequeUpdatedObject.size(); i++)
+	{
+		if (m_dequeUpdatedObject[i] != _pUpdatedObject) continue;
+
+		m_dequeUpdatedObject.erase(m_dequeUpdatedObject.begin() + i);
+		delete _pUpdatedObject;
+
+		return;
+	}
+}
+
+void CGameManager::DestroyImmediate(CUpdatedObject*& _pUpdatedObject)
+{
+	if (_pUpdatedObject == nullptr)
+	{
+		std::cout << "ERROR: Can not use DestroyImmediate on nullptr";
+		return;
+	}
+
+	for (int i = 0; i < (int)m_dequeUpdatedObject.size(); i++)
+	{
+		if (m_dequeUpdatedObject[i] != _pUpdatedObject) continue;
+
+		m_dequeUpdatedObject.erase(m_dequeUpdatedObject.begin() + i);
+		delete _pUpdatedObject;
+		_pUpdatedObject = nullptr;
+
+		return;
+	}
+}
+
 void CGameManager::Clear()
 {
 	const int iGameObjectsCount = m_dequeUpdatedObject.size();

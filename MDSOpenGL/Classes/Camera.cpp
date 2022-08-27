@@ -36,7 +36,7 @@ CCamera& CCamera::MainCamera()
 {
 	if (m_pMainCamera == nullptr)
 	{
-		m_pMainCamera = GetGameManager().CreateObject<CFreePlayerCamera>();
+		m_pMainCamera = new CFreePlayerCamera();
 	}
 
 	return *m_pMainCamera;
