@@ -61,6 +61,9 @@
     <ClCompile Include="Classes\OutlinedObject.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\3DTextureObject.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes\VertexBuffer.h">
@@ -129,6 +132,9 @@
     <ClInclude Include="Classes\OutlinedObject.h">
       <Filter>Assesment</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\3DTextureObject.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -142,15 +148,6 @@
     </Filter>
     <Filter Include="Engine\Text">
       <UniqueIdentifier>{e2e526ca-0533-4292-963a-6b96f3a82707}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Resources">
-      <UniqueIdentifier>{33a8b798-166c-46c6-806e-3d5cd89140d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Resources\Textures">
-      <UniqueIdentifier>{95ccdaf6-bc7b-4b3a-b066-d34f1e2ec56a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Resources\Shaders">
-      <UniqueIdentifier>{3e8ed353-3c09-4e4b-900e-57befa3e62f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Shader">
       <UniqueIdentifier>{fb5e9c9a-69c5-4c59-a81a-911ac13f475f}</UniqueIdentifier>
@@ -170,39 +167,5 @@
     <Filter Include="Assesment">
       <UniqueIdentifier>{a5203cb1-8606-4433-88e8-63cb098e3a2a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Diffuse.frag">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\Diffuse.vert">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\CubeMap.frag">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\CubeMap.vert">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\Unlit.vert">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\Unlit.frag">
-      <Filter>Engine\Resources\Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Textures\Planks.png">
-      <Filter>Engine\Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\PlanksSpecular.png">
-      <Filter>Engine\Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\Crate.png">
-      <Filter>Engine\Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\Crate-Reflection.png">
-      <Filter>Engine\Resources\Textures</Filter>
-    </Image>
   </ItemGroup>
 </Project>
