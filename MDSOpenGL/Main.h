@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 //Window
-extern unsigned int e_uViewPortW, e_uViewPortH;
+const extern unsigned int e_uViewPortW, e_uViewPortH;
 extern GLFWwindow* e_pMainWindow;
 
 //Time

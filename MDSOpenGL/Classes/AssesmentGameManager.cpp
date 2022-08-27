@@ -14,7 +14,6 @@ CAssesmentGameManager::CAssesmentGameManager()
 	CShader* pUnlit = new CShader("Unlit", "Unlit.vert", "Unlit.frag", "", [](CShader& _Shader){ _Shader.Uniform3f("uni_v3Colour", 1.0f, 1.0f, 1.0f); });
 	CShader* pDiffuse = new CShader("Diffuse", "Diffuse.vert", "Diffuse.frag");
 	pDiffuse->m_pDefaultUniform = [](CShader& _Shader)
-	
 	{
 		//Light Uniforms
 		_Shader.Uniform1f("uni_fSpecularStrength", 0.3f);
@@ -45,27 +44,6 @@ CAssesmentGameManager::CAssesmentGameManager()
 	//	pSuperman->m_fOutLineThickness = 0.1f;
 	//}
 	
-	//Draw Rings
-	{
-		C3DTextureObject* pSuperman = CreateObject<C3DTextureObject>();
-
-	{
-		//Light Uniforms
-		_Shader.Uniform1f("uni_fSpecularStrength", 0.3f);
-		_Shader.Uniform1f("uni_fShininess", 16.0f);
-
-		_Shader.Uniform1f("uni_fRimExponent", 16.0f);
-		_Shader.Uniform1f("uni_fShininess", 16.0f);
-		_Shader.Uniform4f("uni_v4RimColour", 1.0f, 1.0f, 1.0f, 0.0f);
-
-		_Shader.Uniform1f("uni_fReflectionStrength", 0.0f);
-	};
-	
-	CLightManager::UpdateDiffuseShader("Diffuse.frag");
-	CLightManager::m_vDirectionalLight.push_back( stDirectionalLight { } );
-
-	CLightManager::UpdateShaderUniforms(pDiffuse);
-
 	//Draw Terrain
 	{
 		CTerrain* pSuperman = CreateObject<CTerrain>();

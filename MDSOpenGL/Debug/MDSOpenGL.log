@@ -1,2 +1,9 @@
-﻿  AssesmentGameManager.cpp
-  MDSOpenGL.vcxproj -> D:\Projects\GD2P02 1\Debug\MDSOpenGL.exe
+﻿  Camera.cpp
+  FreePlayerCamera.cpp
+  GameManager.cpp
+  TextLabel.cpp
+  Main.cpp
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+AssesmentGameManager.obj : error LNK2019: unresolved external symbol "public: void __thiscall CTerrain::Initalise(char const *,unsigned int,unsigned int,float)" (?Initalise@CTerrain@@QAEXPBDIIM@Z) referenced in function "public: __thiscall CAssesmentGameManager::CAssesmentGameManager(void)" (??0CAssesmentGameManager@@QAE@XZ)
+D:\Projects\GD2P02 1\Debug\MDSOpenGL.exe : fatal error LNK1120: 1 unresolved externals
