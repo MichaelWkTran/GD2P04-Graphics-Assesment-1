@@ -1,11 +1,11 @@
 #include "Main.h"
 #include "Classes/GameManager.h"
 #include "Classes/Camera.h"
-#include <iostream>
+#include <iostream> 
 
 #pragma region Window
 
-const unsigned int e_uViewPortW = 800, e_uViewPortH = 800;
+unsigned int e_uViewPortW = 800, e_uViewPortH = 800;
 GLFWwindow* e_pMainWindow = nullptr;
 
 #pragma endregion
@@ -20,31 +20,14 @@ float e_fMaxDeltatime = 1.0f/60.0f;
 
 #pragma region Input
 
-int e_iKey = 0;
-int e_iKeyScanCode = 0;
-int e_iKeyAction = 0;
-int e_iKeyMods = 0;
-bool e_bKeyPressed = false;
+std::set<void(*)(GLFWwindow*, int, int, int, int)> e_setKeyCallbackFunctions;
 char e_charCodePoint = 0;
 bool e_bCodePointFound = false;
 
+std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
 glm::vec2 e_v2MousePosition;
 glm::vec2 e_v2MouseNDCPosition;
 glm::vec3 e_v3MouseRayDirection;
-int e_iMouseButton = 0;
-int e_iMouseAction = 0;
-int e_iMouseMods = 0;
-bool e_bMousePressed = false;
-
-bool e_bTextInputEnabled = false;
-
-void KeyFunction(GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
-{
-    e_iKey = _iKey;
-    e_iKeyScanCode = _iScanCode;
-    e_iKeyAction = _iAction;
-    e_iKeyMods = _iMods;
-}
 
 void UpdateMousePosition()
 {
@@ -76,22 +59,9 @@ void UpdateMousePosition()
     e_v3MouseRayDirection = glm::normalize(glm::vec3(v4RayWorld));
 }
 
-void MouseButtonFunction(GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods)
-{
-    e_iMouseButton = _iButton;
-    e_iMouseAction = _iAction;
-    e_iMouseMods = _iMods;
-}
-
 void UpdateInputPressed()
 {
-    if (e_iKeyAction == GLFW_RELEASE) e_bKeyPressed = false;
-    else e_bKeyPressed = true;
-
     e_bCodePointFound = false;
-
-    if (e_iMouseAction == GLFW_RELEASE) e_bMousePressed = false;
-    else e_bMousePressed = true;
 }
 
 void TextInput(GLFWwindow* _pWindow, unsigned int _iCodePoint)
@@ -152,6 +122,25 @@ int main()
     //Set up Game Manager
     new CAssesmentGameManager;
 
+    //-------------------------------------------------------------------------------------
+    glfwSetKeyCallback
+    (
+        e_pMainWindow,
+        [](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
+        {
+            for (auto& i : e_setKeyCallbackFunctions) i(_pWindow, _iKey, _iScanCode, _iAction, _iMods);
+        }
+    );
+
+    glfwSetMouseButtonCallback
+    (
+        e_pMainWindow,
+        [](GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods)
+        {
+            for (auto& i : e_setMouseCallbackFunctions) i(_pWindow, _iButton, _iAction, _iMods);
+        }
+    );
+
     //Game Loop
     while (!glfwWindowShouldClose(e_pMainWindow))
     {
@@ -160,7 +149,15 @@ int main()
         e_fDeltatime = fCurrentTimestep - e_fPreviousTimestep;
         if (e_fDeltatime > e_fMaxDeltatime) e_fDeltatime = e_fMaxDeltatime;
         e_fPreviousTimestep = fCurrentTimestep;
-        
+
+        //Update Window Size
+        {
+            int x, y;
+            glfwGetWindowSize(e_pMainWindow, &x, &y);
+            e_uViewPortW = x;
+            e_uViewPortH = y;
+        }
+
         //Inputs
         UpdateMousePosition();
 

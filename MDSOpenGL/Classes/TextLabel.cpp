@@ -152,6 +152,6 @@ void CTextLabel::Draw()
 		v2CharacterOrigin.x += FontCharacter.GLuAdvance * m_v2Scale.x;
 	}
 	
-	m_VertexBuffer.Unbind(); m_VertexArray.Unbind(); CTextureManager::Unbind(); m_pShader->Deactivate();
+	m_VertexBuffer.Unbind(); m_VertexArray.Unbind(); CTexture::Unbind(); m_pShader->Deactivate();
 	glDisable(GL_BLEND);
 }

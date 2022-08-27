@@ -10,8 +10,8 @@ const char* CShader::m_strShaderDirective = "Resources/Shaders/";
 
 CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFragmentFile, std::string _pGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
-	CShader::m_mapShaders.emplace(std::make_pair(_pName, this));
-	m_strName = _pName;
+	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
+	m_mapShaders.emplace(std::make_pair(m_strName = _pName, this));
 	m_pDefaultUniform = _pDefaultUniform;
 
 	//Set up Shaders
@@ -28,13 +28,8 @@ CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFra
 	CompileErrors(GLuFragmentShader, "FRAGMENT");
 
 	unsigned int GLuGeometryShader = 0;
-	if (_pGeometryFile == "")
+	if (m_bUsesGeometryShader = (_pGeometryFile != ""))
 	{
-		m_bUsesGeometryShader = false;
-	}
-	else
-	{
-		m_bUsesGeometryShader = true;
 		std::string strGeometryCode = GetFileContents(m_strShaderDirective + _pGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
 		GLuGeometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(GLuGeometryShader, 1, &pGeometrySource, NULL);
@@ -186,10 +181,10 @@ void CShader::Erase(std::string _strName)
 
 void CShader::Clear()
 {
-	for (auto& Shader : m_mapShaders)
+	for (auto& pShader : m_mapShaders)
 	{
-		if (Shader.second != nullptr) delete Shader.second;
-		Shader.second = nullptr;
+		if (pShader.second != nullptr) delete pShader.second;
+		pShader.second = nullptr;
 	}
 
 	m_mapShaders.clear();

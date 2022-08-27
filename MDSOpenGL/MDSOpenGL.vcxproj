@@ -173,6 +173,7 @@
     <ClCompile Include="Classes\UpdatedObject.cpp" />
     <ClCompile Include="Classes\VertexArray.cpp" />
     <ClCompile Include="GenerateMesh.cpp" />
+    <ClCompile Include="GenerateTexture.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,7 @@
     <ClInclude Include="Classes\Texture.h" />
     <ClInclude Include="Classes\VertexArray.h" />
     <ClInclude Include="Classes\VertexBuffer.h" />
+    <ClInclude Include="GenerateTexture.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="GenerateMesh.h" />
   </ItemGroup>

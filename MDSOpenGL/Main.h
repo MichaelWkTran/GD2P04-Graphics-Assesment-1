@@ -2,9 +2,10 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <set>
 
 //Window
-const extern unsigned int e_uViewPortW, e_uViewPortH;
+extern unsigned int e_uViewPortW, e_uViewPortH;
 extern GLFWwindow* e_pMainWindow;
 
 //Time
@@ -13,25 +14,14 @@ extern float e_fDeltatime;
 extern float e_fMaxDeltatime;
 
 //Input
-extern int e_iKey;
-extern int e_iKeyScanCode;
-extern int e_iKeyAction;
-extern int e_iKeyMods;
-extern bool e_bKeyPressed;
+extern std::set<void(*)(GLFWwindow*,int,int,int,int)> e_setKeyCallbackFunctions;
 extern char e_charCodePoint;
 extern bool e_bCodePointFound;
 
+extern std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
 extern glm::vec2 e_v2MousePosition;
 extern glm::vec2 e_v2MouseNDCPosition;
-extern int e_iMouseButton;
-extern int e_iMouseAction;
-extern int e_iMouseMods;
-extern bool e_bMousePressed;
 
-extern bool e_bTextInputEnabled;
-
-void KeyFunction(GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods);
 void UpdateMousePosition();
-void MouseButtonFunction(GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods);
 void UpdateInputPressed();
 void TextInput(GLFWwindow* _pWindow, unsigned int _iCodePoint);

@@ -6,48 +6,23 @@
 #include <string>
 
 class CShader;
-class CTexture;
-
-class CTextureManager
-{
-private:
-	static std::map<const char* /*Texture name*/, CTexture*> m_mapTextures;
-
-public:
-	static bool Empty();
-	static unsigned int Size();
-	static unsigned int MaxSize();
-
-	CTexture* operator[](unsigned int _uiID);
-	static CTexture* At(unsigned int _uiID);
-	static CTexture* Find(const char* _strName);
-
-	static CTexture* Insert(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget = GL_TEXTURE_2D);
-	static CTexture* Insert(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
-	static void Erase(unsigned int _uiID);
-	static void Erase(const char* _strName);
-	static void Clear();
-
-	static void Bind(unsigned int _uiID);
-	static void Unbind();
-};
 
 class CTexture
 {
-	friend CTextureManager;
-
 private:
+	static std::map<const char* /*Texture name*/, CTexture*> m_mapTextures;
 	unsigned int m_uiID;
-	
-	CTexture(GLenum&& _GLeTarget, unsigned int&& _uiSlot);
-	~CTexture();
 
 public:
+	const char* m_strName;
 	GLenum m_GLeTarget;
 	unsigned int m_uiUnit;
 	
+	CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget = GL_TEXTURE_2D);
+	CTexture(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
 	CTexture(CTexture const&) = delete;
 	CTexture& operator=(const CTexture&) = delete;
+	~CTexture();
 
 	operator int() const;
 	explicit operator int* ();
@@ -55,4 +30,13 @@ public:
 	void Uniform(unsigned int _uiShaderID, const char* _strUniformName);
 	void Bind() const;
 	static void Unbind();
+
+	static bool Empty();
+	static unsigned int Size();
+	static unsigned int MaxSize();
+	static CTexture* At(unsigned int _uiID);
+	static CTexture* Find(const char* _strName);
+	static void Erase(unsigned int _uiID);
+	static void Erase(std::string _strName);
+	static void Clear();
 };

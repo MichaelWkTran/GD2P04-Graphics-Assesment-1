@@ -11,7 +11,10 @@ private:
 	static std::map<const char* /*Shader name*/, CShader*> m_mapShaders;
 	const char* m_strName;
 	unsigned int m_uiID;
+	
 	bool m_bUsesGeometryShader;
+	bool m_bUsesTessellationShader;
+
 	void CompileErrors(unsigned int _uShader, std::string _pType);
 
 public:

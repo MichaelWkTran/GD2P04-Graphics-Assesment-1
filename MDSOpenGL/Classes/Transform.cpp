@@ -32,6 +32,12 @@ void CTransform::SetPosition(const glm::vec3 _v3Position)
     UpdateModelMatrix();
 }
 
+void CTransform::Move(const glm::vec3 _v3Offset)
+{
+    m_v3Position += _v3Offset;
+    UpdateModelMatrix();
+}
+
 const glm::quat CTransform::GetRotation() const
 {
     return m_fquatRotation;
@@ -40,6 +46,11 @@ void CTransform::SetRotation(const glm::fquat _fquatRotation)
 {
     m_fquatRotation = _fquatRotation;
     UpdateModelMatrix();
+}
+
+void CTransform::Rotate(const glm::fquat _fquatOffset)
+{
+    m_fquatRotation *= _fquatOffset;
 }
 
 const glm::vec3 CTransform::GetRotationEuler(bool _bInDegrees/* = true*/) const
@@ -52,6 +63,13 @@ const glm::vec3 CTransform::GetRotationEuler(bool _bInDegrees/* = true*/) const
 void CTransform::SetRotationEuler(const glm::vec3 _v3Rotation, bool _bInDegrees/* = true*/)
 {
     m_fquatRotation = _bInDegrees ? glm::quat(glm::radians(_v3Rotation)) : glm::quat(_v3Rotation);
+    UpdateModelMatrix();
+}
+
+void CTransform::RotateEuler(const glm::vec3 _v3Offset, bool _bInDegrees)
+{
+    glm::quat fquatOffset = _bInDegrees ? glm::quat(glm::radians(_v3Offset)) : glm::quat(_v3Offset);
+    m_fquatRotation *= fquatOffset;
     UpdateModelMatrix();
 }
 

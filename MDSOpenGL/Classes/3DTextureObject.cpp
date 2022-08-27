@@ -46,7 +46,7 @@ void Generate3DData()
 			}
 
 	//Generate 3D Texture
-	p3DTexture = CTextureManager::Insert("3DTexture", 0, GL_TEXTURE_3D);
+	p3DTexture = new CTexture("3DTexture", 0, GL_TEXTURE_3D);
 
 	p3DTexture->Bind();
 

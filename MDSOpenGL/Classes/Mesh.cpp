@@ -104,7 +104,7 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 		if (pTexture.second == nullptr) continue;
 		pTexture.second->Uniform(*m_pShader, pTexture.first);
 	}
-	CTextureManager::Unbind();
+	CTexture::Unbind();
 
 	//Draw Mesh
 	m_VertexArray.Bind();
