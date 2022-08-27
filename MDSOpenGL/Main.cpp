@@ -5,7 +5,7 @@
 
 #pragma region Window
 
-unsigned int e_uViewPortW = 800, e_uViewPortH = 800;
+const unsigned int e_uViewPortW = 800, e_uViewPortH = 800;
 GLFWwindow* e_pMainWindow = nullptr;
 
 #pragma endregion
@@ -29,6 +29,8 @@ char e_charCodePoint = 0;
 bool e_bCodePointFound = false;
 
 glm::vec2 e_v2MousePosition;
+glm::vec2 e_v2MouseNDCPosition;
+glm::vec3 e_v3MouseRayDirection;
 int e_iMouseButton = 0;
 int e_iMouseAction = 0;
 int e_iMouseMods = 0;
@@ -44,13 +46,34 @@ void KeyFunction(GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, 
     e_iKeyMods = _iMods;
 }
 
-void UpdateMousePosition(GLFWwindow* _pWindow)
+void UpdateMousePosition()
 {
     double XPos, YPos;
-    glfwGetCursorPos(_pWindow, &XPos, &YPos);
+    glfwGetCursorPos(e_pMainWindow, &XPos, &YPos);
 
     e_v2MousePosition.x = (float)XPos;
     e_v2MousePosition.y = (float)YPos;
+
+    //Update Mouse NDC Position
+    e_v2MouseNDCPosition = glm::vec2
+    (
+        (2.0f * e_v2MousePosition.x) / ((float)e_uViewPortW - 1.0f),
+        (1.0f - (2.0f * e_v2MousePosition.y)) / (float)e_uViewPortH
+    );
+    
+    glm::vec4 v4ClipCoord = glm::vec4(e_v2MouseNDCPosition.x, e_v2MouseNDCPosition.y, -1.0f, 1.0f);
+
+    //Homogeneous Clip Space to Eye space
+    glm::mat4 mat4InvProj = glm::inverse(GetMainCamera().GetProjectionMatrix());
+    glm::vec4 v4EyeCoords = mat4InvProj * v4ClipCoord;
+
+    // Manually set z and w to mean forward direction and a vector and not a point.
+    v4EyeCoords = glm::vec4(v4EyeCoords.x, v4EyeCoords.y, -1.0f, 0.0f);
+
+    //Eyespace to World space
+    glm::mat4 mat4InvView = glm::inverse(GetMainCamera().GetViewMatrix());
+    glm::vec4 v4RayWorld = mat4InvView * v4EyeCoords;
+    e_v3MouseRayDirection = glm::normalize(glm::vec3(v4RayWorld));
 }
 
 void MouseButtonFunction(GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods)
@@ -139,7 +162,7 @@ int main()
         e_fPreviousTimestep = fCurrentTimestep;
         
         //Inputs
-        UpdateMousePosition(e_pMainWindow);
+        UpdateMousePosition();
 
         //Clear Screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

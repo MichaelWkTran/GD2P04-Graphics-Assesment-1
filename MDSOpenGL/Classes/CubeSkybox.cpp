@@ -25,8 +25,8 @@ void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTe
 	m_Mesh.SetIndicies(vIndicies);
 
 	//Set up texture
-	m_Mesh.m_vTextures.push_back(CTextureManager::Insert("", 0, GL_TEXTURE_CUBE_MAP));
-	CTexture* pTexture = m_Mesh.m_vTextures.back();
+	CTexture* pTexture = CTextureManager::Insert("", 0, GL_TEXTURE_CUBE_MAP);
+	m_Mesh.m_mapTextures.insert(std::make_pair("", pTexture));
 
 	pTexture->Bind();
 
@@ -59,7 +59,7 @@ void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTe
 /*static*/ void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
 {
 	_pShader->Activate();
-	m_Mesh.m_vTextures.back()->Uniform(*_pShader, "Skybox");
+	m_Mesh.m_mapTextures[0]->Uniform(*_pShader, "uni_sampSkybox");
 	CTextureManager::Unbind();
 	_pShader->Deactivate();
 }
@@ -73,7 +73,5 @@ void CCubeSkybox::Draw()
 {
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-	m_Mesh.m_pShader->Activate();
-	m_Mesh.m_vTextures.back()->Uniform(*m_Mesh.m_pShader, "");
 	m_Mesh.Draw(GetMainCamera());
 }

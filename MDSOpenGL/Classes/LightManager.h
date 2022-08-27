@@ -50,8 +50,6 @@ public:
 	static std::vector<stSpotLight> m_vSpotLight;
 
 	static const unsigned int TotalLights();
-	static bool UpdateDiffuseShader(const char* _pShaderFile);
-	static bool UpdateDiffuseShaders(std::vector<const char*> _vShaderFiles);
 	static void UpdateShaderUniforms(CShader* _pShader);
 	static void UpdateShaderUniforms(std::vector<CShader*> _vShaders);
 };

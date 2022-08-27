@@ -5,83 +5,68 @@
 #include <string>
 #include <map>
 
-class CShader;
-
-class CShaderManager
+class CShader
 {
 private:
 	static std::map<const char* /*Shader name*/, CShader*> m_mapShaders;
-
-public:
-	static std::string GetFileContents(const char* _pFileName);
-
-	static bool Empty();
-	static unsigned int Size();
-	static unsigned int MaxSize();
-
-	CShader* operator[](unsigned int _uiID);
-	static CShader* At(unsigned int _uiID);
-	static CShader* Find(const char* _strName);
-
-	static CShader* Insert(const char* _pName, const char* _pVertexFile, const char* _pFragmentFile, const char* _pGeometryFile = "");
-	static void Erase(unsigned int _uiID);
-	static void Erase(const char* _strName);
-	static void Clear();
-
-	static void Activate(unsigned int _uiID);
-	static void Deactivate();
-};
-
-class CShader
-{
-	friend CShaderManager;
-
-protected:
+	const char* m_strName;
 	unsigned int m_uiID;
 	bool m_bUsesGeometryShader;
-
-	void CompileErrors(unsigned int _uShader, const char* _pType);
-	CShader(const char*&& _pVertexFile, const char*&& _pFragmentFile, const char*&& _pGeometryFile = "");
+	void CompileErrors(unsigned int _uShader, std::string _pType);
 
 public:
-	static std::string GetFileContents(const char* _pFileName);
+	static const char* m_strShaderDirective;
+	void(*m_pDefaultUniform)(CShader& _Shader);
 
+	CShader(const char* _pName, std::string _pVertexFile, std::string _pFragmentFile, std::string _pGeometryFile = "", void(*_pDefaultUniform)(CShader& _Shader) = nullptr);
 	CShader(CShader const&) = delete;
 	CShader& operator=(const CShader&) = delete;
 	~CShader();
 
 	operator int() const;
-	explicit operator int* ();
+	explicit operator int*();
 	const unsigned int& GetID();
 	void Activate();
-	void Deactivate();
+	static void Activate(unsigned int _uiID);
+	static void Deactivate();
+	
+	static std::string GetFileContents(std::string _pFileName);
+	static bool Empty();
+	static unsigned int Size();
+	static unsigned int MaxSize();
+	static CShader* At(unsigned int _uiID);
+	static CShader* Find(const char* _strName);
+	static void Erase(unsigned int _uiID);
+	static void Erase(std::string _strName);
+	static void Clear();
 
-	void Uniform1f(const char* _pUniform, float _v0);
-	void Uniform2f(const char* _pUniform, float _v0, float _v1);
-	void Uniform3f(const char* _pUniform, float _v0, float _v1, float _v2);
-	void Uniform3f(const char* _pUniform, glm::vec3 _v0);
-	void Uniform4f(const char* _pUniform, float _v0, float _v1, float _v2, float _v3);
-	void Uniform4f(const char* _pUniform, glm::vec4 _v0);
-	void Uniform1i(const char* _pUniform, int _v0);
-	void Uniform2i(const char* _pUniform, int _v0, int _v1);
-	void Uniform3i(const char* _pUniform, int _v0, int _v1, int _v2);
-	void Uniform4i(const char* _pUniform, int _v0, int _v1, int _v2, int _v3);
-	void Uniform1ui(const char* _pUniform, unsigned int _v0);
-	void Uniform2ui(const char* _pUniform, unsigned int _v0, unsigned int _v1);
-	void Uniform3ui(const char* _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2);
-	void Uniform4ui(const char* _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2, unsigned int _v3);
-	void Uniform1fv(const char* _pUniform, int _iCount, float* _v);
-	void Uniform2fv(const char* _pUniform, int _iCount, float* _v);
-	void Uniform3fv(const char* _pUniform, int _iCount, float* _v);
-	void Uniform4fv(const char* _pUniform, int _iCount, float* _v);
-	void Uniform1iv(const char* _pUniform, int _iCount, int* _v);
-	void Uniform2iv(const char* _pUniform, int _iCount, int* _v);
-	void Uniform3iv(const char* _pUniform, int _iCount, int* _v);
-	void Uniform4iv(const char* _pUniform, int _iCount, int* _v);
-	void Uniform1uiv(const char* _pUniform, int _iCount, unsigned int* _v);
-	void Uniform2uiv(const char* _pUniform, int _iCount, unsigned int* _v);
-	void Uniform3uiv(const char* _pUniform, int _iCount, unsigned int* _v);
-	void Uniform4uiv(const char* _pUniform, int _iCount, unsigned int* _v);
-	void UniformMatrix4fv(const char* _pUniform, int _iCount, bool _bTranspose, float* _v);
-	void UniformMatrix4fv(const char* _pUniform, int _iCount, bool _bTranspose, glm::mat4 _v);
+	void ResetUniforms();
+	void Uniform1f(std::string _pUniform, float _v0);
+	void Uniform2f(std::string _pUniform, float _v0, float _v1);
+	void Uniform3f(std::string _pUniform, float _v0, float _v1, float _v2);
+	void Uniform3f(std::string _pUniform, glm::vec3 _v0);
+	void Uniform4f(std::string _pUniform, float _v0, float _v1, float _v2, float _v3);
+	void Uniform4f(std::string _pUniform, glm::vec4 _v0);
+	void Uniform1i(std::string _pUniform, int _v0);
+	void Uniform2i(std::string _pUniform, int _v0, int _v1);
+	void Uniform3i(std::string _pUniform, int _v0, int _v1, int _v2);
+	void Uniform4i(std::string _pUniform, int _v0, int _v1, int _v2, int _v3);
+	void Uniform1ui(std::string _pUniform, unsigned int _v0);
+	void Uniform2ui(std::string _pUniform, unsigned int _v0, unsigned int _v1);
+	void Uniform3ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2);
+	void Uniform4ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2, unsigned int _v3);
+	void Uniform1fv(std::string _pUniform, int _iCount, float* _v);
+	void Uniform2fv(std::string _pUniform, int _iCount, float* _v);
+	void Uniform3fv(std::string _pUniform, int _iCount, float* _v);
+	void Uniform4fv(std::string _pUniform, int _iCount, float* _v);
+	void Uniform1iv(std::string _pUniform, int _iCount, int* _v);
+	void Uniform2iv(std::string _pUniform, int _iCount, int* _v);
+	void Uniform3iv(std::string _pUniform, int _iCount, int* _v);
+	void Uniform4iv(std::string _pUniform, int _iCount, int* _v);
+	void Uniform1uiv(std::string _pUniform, int _iCount, unsigned int* _v);
+	void Uniform2uiv(std::string _pUniform, int _iCount, unsigned int* _v);
+	void Uniform3uiv(std::string _pUniform, int _iCount, unsigned int* _v);
+	void Uniform4uiv(std::string _pUniform, int _iCount, unsigned int* _v);
+	void UniformMatrix4fv(std::string _pUniform, int _iCount, bool _bTranspose, float* _v);
+	void UniformMatrix4fv(std::string _pUniform, int _iCount, bool _bTranspose, glm::mat4 _v);
 };

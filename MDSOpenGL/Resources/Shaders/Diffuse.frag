@@ -1,11 +1,10 @@
 #version 430 core
 
-out vec4 FragColour;
+out vec4 fs_v4Colour;
 
 in vec3 vs_v3Position;
 in vec3 vs_v3Normal;
 in vec2 vs_v2TextureCoord;
-in vec3 vs_v3Colour;
 
 //Unique Uniforms---------------------------------------------------------
 //Texture Uniforms
@@ -61,21 +60,26 @@ struct stSpotLight
 uniform vec3 uni_v3CameraPosition;
 uniform vec4 uni_v4AmbientColour;
 
-#define INF_POINT_LIGHT_NUM 1
-uniform bool uni_bUsesInfinitePointLight;
-uniform stInfinitePointLight uni_InfinitePointLight[INF_POINT_LIGHT_NUM];
+#define MAX_INF_POINT_LIGHT 10
+uniform int uni_iInfPointLightNum = 0;
+uniform stInfinitePointLight uni_InfinitePointLight[MAX_INF_POINT_LIGHT];
 
-#define POINT_LIGHT_NUM 2
-uniform bool uni_bUsesPointLight;
-uniform stPointLight uni_PointLight[POINT_LIGHT_NUM];
+#define MAX_POINT_LIGHT 10
+uniform int uni_iPointLightNum = 0;
+uniform stPointLight uni_PointLight[MAX_POINT_LIGHT];
 
-#define DIRECTIONAL_LIGHT_NUM 1
-uniform bool uni_bUsesDirectionalLight;
-uniform stDirectionalLight uni_DirectionalLight[DIRECTIONAL_LIGHT_NUM];
+#define MAX_DIRECTIONAL_LIGHT 10
+uniform int uni_iDirectionalLightNum = 0;
+uniform stDirectionalLight uni_DirectionalLight[MAX_DIRECTIONAL_LIGHT];
 
-#define SPOT_LIGHT_NUM 1
-uniform bool uni_bUsesSpotLight;
-uniform stSpotLight uni_SpotLight[SPOT_LIGHT_NUM];
+#define MAX_SPOT_LIGHT 10
+uniform int uni_iSpotLightNum = 0;
+uniform stSpotLight uni_SpotLight[MAX_SPOT_LIGHT];
+
+//Fog Uniforms
+uniform vec3 uni_v3FogColour = vec3(0.0f, 0.0f, 0.0f);
+uniform float uni_fFogStart = 5.0f;
+uniform float uni_fFogRange = 10.0f;
 
 //Global Variables
 vec3 g_v3Diffuse = vec3(0);
@@ -105,6 +109,16 @@ vec3 RimColour()
 	fRimFactor = pow(fRimFactor, uni_fRimExponent);
 
 	return fRimFactor * (uni_v4RimColour.rgb * uni_v4RimColour.a);
+}
+
+vec4 MixFogColour(vec4 _v4Colour)
+{
+	float fCameraDistance = distance(vs_v3Position, uni_v3CameraPosition);
+
+	float fFogContribution = (fCameraDistance - uni_fFogStart)/uni_fFogRange;
+	fFogContribution = clamp(fFogContribution, 0.0, 1.0);
+
+	return mix(_v4Colour, vec4(uni_v3FogColour, 1.0f), fFogContribution);
 }
 
 void InfinitePointLight(stInfinitePointLight _InfinitePointLight)
@@ -157,19 +171,19 @@ void SpotLight(stSpotLight _SpotLight)
 void main()
 {
 	//Get Texture Colours
-	vec4 v4DiffuseTexture = vec4(vs_v3Colour, 1.0f);
+	vec4 v4DiffuseTexture = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	if (textureSize(uni_samp2DDiffuse0, 0) != vec2(1,1)) v4DiffuseTexture *= texture(uni_samp2DDiffuse0, vs_v2TextureCoord);
 	vec4 v4SpecularTexture = vec4(1.0f,1.0f,1.0f,1.0f);
 	 if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4SpecularTexture = texture(uni_samp2DSpecular0, vs_v2TextureCoord);
 	
 	//Calculate Diffuse and Specular Colours	
-	for (int i = 0; i < INF_POINT_LIGHT_NUM && uni_bUsesInfinitePointLight; i++) InfinitePointLight(uni_InfinitePointLight[i]);
+	for (int i = 0; i < uni_iInfPointLightNum; i++) InfinitePointLight(uni_InfinitePointLight[i]);
 	
-	for (int i = 0; i < POINT_LIGHT_NUM && uni_bUsesPointLight; i++) PointLight(uni_PointLight[i]);
+	for (int i = 0; i < uni_iPointLightNum; i++) PointLight(uni_PointLight[i]);
 	
-	for (int i = 0; i < DIRECTIONAL_LIGHT_NUM && uni_bUsesDirectionalLight; i++) DirectionalLight(uni_DirectionalLight[i]);
+	for (int i = 0; i < uni_iDirectionalLightNum; i++) DirectionalLight(uni_DirectionalLight[i]);
 
-	for (int i = 0; i < SPOT_LIGHT_NUM && uni_bUsesSpotLight; i++) SpotLight(uni_SpotLight[i]);
+	for (int i = 0; i < uni_iSpotLightNum; i++) SpotLight(uni_SpotLight[i]);
 
 	//Calculate Reflection
 	if (textureSize(uni_sampCubeSkybox, 0) != ivec2(1,1) && uni_fReflectionStrength > 0)
@@ -188,12 +202,9 @@ void main()
 		);
 	}
 
-	//Combine Calculated Colours
-	FragColour = vec4
-	(
-		(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w))) + 
-		(v4SpecularTexture.rgb * g_v3Specular) + 
-		RimColour(),
-		1.0f
-	);
+	//Calculate Final Fragment Colour
+	fs_v4Colour = vec4(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
+	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_v3Specular, 1.0f);
+	fs_v4Colour += vec4(RimColour(), 1.0f);
+	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);
 }

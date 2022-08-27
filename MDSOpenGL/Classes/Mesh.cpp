@@ -19,11 +19,11 @@ inline CMesh<T>::CMesh()
 }
 
 template<class T>
-inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::vector<CTexture*>& _vTextures, CShader* _pShader)
+inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _mapTextures, CShader* _pShader)
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
 	m_ElementBuffer.SetIndicies(_vIndicies);
-	m_vTextures = _vTextures;
+	m_mapTextures = _mapTextures;
 	m_pShader = _pShader;
 	m_pDrawMethod = [](CMesh<T>& _Mesh)
 	{
@@ -94,24 +94,15 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	}
 
 	//Set Mesh Uniforms
+	m_pShader->ResetUniforms();
 	m_pShader->Uniform3f("uni_v3CameraPosition", _Camera.m_Transform.GetPosition());
 	m_pShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, _Camera.GetCameraMatrix());
 
 	//Set Texture Uniforms
-	unsigned int uNumDiffuse = 0, uNumSpecular = 0, uNumReflect = 0;
-	for (auto& pTexture : m_vTextures)
+	for (auto& pTexture : m_mapTextures)
 	{
-		//Get the name of the uniform in the format: uni_samp + "texture target" + "texture type" + "add array index"
-		std::string strUniformName = pTexture->m_pType;
-
-		//Add array number
-		if (pTexture->m_pType == "Diffuse") strUniformName += std::to_string(uNumDiffuse++);
-		else if (pTexture->m_pType == "Specular") strUniformName += std::to_string(uNumSpecular++);
-		else if (pTexture->m_pType == "Reflect") strUniformName += std::to_string(uNumReflect++);
-		else continue;
-
-		//Set Uniform
-		pTexture->Uniform(*m_pShader, strUniformName);
+		if (pTexture.second == nullptr) continue;
+		pTexture.second->Uniform(*m_pShader, pTexture.first);
 	}
 	CTextureManager::Unbind();
 
