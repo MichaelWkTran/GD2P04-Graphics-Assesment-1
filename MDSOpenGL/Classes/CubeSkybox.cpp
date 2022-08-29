@@ -4,14 +4,13 @@
 #include "Shader.h"
 #include "Camera.h"
 
-CCubeSkybox::CCubeSkybox(CShader* _pShader, float _fSize, const char* _pTextureDirectories[6])
+CCubeSkybox::CCubeSkybox(float _fSize, const char* _pTextureDirectories[6])
 {
-	CreateSkybox(_pShader, _fSize, _pTextureDirectories);
-}
+	//Set Shader
+	m_Mesh.m_pShader = CShader::Find("CubeSkybox");
+	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = new CShader("CubeSkybox", "CubeMap.vert", "CubeMap.frag");
 
-void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTextureDirectories[6])
-{
-	m_Mesh.m_pShader = _pShader;
+	//Generate Mesh
 	gm::GenerateFlatCube(m_Mesh, glm::vec3(1.0f, 1.0f, 1.0f) * _fSize);
 
 	//Invert Faces
@@ -25,9 +24,8 @@ void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTe
 	m_Mesh.SetIndicies(vIndicies);
 
 	//Set up texture
-	CTexture* pTexture = new CTexture("", 0, GL_TEXTURE_CUBE_MAP);
-	m_Mesh.m_mapTextures.insert(std::make_pair("", pTexture));
-
+	CTexture* pTexture = new CTexture("CubeSkybox", 0, GL_TEXTURE_CUBE_MAP);
+	m_Mesh.m_mapTextures.insert(std::make_pair("uni_sampCube", new CTexture("CubeSkybox", 0, GL_TEXTURE_CUBE_MAP)));
 	pTexture->Bind();
 
 	int iImageWidth, iImageHeight, iImageComponents;
@@ -35,36 +33,37 @@ void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTe
 	for (int i = 0; i < 6; i++)
 	{
 		unsigned char* pImageData = stbi_load(_pTextureDirectories[i], &iImageWidth, &iImageHeight, &iImageComponents, 0);
+		unsigned int uiLoadedComponents = (iImageComponents == 4) ? GL_RGBA : GL_RGB;
 
-		unsigned int GLuLoadedComponents = (iImageComponents == 4) ? GL_RGBA : GL_RGB;
 		glTexImage2D
 		(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-			0, GLuLoadedComponents, iImageWidth, iImageHeight, 0,
-			GLuLoadedComponents, GL_UNSIGNED_BYTE, pImageData
+			0, uiLoadedComponents, iImageWidth, iImageHeight, 0,
+			uiLoadedComponents, GL_UNSIGNED_BYTE, pImageData
 		);
-		glGenerateMipmap(pTexture->m_GLeTarget);
+		
 		stbi_image_free(pImageData);
 	}
 
-	glTexParameteri(pTexture->m_GLeTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(pTexture->m_GLeTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(pTexture->m_GLeTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(pTexture->m_GLeTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(pTexture->m_GLeTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
 	CTexture::Unbind();
 }
 
-/*static*/ void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
+void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
 {
-	_pShader->Activate();
+	//_pShader->Activate();
 	m_Mesh.m_mapTextures[0]->Uniform(*_pShader, "uni_sampSkybox");
 	CTexture::Unbind();
-	_pShader->Deactivate();
+	//_pShader->Deactivate();
 }
 
-/*static*/ void CCubeSkybox::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
+void CCubeSkybox::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
 {
 	for (auto pShader : _vShaders) UpdateShaderUniforms(pShader);
 }
@@ -72,6 +71,6 @@ void CCubeSkybox::CreateSkybox(CShader* _pShader, float _fSize, const char* _pTe
 void CCubeSkybox::Draw()
 {
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-
 	m_Mesh.Draw(GetMainCamera());
+	glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 }

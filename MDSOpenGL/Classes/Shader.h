@@ -18,7 +18,7 @@ private:
 	void CompileErrors(unsigned int _uShader, std::string _pType);
 
 public:
-	static const char* m_strShaderDirective;
+	static const char* m_strDirective;
 	void(*m_pDefaultUniform)(CShader& _Shader);
 
 	CShader(const char* _pName, std::string _pVertexFile, std::string _pFragmentFile, std::string _pGeometryFile = "", void(*_pDefaultUniform)(CShader& _Shader) = nullptr);

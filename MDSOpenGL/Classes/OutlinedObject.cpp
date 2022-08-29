@@ -51,12 +51,14 @@ void COutlinedObject::Draw()
 
 		//Draw outline
 		m_Mesh.BindVertexArray();
+		m_pUnlitShader->Activate();
 		m_Mesh.m_pDrawMethod(m_Mesh);
+		m_pUnlitShader->Deactivate();
 		m_Mesh.UnbindVertexArray();
-
-		//Disable stencil test
-		glStencilMask(0x00);
-		glDisable(GL_STENCIL_TEST);
-		glStencilMask(0xFF);
 	}
+
+	//Disable stencil test
+	glStencilMask(0x00);
+	glDisable(GL_STENCIL_TEST);
+	glStencilMask(0xFF);
 }

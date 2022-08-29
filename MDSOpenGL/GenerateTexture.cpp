@@ -1,5 +1,9 @@
 #include "GenerateTexture.h"
 #include <math.h>
+#include <iostream>
+#include <string>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb/stb_image_write.h>
 
 float Smooth(float, float, int);
 float Lerp(float, float, float);
@@ -8,6 +12,64 @@ float SmoothInterpolate(float, float, int);
 
 #pragma region gt namespace methods
 
+
+#pragma region CImageData methods
+
+gt::CImageData::CImageData(int _iWidth, int _iHeight, int _iChannels, bool _bZeroed)
+{
+	unsigned int uiDataSize = _iWidth * _iHeight * _iChannels;
+	if (_bZeroed) pData = (unsigned char*)calloc(uiDataSize, sizeof(unsigned char));
+	else pData = (unsigned char*)malloc(uiDataSize * sizeof(unsigned char));
+
+	if (pData == nullptr)
+	{
+		std::cout << "ERROR: Can not allocate data for the image";
+		return;
+	}
+
+	iWidth = _iWidth;
+	_iHeight = _iHeight;
+	uiSize = uiDataSize;
+	iChannels = _iChannels;
+}
+
+gt::CImageData::~CImageData()
+{
+	free(pData);
+}
+
+bool StrEndsWith(const std::string _String, const std::string _strSuffix) {
+	if (_String.length() < _strSuffix.length()) { return false; }
+
+	return _String.compare(_String.length() - _strSuffix.length(), _strSuffix.length(), _strSuffix) == 0;
+}
+
+void gt::CImageData::SaveImage(const char* _strFileName)
+{
+	if (StrEndsWith(_strFileName, ".jpg") || StrEndsWith(_strFileName, ".JPG") || StrEndsWith(_strFileName, ".jpeg") || StrEndsWith(_strFileName, ".JPEG"))
+	{
+		stbi_write_jpg(_strFileName, iWidth, iHeight, iChannels, pData, 100);
+	}
+	else if (StrEndsWith(_strFileName, ".png") || StrEndsWith(_strFileName, ".PNG"))
+	{
+		stbi_write_png(_strFileName, iWidth, iHeight, iChannels, pData, iWidth * iChannels);
+	}
+	else if (StrEndsWith(_strFileName, ".bmp") || StrEndsWith(_strFileName, ".BMP"))
+	{
+		stbi_write_bmp(_strFileName, iWidth, iHeight, iChannels, pData);
+	}
+	else if (StrEndsWith(_strFileName, ".raw") || StrEndsWith(_strFileName, ".RAW"))
+	{
+
+	}
+	else
+	{
+
+	}
+}
+
+#pragma endregion
+
 float gt::Noise(int _x, int _y, int _iSeed)
 {
 	double value;
@@ -15,7 +77,6 @@ float gt::Noise(int _x, int _y, int _iSeed)
 	//(n << 13) is the same thing as (n * 2^13)
 	//the (x & 7fffffff) operation is equivaLent to (x mod 2147483648) 
 	
-	// 57 here is the seed vaLue
 	int noise = _x + _y * _iSeed; 
 	noise = (noise << 13) ^ noise; 
 

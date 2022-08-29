@@ -14,12 +14,13 @@ private:
 	unsigned int m_uiID;
 
 public:
+	static const char* m_strDirective;
 	const char* m_strName;
 	GLenum m_GLeTarget;
 	unsigned int m_uiUnit;
 	
 	CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget = GL_TEXTURE_2D);
-	CTexture(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
+	CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
 	CTexture(CTexture const&) = delete;
 	CTexture& operator=(const CTexture&) = delete;
 	~CTexture();

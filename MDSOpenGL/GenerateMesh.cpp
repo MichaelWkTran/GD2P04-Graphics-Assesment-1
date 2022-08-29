@@ -92,15 +92,15 @@ void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,
 	_Mesh.SetIndicies(vIndices);
 }
 
-void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale)
+void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale, bool _bXZAxis)
 {
 	std::vector<stVertex> vVertices =
 	{
 		//Coordinates                                     Normals                      Texture Cordinate
-		stVertex{glm::vec3(-0.5f, 0.0f,-0.5f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,1.0f)},
-		stVertex{glm::vec3(-0.5f, 0.0f, 0.5f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f, 0.0f, 0.5f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f, 0.0f,-0.5f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f,-0.5f * !_bXZAxis,-0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f, 0.5f * !_bXZAxis, 0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f, 0.5f * !_bXZAxis, 0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f,-0.5f * !_bXZAxis,-0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,1.0f)},
 	};
 	std::vector<unsigned int> vIndices =
 	{

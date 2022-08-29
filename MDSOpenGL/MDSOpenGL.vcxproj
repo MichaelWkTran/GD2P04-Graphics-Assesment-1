@@ -162,6 +162,7 @@
     <ClCompile Include="Classes\GameObject.cpp" />
     <ClCompile Include="Classes\Mesh.cpp" />
     <ClCompile Include="Classes\OutlinedObject.cpp" />
+    <ClCompile Include="Classes\QuadMousePick.cpp" />
     <ClCompile Include="Classes\Terrain.cpp" />
     <ClCompile Include="Classes\TinyObjectLoader.cpp" />
     <ClCompile Include="Classes\Transform.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Classes\FreePlayerCamera.h" />
     <ClInclude Include="Classes\GameManager.h" />
     <ClInclude Include="Classes\OutlinedObject.h" />
+    <ClInclude Include="Classes\QuadMousePick.h" />
     <ClInclude Include="Classes\Terrain.h" />
     <ClInclude Include="Classes\TinyObjectLoader.h" />
     <ClInclude Include="Classes\Transform.h" />

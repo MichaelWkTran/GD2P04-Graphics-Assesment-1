@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 std::map<const char*, CShader*> CShader::m_mapShaders;
-const char* CShader::m_strShaderDirective = "Resources/Shaders/";
+const char* CShader::m_strDirective = "Resources/Shaders/";
 
 CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFragmentFile, std::string _pGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
@@ -15,13 +15,13 @@ CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFra
 	m_pDefaultUniform = _pDefaultUniform;
 
 	//Set up Shaders
-	std::string strVertexCode = GetFileContents(m_strShaderDirective + _pVertexFile); const char* pVertexSource = strVertexCode.c_str();
+	std::string strVertexCode = GetFileContents(m_strDirective + _pVertexFile); const char* pVertexSource = strVertexCode.c_str();
 	unsigned int GLuVertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(GLuVertexShader, 1, &pVertexSource, NULL);
 	glCompileShader(GLuVertexShader);
 	CompileErrors(GLuVertexShader, "VERTEX");
 
-	std::string strFragmentCode = GetFileContents(m_strShaderDirective + _pFragmentFile); const char* pFragmentSource = strFragmentCode.c_str();
+	std::string strFragmentCode = GetFileContents(m_strDirective + _pFragmentFile); const char* pFragmentSource = strFragmentCode.c_str();
 	unsigned int GLuFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(GLuFragmentShader, 1, &pFragmentSource, NULL);
 	glCompileShader(GLuFragmentShader);
@@ -30,7 +30,7 @@ CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFra
 	unsigned int GLuGeometryShader = 0;
 	if (m_bUsesGeometryShader = (_pGeometryFile != ""))
 	{
-		std::string strGeometryCode = GetFileContents(m_strShaderDirective + _pGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
+		std::string strGeometryCode = GetFileContents(m_strDirective + _pGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
 		GLuGeometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(GLuGeometryShader, 1, &pGeometrySource, NULL);
 		glCompileShader(GLuGeometryShader);
@@ -204,48 +204,56 @@ void CShader::Uniform1f(std::string _pUniform, float _v0)
 {
 	Activate();
 	glUniform1f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	Deactivate();
 }
 
 void CShader::Uniform2f(std::string _pUniform, float _v0, float _v1)
 {
 	Activate();
 	glUniform2f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	Deactivate();
 }
 
 void CShader::Uniform3f(std::string _pUniform, float _v0, float _v1, float _v2)
 {
 	Activate();
 	glUniform3f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2);
+	Deactivate();
 }
 
 void CShader::Uniform3f(std::string _pUniform, glm::vec3 _v0)
 {
 	Activate();
 	glUniform3f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z);
+	Deactivate();
 }
 
 void CShader::Uniform4f(std::string _pUniform, float _v0, float _v1, float _v2, float _v3)
 {
 	Activate();
 	glUniform4f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	Deactivate();
 }
 
 void CShader::Uniform4f(std::string _pUniform, glm::vec4 _v0)
 {
 	Activate();
 	glUniform4f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z, _v0.w);
+	Deactivate();
 }
 
 void CShader::Uniform1i(std::string _pUniform, int _v0)
 {
 	Activate();
 	glUniform1i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	Deactivate();
 }
 
 void CShader::Uniform2i(std::string _pUniform, int _v0, int _v1)
 {
 	Activate();
 	glUniform2i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	Deactivate();
 }
 
 void CShader::Uniform3i(std::string _pUniform, int _v0, int _v1, int _v2)
@@ -258,36 +266,42 @@ void CShader::Uniform4i(std::string _pUniform, int _v0, int _v1, int _v2, int _v
 {
 	Activate();
 	glUniform4i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	Deactivate();
 }
 
 void CShader::Uniform1ui(std::string _pUniform, unsigned int _v0)
 {
 	Activate();
 	glUniform1ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	Deactivate();
 }
 
 void CShader::Uniform2ui(std::string _pUniform, unsigned int _v0, unsigned int _v1)
 {
 	Activate();
 	glUniform2ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	Deactivate();
 }
 
 void CShader::Uniform3ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2)
 {
 	Activate();
 	glUniform3ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2);
+	Deactivate();
 }
 
 void CShader::Uniform4ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2, unsigned int _v3)
 {
 	Activate();
 	glUniform4ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	Deactivate();
 }
 
 void CShader::UniformMatrix4fv(std::string _pUniform, int _iCount, bool _bTranspose, glm::mat4 _v)
 {
 	Activate();
 	glUniformMatrix4fv(glGetUniformLocation(m_uiID, _pUniform.c_str()), _iCount, _bTranspose, glm::value_ptr(_v));
+	Deactivate();
 }
 
 #pragma endregion

@@ -4,6 +4,7 @@
 #include <stb/stb_image.h>
 #include <iostream>
 
+const char* CTexture::m_strDirective = "Resources/Textures/";
 std::map<const char*, CTexture*> CTexture::m_mapTextures;
 
 CTexture::CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget)
@@ -13,9 +14,12 @@ CTexture::CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarg
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = _GLeTarget;
 	m_uiUnit = _uiSlot;
+	
+	_uiSlot = 0U;
+	_GLeTarget = 0U;
 }
 
-CTexture::CTexture(const char* _pName, const char* _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
+CTexture::CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
 	//Set up CTexture
 	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
@@ -25,21 +29,25 @@ CTexture::CTexture(const char* _pName, const char* _pImage, unsigned int&& _uiSl
 	m_uiUnit = _uiSlot;	
 
 	//Load 2D Image
-	int iImageWidth, iImageHeight, iColChanNum;
+	int iImageWidth, iImageHeight, iChannelNum;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* pImageData = stbi_load(_pImage, &iImageWidth, &iImageHeight, &iColChanNum, 0);
+	unsigned char* pImageData = stbi_load((std::string(m_strDirective) + _pImage).c_str(), &iImageWidth, &iImageHeight, &iChannelNum, 0);
 
 	Bind();
 
-	glTexParameteri(m_GLeTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(m_GLeTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(m_GLeTarget, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(m_GLeTarget, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexImage2D(m_GLeTarget, 0, GL_RGBA, iImageWidth, iImageHeight, 0, _GLeFormat, _GLePixelType, pImageData);
-	glGenerateMipmap(m_GLeTarget);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iImageWidth, iImageHeight, 0, _GLeFormat, _GLePixelType, pImageData);
+	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(pImageData);
 
 	Unbind();
+	
+	_uiSlot = 0U;
+	_GLeFormat = 0U;
+	_GLePixelType = 0U;
 }
 
 CTexture::~CTexture()
@@ -66,8 +74,10 @@ const unsigned int CTexture::GetID() const
 
 void CTexture::Uniform(unsigned int _uiShaderID, const char* _strUniformName)
 {
+	glUseProgram(m_uiID);
 	Bind();
 	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName), m_uiUnit);
+	glUseProgram(0);
 }
 
 void CTexture::Bind() const
@@ -80,6 +90,7 @@ void CTexture::Unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindTexture(GL_TEXTURE_3D, 0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 bool CTexture::Empty()

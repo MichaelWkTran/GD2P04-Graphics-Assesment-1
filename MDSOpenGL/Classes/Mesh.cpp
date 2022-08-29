@@ -84,14 +84,8 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	}
 
 	//Set GameObject Uniform
-	if (m_pTransform != nullptr)
-	{
-		m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_pTransform->GetModel());
-	}
-	else
-	{
-		m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, glm::mat4(1));
-	}
+	if (m_pTransform != nullptr) m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_pTransform->GetModel());
+	else m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, glm::mat4(1));
 
 	//Set Mesh Uniforms
 	m_pShader->ResetUniforms();
@@ -104,12 +98,14 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 		if (pTexture.second == nullptr) continue;
 		pTexture.second->Uniform(*m_pShader, pTexture.first);
 	}
-	CTexture::Unbind();
 
 	//Draw Mesh
+	m_pShader->Activate();
 	m_VertexArray.Bind();
 	m_pDrawMethod(*this);
 	m_VertexArray.Unbind();
+	CTexture::Unbind();
+	m_pShader->Deactivate();
 }
 
 template class CMesh<stVertex>;

@@ -6,6 +6,6 @@
 class CTerrain : public CGameObject
 {
 public:
-	CTerrain(const char* _strHeightmapDirectory, unsigned int _uiNumRows, unsigned int _uiNumCols, float _fHeightScaleFactor = 0.35f);
+	CTerrain(const char* const _strHeightmapDirectory, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor = 0.35f);
+	CTerrain(const unsigned char* _pTextureData, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor = 0.35f);
 };
-

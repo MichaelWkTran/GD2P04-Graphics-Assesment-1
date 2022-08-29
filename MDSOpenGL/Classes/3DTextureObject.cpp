@@ -3,45 +3,49 @@
 #include "Texture.h"
 #include "Shader.h"
 
-const int texHeight = 200, texWidth = 200, texDepth = 200;
-bool tex3Dpattern[texWidth][texHeight][texDepth];
-GLubyte* data = nullptr;
+const int iTexHeight = 200, iTexWidth = 200, iTexDepth = 200, iGridSize = 10;
+bool bTex3Dpattern[iTexWidth][iTexHeight][iTexDepth];
+GLubyte* pData = nullptr;
 CTexture* p3DTexture = nullptr;
 
 void Generate3DData()
 {
-	if (data != nullptr) return;
+	if (pData != nullptr) return;
 
 	//Generate 3D Pattern
-	for (int x = 0; x < texWidth; x++)
-		for (int y = 0; y < texHeight; y++)
-			for (int z = 0; z < texDepth; z++)
+	for (int iPixelX = 0; iPixelX < iTexWidth; iPixelX++)
+		for (int iPixelY = 0; iPixelY < iTexHeight; iPixelY++)
+			for (int iPixelZ = 0; iPixelZ < iTexDepth; iPixelZ++)
 			{
-				if ((y / 10) % 2 == 0) tex3Dpattern[x][y][z] = false;
-				else tex3Dpattern[x][y][z] = true;
+				bool bEvenXCell = (iPixelX / iGridSize) % 2 == 0;
+				bool bEvenYCell = (iPixelY / iGridSize) % 2 == 0;
+				bool bEvenZCell = (iPixelZ / iGridSize) % 2 == 0;
+
+				if (bEvenXCell == bEvenYCell) { if (bEvenZCell == true) bTex3Dpattern[iPixelX][iPixelY][iPixelZ] = true; }
+				else { if (bEvenZCell == false) bTex3Dpattern[iPixelX][iPixelY][iPixelZ] = true; }
 			}
 
 	//Generate 3D Data
-	data = new GLubyte[texWidth * texHeight * texDepth * 4];
-	for (int i = 0; i < texWidth; i++)
-		for (int j = 0; j < texHeight; j++)
-			for (int k = 0; k < texDepth; k++)
+	pData = new GLubyte[iTexWidth * iTexHeight * iTexDepth * 4];
+	for (int iPixelX = 0; iPixelX < iTexWidth; iPixelX++)
+		for (int iPixelY = 0; iPixelY < iTexHeight; iPixelY++)
+			for (int iPixelZ = 0; iPixelZ < iTexDepth; iPixelZ++)
 			{
-				if (tex3Dpattern[i][j][k] == true)
+				if (bTex3Dpattern[iPixelX][iPixelY][iPixelZ] == true)
 				{
 					//Yellow Colour
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+0] = (GLubyte)255;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+1] = (GLubyte)255;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+2] = (GLubyte)0;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+3] = (GLubyte)255;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+0] = (GLubyte)255;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+1] = (GLubyte)255;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+2] = (GLubyte)0;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+3] = (GLubyte)255;
 				}
 				else
 				{
 					//Blue Colour
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+0] = (GLubyte)0;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+1] = (GLubyte)0;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+2] = (GLubyte)225;
-					data[i * (texWidth*texHeight*4) + j*(texHeight*4) + k*4+3] = (GLubyte)255;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+0] = (GLubyte)0;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+1] = (GLubyte)0;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+2] = (GLubyte)225;
+					pData[iPixelX * (iTexWidth*iTexHeight*4) + iPixelY*(iTexHeight*4) + iPixelZ*4+3] = (GLubyte)255;
 				}
 			}
 
@@ -51,8 +55,8 @@ void Generate3DData()
 	p3DTexture->Bind();
 
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, texWidth, texHeight, texDepth);
-	glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, texWidth, texHeight, texDepth, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+	glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, iTexWidth, iTexHeight, iTexDepth);
+	glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, iTexWidth, iTexHeight, iTexDepth, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pData);
 
 	p3DTexture->Unbind();
 }

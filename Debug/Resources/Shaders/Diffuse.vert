@@ -12,11 +12,14 @@ out vec2 vs_v2TextureCoord;
 uniform mat4 uni_mat4CameraMatrix;
 uniform mat4 uni_mat4Model;
 
+//Tiling
+uniform vec2 uni_v2Tiling = vec2(1.0f, 1.0f);
+
 void main()
 {
 	vs_v3Position = vec3(uni_mat4Model * vec4(in_v3Position, 1.0f));
 	vs_v3Normal = normalize(mat3(transpose(inverse(uni_mat4Model))) * in_v3Normal);
-	vs_v2TextureCoord = in_v2TextureCoord;
+	vs_v2TextureCoord = in_v2TextureCoord * uni_v2Tiling;
 
 	gl_Position = uni_mat4CameraMatrix * vec4(vs_v3Position, 1.0);
 }
