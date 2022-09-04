@@ -11,7 +11,7 @@ namespace gt
 	
 		CImageData(int width, int height, int channels, bool zeroed = true);
 		~CImageData();
-		void SaveImage(const char* _strFileName);
+		void SaveImage(const char* _pFileName);
 	};
 
 	float Noise(int _x, int _y, int _iSeed = 0);

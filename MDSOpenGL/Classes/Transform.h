@@ -13,7 +13,6 @@ private:
 
 public:
 	CTransform();
-	~CTransform() {};
 
 	const glm::mat4x4 GetModel() const;
 	

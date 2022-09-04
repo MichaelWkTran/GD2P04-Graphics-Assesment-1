@@ -38,7 +38,7 @@ public:
 	static unsigned int Size();
 	static unsigned int MaxSize();
 	static CShader* At(unsigned int _uiID);
-	static CShader* Find(const char* _strName);
+	static CShader* Find(const char* _pName);
 	static void Erase(unsigned int _uiID);
 	static void Erase(std::string _strName);
 	static void Clear();

@@ -38,27 +38,27 @@ gt::CImageData::~CImageData()
 	free(pData);
 }
 
-bool StrEndsWith(const std::string _String, const std::string _strSuffix) {
+bool StringEndsWith(const std::string _String, const std::string _strSuffix) {
 	if (_String.length() < _strSuffix.length()) { return false; }
 
 	return _String.compare(_String.length() - _strSuffix.length(), _strSuffix.length(), _strSuffix) == 0;
 }
 
-void gt::CImageData::SaveImage(const char* _strFileName)
+void gt::CImageData::SaveImage(const char* _pFileName)
 {
-	if (StrEndsWith(_strFileName, ".jpg") || StrEndsWith(_strFileName, ".JPG") || StrEndsWith(_strFileName, ".jpeg") || StrEndsWith(_strFileName, ".JPEG"))
+	if (StringEndsWith(_pFileName, ".jpg") || StringEndsWith(_pFileName, ".JPG") || StringEndsWith(_pFileName, ".jpeg") || StringEndsWith(_pFileName, ".JPEG"))
 	{
-		stbi_write_jpg(_strFileName, iWidth, iHeight, iChannels, pData, 100);
+		stbi_write_jpg(_pFileName, iWidth, iHeight, iChannels, pData, 100);
 	}
-	else if (StrEndsWith(_strFileName, ".png") || StrEndsWith(_strFileName, ".PNG"))
+	else if (StringEndsWith(_pFileName, ".png") || StringEndsWith(_pFileName, ".PNG"))
 	{
-		stbi_write_png(_strFileName, iWidth, iHeight, iChannels, pData, iWidth * iChannels);
+		stbi_write_png(_pFileName, iWidth, iHeight, iChannels, pData, iWidth * iChannels);
 	}
-	else if (StrEndsWith(_strFileName, ".bmp") || StrEndsWith(_strFileName, ".BMP"))
+	else if (StringEndsWith(_pFileName, ".bmp") || StringEndsWith(_pFileName, ".BMP"))
 	{
-		stbi_write_bmp(_strFileName, iWidth, iHeight, iChannels, pData);
+		stbi_write_bmp(_pFileName, iWidth, iHeight, iChannels, pData);
 	}
-	else if (StrEndsWith(_strFileName, ".raw") || StrEndsWith(_strFileName, ".RAW"))
+	else if (StringEndsWith(_pFileName, ".raw") || StringEndsWith(_pFileName, ".RAW"))
 	{
 
 	}

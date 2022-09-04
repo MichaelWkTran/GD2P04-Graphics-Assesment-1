@@ -8,7 +8,7 @@ class GameObject : public CUpdatedObject
 {
 public:
 	//Refrencing variables
-	std::set<const char*> m_strTags;
+	std::set<const char*> m_setTags;
 
 	//Transformation variables
 	CTransform m_Transform;
@@ -20,7 +20,7 @@ public:
 	//Methods
 	GameObject();
 
-	const bool TagExists(const char* _strTagName);
+	const bool TagExists(const char* _pTagName);
 
 	virtual void Draw() override;
 };

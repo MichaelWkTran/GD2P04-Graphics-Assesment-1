@@ -7,9 +7,9 @@ GameObject::GameObject()
 	m_bVisible = true;
 }
 
-const bool GameObject::TagExists(const char* _strTagName)
+const bool GameObject::TagExists(const char* _pTagName)
 {
-	if (m_strTags.find(_strTagName) != m_strTags.end()) return true;
+	if (m_setTags.find(_pTagName) != m_setTags.end()) return true;
 	else return false;
 }
 

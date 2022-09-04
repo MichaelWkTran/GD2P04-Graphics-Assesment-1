@@ -28,7 +28,7 @@ public:
 	operator int() const;
 	explicit operator int* ();
 	const unsigned int GetID() const;
-	void Uniform(unsigned int _uiShaderID, const char* _strUniformName);
+	void Uniform(unsigned int _uiShaderID, const char* _pUniformName);
 	void Bind() const;
 	static void Unbind();
 
@@ -36,7 +36,7 @@ public:
 	static unsigned int Size();
 	static unsigned int MaxSize();
 	static CTexture* At(unsigned int _uiID);
-	static CTexture* Find(const char* _strName);
+	static CTexture* Find(const char* _pName);
 	static void Erase(unsigned int _uiID);
 	static void Erase(std::string _strName);
 	static void Clear();

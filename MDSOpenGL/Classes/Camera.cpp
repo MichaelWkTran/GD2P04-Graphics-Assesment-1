@@ -94,15 +94,15 @@ void CCamera::SetProjection(const bool _bIsPerspective)
 	m_bUpdateProjectionMatrix = true;
 }
 
-const float CCamera::GetFieldOfView(const bool _InRadians)
+const float CCamera::GetFieldOfView(const bool _bInRadians)
 {
-	if (_InRadians) return glm::radians(m_fFieldOfView);
+	if (_bInRadians) return glm::radians(m_fFieldOfView);
 	else return m_fFieldOfView;
 }
 
-void CCamera::SetFieldOfView(const float _FOV, const bool _IsRadians)
+void CCamera::SetFieldOfView(const float _fFOV, const bool _bIsRadians)
 {
-	m_fFieldOfView = _IsRadians ? glm::degrees(_FOV) : _FOV;
+	m_fFieldOfView = _bIsRadians ? glm::degrees(_fFOV) : _fFOV;
 	m_bUpdateProjectionMatrix = true;
 }
 

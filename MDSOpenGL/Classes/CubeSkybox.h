@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
 #include "UpdatedObject.h"
 #include "Mesh.h"
+#include <vector>
 
 class CShader;
 
@@ -11,7 +11,7 @@ private:
 	CMesh<> m_Mesh;
 
 public:
-	CCubeSkybox(float _fSize, const char* _pTextureDirectories[6]);
+	CCubeSkybox(const float _fSize, const char* const _pTextureDirectories[6]);
 	
 	void UpdateShaderUniforms(CShader* _pShader);
 	void UpdateShaderUniforms(std::vector<CShader*> _vShaders);

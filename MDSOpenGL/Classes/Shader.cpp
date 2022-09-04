@@ -8,29 +8,29 @@
 std::map<const char*, CShader*> CShader::m_mapShaders;
 const char* CShader::m_strDirective = "Resources/Shaders/";
 
-CShader::CShader(const char* _pName, std::string _pVertexFile, std::string _pFragmentFile, std::string _pGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
+CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _strFragmentFile, std::string _strGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
 	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
 	m_mapShaders.emplace(std::make_pair(m_strName = _pName, this));
 	m_pDefaultUniform = _pDefaultUniform;
 
 	//Set up Shaders
-	std::string strVertexCode = GetFileContents(m_strDirective + _pVertexFile); const char* pVertexSource = strVertexCode.c_str();
+	std::string strVertexCode = GetFileContents(m_strDirective + _strVertexFile); const char* pVertexSource = strVertexCode.c_str();
 	unsigned int GLuVertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(GLuVertexShader, 1, &pVertexSource, NULL);
 	glCompileShader(GLuVertexShader);
 	CompileErrors(GLuVertexShader, "VERTEX");
 
-	std::string strFragmentCode = GetFileContents(m_strDirective + _pFragmentFile); const char* pFragmentSource = strFragmentCode.c_str();
+	std::string strFragmentCode = GetFileContents(m_strDirective + _strFragmentFile); const char* pFragmentSource = strFragmentCode.c_str();
 	unsigned int GLuFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(GLuFragmentShader, 1, &pFragmentSource, NULL);
 	glCompileShader(GLuFragmentShader);
 	CompileErrors(GLuFragmentShader, "FRAGMENT");
 
 	unsigned int GLuGeometryShader = 0;
-	if (m_bUsesGeometryShader = (_pGeometryFile != ""))
+	if (m_bUsesGeometryShader = (_strGeometryFile != ""))
 	{
-		std::string strGeometryCode = GetFileContents(m_strDirective + _pGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
+		std::string strGeometryCode = GetFileContents(m_strDirective + _strGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
 		GLuGeometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(GLuGeometryShader, 1, &pGeometrySource, NULL);
 		glCompileShader(GLuGeometryShader);
@@ -157,10 +157,10 @@ CShader* CShader::At(unsigned int _uiID)
 	return nullptr;
 }
 
-CShader* CShader::Find(const char* _strName)
+CShader* CShader::Find(const char* _pName)
 {
-	if (m_mapShaders.find(_strName) == m_mapShaders.end()) return nullptr;
-	return m_mapShaders.at(_strName);
+	if (m_mapShaders.find(_pName) == m_mapShaders.end()) return nullptr;
+	return m_mapShaders.at(_pName);
 }
 
 void CShader::Erase(unsigned int _uiID)

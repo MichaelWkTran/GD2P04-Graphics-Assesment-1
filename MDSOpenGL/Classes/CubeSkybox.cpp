@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "Camera.h"
 
-CCubeSkybox::CCubeSkybox(float _fSize, const char* _pTextureDirectories[6])
+CCubeSkybox::CCubeSkybox(const float _fSize, const char* const _pTextureDirectories[6])
 {
 	//Set Shader
 	m_Mesh.m_pShader = CShader::Find("CubeSkybox");

@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 
-void GetObjModelData(CMesh<stVertex>& _Mesh, const char* _strOBJModelDirectory)
+void GetObjModelData(CMesh<stVertex>& _Mesh, const char* _pOBJModelDirectory)
 {
 	std::vector<stVertex> vVertices;
 	tinyobj::attrib_t Attrib; //Used to get the attributes like pos, normal, etc.
@@ -14,7 +14,7 @@ void GetObjModelData(CMesh<stVertex>& _Mesh, const char* _strOBJModelDirectory)
 	std::vector<tinyobj::material_t> vMaterials; // Get any materials if any.
 	std::string Warn, Err; //String for warnings and errors. 
 
-	if (!tinyobj::LoadObj(&Attrib, &vShapes, &vMaterials, &Warn, &Err, _strOBJModelDirectory))
+	if (!tinyobj::LoadObj(&Attrib, &vShapes, &vMaterials, &Warn, &Err, _pOBJModelDirectory))
 	{
 		throw std::runtime_error(Warn + Err);
 	}

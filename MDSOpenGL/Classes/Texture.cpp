@@ -72,11 +72,11 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, const char* _strUniformName)
+void CTexture::Uniform(unsigned int _uiShaderID, const char* _pUniformName)
 {
 	glUseProgram(_uiShaderID);
 	Bind();
-	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName), m_uiUnit);
+	glUniform1i(glGetUniformLocation(_uiShaderID, _pUniformName), m_uiUnit);
 	glUseProgram(0);
 }
 
@@ -120,10 +120,10 @@ CTexture* CTexture::At(unsigned int _uiID)
 	return nullptr;
 }
 
-CTexture* CTexture::Find(const char* _strName)
+CTexture* CTexture::Find(const char* _pName)
 {
-	if (m_mapTextures.find(_strName) == m_mapTextures.end()) return nullptr;
-	return m_mapTextures.at(_strName);
+	if (m_mapTextures.find(_pName) == m_mapTextures.end()) return nullptr;
+	return m_mapTextures.at(_pName);
 }
 
 void CTexture::Erase(unsigned int _uiID)
