@@ -87,7 +87,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\Scripts;$(ProjectDir)\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -151,59 +151,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Classes\3DTextureObject.cpp" />
-    <ClCompile Include="Classes\AssesmentGameManager.cpp" />
-    <ClCompile Include="Classes\Camera.cpp" />
-    <ClCompile Include="Classes\CubeSkybox.cpp" />
-    <ClCompile Include="Classes\ElementBuffer.cpp" />
-    <ClCompile Include="Classes\Font.cpp" />
-    <ClCompile Include="Classes\FreePlayerCamera.cpp" />
-    <ClCompile Include="Classes\GameManager.cpp" />
-    <ClCompile Include="Classes\GameObject.cpp" />
-    <ClCompile Include="Classes\Mesh.cpp" />
-    <ClCompile Include="Classes\OutlinedObject.cpp" />
-    <ClCompile Include="Classes\QuadMousePick.cpp" />
-    <ClCompile Include="Classes\Terrain.cpp" />
-    <ClCompile Include="Classes\TinyObjectLoader.cpp" />
-    <ClCompile Include="Classes\Transform.cpp" />
-    <ClCompile Include="Classes\LightManager.cpp" />
-    <ClCompile Include="Classes\MeshTris.cpp" />
-    <ClCompile Include="Classes\Shader.cpp" />
-    <ClCompile Include="Classes\TextLabel.cpp" />
-    <ClCompile Include="Classes\Texture.cpp" />
-    <ClCompile Include="Classes\UpdatedObject.cpp" />
-    <ClCompile Include="Classes\VertexArray.cpp" />
-    <ClCompile Include="GenerateMesh.cpp" />
-    <ClCompile Include="GenerateTexture.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Scripts\3DTextureObject.cpp" />
+    <ClCompile Include="Scripts\AssesmentGameManager.cpp" />
+    <ClCompile Include="Scripts\Camera.cpp" />
+    <ClCompile Include="Scripts\CubeSkybox.cpp" />
+    <ClCompile Include="Scripts\ElementBuffer.cpp" />
+    <ClCompile Include="Scripts\Font.cpp" />
+    <ClCompile Include="Scripts\FreePlayerCamera.cpp" />
+    <ClCompile Include="Scripts\GameManager.cpp" />
+    <ClCompile Include="Scripts\GameObject.cpp" />
+    <ClCompile Include="Scripts\GenerateMesh.cpp" />
+    <ClCompile Include="Scripts\GenerateTexture.cpp" />
+    <ClCompile Include="Scripts\LightManager.cpp" />
+    <ClCompile Include="Scripts\Main.cpp" />
+    <ClCompile Include="Scripts\Mesh.cpp" />
+    <ClCompile Include="Scripts\OutlinedObject.cpp" />
+    <ClCompile Include="Scripts\QuadMousePick.cpp" />
+    <ClCompile Include="Scripts\Shader.cpp" />
+    <ClCompile Include="Scripts\Terrain.cpp" />
+    <ClCompile Include="Scripts\TextLabel.cpp" />
+    <ClCompile Include="Scripts\Texture.cpp" />
+    <ClCompile Include="Scripts\TinyObjectLoader.cpp" />
+    <ClCompile Include="Scripts\Transform.cpp" />
+    <ClCompile Include="Scripts\UpdatedObject.cpp" />
+    <ClCompile Include="Scripts\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\3DTextureObject.h" />
-    <ClInclude Include="Classes\AssesmentGameManager.h" />
-    <ClInclude Include="Classes\GameObject.h" />
-    <ClInclude Include="Classes\Camera.h" />
-    <ClInclude Include="Classes\CubeSkybox.h" />
-    <ClInclude Include="Classes\ElementBuffer.h" />
-    <ClInclude Include="Classes\Font.h" />
-    <ClInclude Include="Classes\FreePlayerCamera.h" />
-    <ClInclude Include="Classes\GameManager.h" />
-    <ClInclude Include="Classes\OutlinedObject.h" />
-    <ClInclude Include="Classes\QuadMousePick.h" />
-    <ClInclude Include="Classes\Terrain.h" />
-    <ClInclude Include="Classes\TinyObjectLoader.h" />
-    <ClInclude Include="Classes\Transform.h" />
-    <ClInclude Include="Classes\UpdatedObject.h" />
-    <ClInclude Include="Classes\LightManager.h" />
-    <ClInclude Include="Classes\Mesh.h" />
-    <ClInclude Include="Classes\MeshTris.h" />
-    <ClInclude Include="Classes\Shader.h" />
-    <ClInclude Include="Classes\TextLabel.h" />
-    <ClInclude Include="Classes\Texture.h" />
-    <ClInclude Include="Classes\VertexArray.h" />
-    <ClInclude Include="Classes\VertexBuffer.h" />
-    <ClInclude Include="GenerateTexture.h" />
-    <ClInclude Include="Main.h" />
-    <ClInclude Include="GenerateMesh.h" />
+    <ClInclude Include="Scripts\3DTextureObject.h" />
+    <ClInclude Include="Scripts\AssesmentGameManager.h" />
+    <ClInclude Include="Scripts\Camera.h" />
+    <ClInclude Include="Scripts\CubeSkybox.h" />
+    <ClInclude Include="Scripts\ElementBuffer.h" />
+    <ClInclude Include="Scripts\Font.h" />
+    <ClInclude Include="Scripts\FreePlayerCamera.h" />
+    <ClInclude Include="Scripts\GameManager.h" />
+    <ClInclude Include="Scripts\GameObject.h" />
+    <ClInclude Include="Scripts\GenerateMesh.h" />
+    <ClInclude Include="Scripts\GenerateTexture.h" />
+    <ClInclude Include="Scripts\LightManager.h" />
+    <ClInclude Include="Scripts\Main.h" />
+    <ClInclude Include="Scripts\Mesh.h" />
+    <ClInclude Include="Scripts\OutlinedObject.h" />
+    <ClInclude Include="Scripts\QuadMousePick.h" />
+    <ClInclude Include="Scripts\Shader.h" />
+    <ClInclude Include="Scripts\Terrain.h" />
+    <ClInclude Include="Scripts\TextLabel.h" />
+    <ClInclude Include="Scripts\Texture.h" />
+    <ClInclude Include="Scripts\TinyObjectLoader.h" />
+    <ClInclude Include="Scripts\Transform.h" />
+    <ClInclude Include="Scripts\UpdatedObject.h" />
+    <ClInclude Include="Scripts\VertexArray.h" />
+    <ClInclude Include="Scripts\VertexBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

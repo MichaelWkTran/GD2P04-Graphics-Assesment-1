@@ -1,15 +1,1 @@
-﻿  AssesmentGameManager.cpp
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(91,48): error C2665: 'CCubeSkybox::CCubeSkybox': none of the 2 overloads could convert all the argument types
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\CubeSkybox.h(15,2): message : could be 'CCubeSkybox::CCubeSkybox(const float,const std::string [])'
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(91,18): message : 'CCubeSkybox::CCubeSkybox(const float,const std::string [])': cannot convert argument 2 from 'const char *[6]' to 'const std::string []'
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(91,28): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\CubeSkybox.h(15,2): message : see declaration of 'CCubeSkybox::CCubeSkybox'
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(91,48): message : while trying to match the argument list '(float, const char *[6])'
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(124,24): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(127,21): warning C4018: '<': signed/unsigned mismatch
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\AssesmentGameManager.cpp(127,64): warning C4018: '<': signed/unsigned mismatch
-  Camera.cpp
-D:\Projects\GitHub\GD2P02-1\MDSOpenGL\Classes\Camera.cpp(44,43): warning C4553: '==': result of expression not used; did you intend '='?
-  CubeSkybox.cpp
-  Main.cpp
-  Generating Code...
+﻿  MDSOpenGL.vcxproj -> C:\Users\User\Documents\GitHub\GD2P02-1\Debug\MDSOpenGL.exe

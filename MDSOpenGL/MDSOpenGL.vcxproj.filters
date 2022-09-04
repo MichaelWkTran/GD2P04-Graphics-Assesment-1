@@ -1,160 +1,154 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Classes\VertexArray.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Mesh.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\MeshTris.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\ElementBuffer.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="GenerateMesh.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\LightManager.cpp">
-      <Filter>Engine\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Font.cpp">
-      <Filter>Engine\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\TextLabel.cpp">
-      <Filter>Engine\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Shader.cpp">
-      <Filter>Engine\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Texture.cpp">
-      <Filter>Engine\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\GameManager.cpp">
-      <Filter>Engine\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Transform.cpp">
-      <Filter>Engine\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Camera.cpp">
-      <Filter>Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\CubeSkybox.cpp">
-      <Filter>Engine\Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\TinyObjectLoader.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Scripts\Main.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\FreePlayerCamera.cpp">
+    <ClCompile Include="Scripts\3DTextureObject.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\AssesmentGameManager.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Camera.cpp">
+      <Filter>Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\CubeSkybox.cpp">
       <Filter>Engine\Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\GameObject.cpp">
+    <ClCompile Include="Scripts\ElementBuffer.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Font.cpp">
+      <Filter>Engine\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\FreePlayerCamera.cpp">
       <Filter>Engine\Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\AssesmentGameManager.cpp">
-      <Filter>Assesment</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\OutlinedObject.cpp">
-      <Filter>Assesment</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\3DTextureObject.cpp">
-      <Filter>Assesment</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\UpdatedObject.cpp">
+    <ClCompile Include="Scripts\GameManager.cpp">
       <Filter>Engine\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Terrain.cpp">
+    <ClCompile Include="Scripts\GameObject.cpp">
       <Filter>Engine\Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="GenerateTexture.cpp">
+    <ClCompile Include="Scripts\GenerateMesh.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\GenerateTexture.cpp">
       <Filter>Engine\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\QuadMousePick.cpp">
+    <ClCompile Include="Scripts\LightManager.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mesh.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\OutlinedObject.cpp">
       <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\QuadMousePick.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Shader.cpp">
+      <Filter>Engine\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Terrain.cpp">
+      <Filter>Engine\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\TextLabel.cpp">
+      <Filter>Engine\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Texture.cpp">
+      <Filter>Engine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\TinyObjectLoader.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Transform.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\UpdatedObject.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\VertexArray.cpp">
+      <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\VertexBuffer.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\VertexArray.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Mesh.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\MeshTris.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\ElementBuffer.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="GenerateMesh.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\LightManager.h">
-      <Filter>Engine\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Font.h">
-      <Filter>Engine\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\TextLabel.h">
-      <Filter>Engine\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Shader.h">
-      <Filter>Engine\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Texture.h">
-      <Filter>Engine\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\UpdatedObject.h">
-      <Filter>Engine\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\GameManager.h">
-      <Filter>Engine\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Transform.h">
-      <Filter>Engine\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Camera.h">
-      <Filter>Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\CubeSkybox.h">
-      <Filter>Engine\Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\TinyObjectLoader.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Main.h">
+    <ClInclude Include="Scripts\Main.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\FreePlayerCamera.h">
-      <Filter>Engine\Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\GameObject.h">
-      <Filter>Engine\Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\AssesmentGameManager.h">
+    <ClInclude Include="Scripts\AssesmentGameManager.h">
       <Filter>Assesment</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\OutlinedObject.h">
+    <ClInclude Include="Scripts\3DTextureObject.h">
       <Filter>Assesment</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\3DTextureObject.h">
-      <Filter>Assesment</Filter>
+    <ClInclude Include="Scripts\Camera.h">
+      <Filter>Engine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Terrain.h">
+    <ClInclude Include="Scripts\CubeSkybox.h">
       <Filter>Engine\Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="GenerateTexture.h">
+    <ClInclude Include="Scripts\ElementBuffer.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Font.h">
+      <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\FreePlayerCamera.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GameManager.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GameObject.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GenerateMesh.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GenerateTexture.h">
       <Filter>Engine\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\QuadMousePick.h">
+    <ClInclude Include="Scripts\LightManager.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mesh.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\OutlinedObject.h">
       <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\QuadMousePick.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Shader.h">
+      <Filter>Engine\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Terrain.h">
+      <Filter>Engine\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\TextLabel.h">
+      <Filter>Engine\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Texture.h">
+      <Filter>Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\TinyObjectLoader.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Transform.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\UpdatedObject.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\VertexArray.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\VertexBuffer.h">
+      <Filter>Engine\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
