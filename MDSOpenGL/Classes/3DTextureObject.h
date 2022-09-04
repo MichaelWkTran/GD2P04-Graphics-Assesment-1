@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
-class C3DTextureObject : public CGameObject
+/*The C3DTextureObject is a game object which uses a 3D checkerboard texture*/
+class C3DTextureObject : public GameObject
 {
 public:
 	C3DTextureObject();

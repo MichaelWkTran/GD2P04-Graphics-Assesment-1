@@ -3,7 +3,8 @@
 #include "UpdatedObject.h"
 
 /*
-CGameManager managages the game rules
+CGameManager managages the game rules. This includes the creation and deleting of updated objects as well as updating the objects every frame.
+Though this object have be used on its own, it have be used to make subclasses that add rules such as score. 
 */
 class CGameManager
 {
@@ -18,7 +19,6 @@ protected:
 	~CGameManager();
 
 public:
-	//Methods
 	CGameManager();
 	CGameManager(const CGameManager&) = delete;
 	CGameManager& operator= (const CGameManager&) = delete;

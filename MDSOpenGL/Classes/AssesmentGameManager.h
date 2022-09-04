@@ -8,7 +8,6 @@ public:
 	bool m_bStencilTestEnabled;
 
 	CAssesmentGameManager();
-
 	void Update() override;
 };
 

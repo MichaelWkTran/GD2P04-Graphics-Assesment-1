@@ -13,8 +13,8 @@ CTransform::CTransform()
 void CTransform::UpdateModelMatrix()
 {
     m_mat4Model = glm::scale(glm::mat4x4(1), m_v3Scale);
-    m_mat4Model *= glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
     m_mat4Model = glm::translate(m_mat4Model, m_v3Position);
+    m_mat4Model *= glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 const glm::mat4x4 CTransform::GetModel() const

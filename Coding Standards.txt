@@ -1,0 +1,9 @@
+Variables
+ - Boolean: b (e.g. bool bIsActive)
+ - Character: c (e.g. char cLetter)
+ - Double: d (e.g. double dHealth)
+ - Float: f (e.g. float fHealth)
+ - Integers: i (e.g. int iCount)
+
+ - Unsigned: u (e.g. unsigned int uiIndex, unsigned char ucIndex)
+

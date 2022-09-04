@@ -74,7 +74,7 @@ const unsigned int CTexture::GetID() const
 
 void CTexture::Uniform(unsigned int _uiShaderID, const char* _strUniformName)
 {
-	glUseProgram(m_uiID);
+	glUseProgram(_uiShaderID);
 	Bind();
 	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName), m_uiUnit);
 	glUseProgram(0);

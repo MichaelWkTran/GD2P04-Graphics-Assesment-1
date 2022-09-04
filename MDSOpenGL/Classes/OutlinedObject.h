@@ -2,7 +2,9 @@
 #include "GameObject.h" 
 #include <glm/glm.hpp>
 
-class COutlinedObject : public CGameObject
+/*The Outlined Object is a game object which uses the stencil test to draw an outine around its mesh*/
+/**/
+class COutlinedObject : public GameObject
 {
 public:
 	float m_fOutLineThickness;

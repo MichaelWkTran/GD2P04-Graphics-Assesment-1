@@ -3,7 +3,7 @@
 #include "Mesh.h"
 #include <vector>
 
-class CTerrain : public CGameObject
+class CTerrain : public GameObject
 {
 public:
 	CTerrain(const char* const _strHeightmapDirectory, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor = 0.35f);

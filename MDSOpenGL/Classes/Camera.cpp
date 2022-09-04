@@ -12,19 +12,25 @@ CCamera* CCamera::m_pMainCamera = nullptr;
 
 CCamera::CCamera()
 {
+	//Set the main camera if not assigned yet
 	if (m_pMainCamera == nullptr) m_pMainCamera = this;
 
+	//Set camera viewport
 	m_uv2ViewPort.x = e_uViewPortW;
 	m_uv2ViewPort.y = e_uViewPortH;
 	
+	//Set camera view mode
 	m_bIsPerspective = true;
 	
-	m_fFOV = 45.0f;
+	//Set view specefic variables
+	m_fFieldOfView = 45.0f;
 	m_fOrthographicScale = 1;
 	
+	//Set far and near plane
 	m_fNearPlane = 0.1f;
 	m_fFarPlane = 100.0f;
 
+	//Set camera matrices
 	m_mat4View = glm::mat4(1.0f);
 	m_mat4Projection = glm::mat4(1.0f);
 	m_mat4Camera = glm::mat4(1.0f);
@@ -32,8 +38,15 @@ CCamera::CCamera()
 	m_bUpdateProjectionMatrix = true;
 }
 
+CCamera::~CCamera()
+{
+	//Set m_pMainCamera to null if it is destroyed
+	if (m_pMainCamera == this) m_pMainCamera == nullptr;
+}
+
 CCamera& CCamera::MainCamera()
 {
+	//If a main camera does not exist, create a free camera
 	if (m_pMainCamera == nullptr)
 	{
 		m_pMainCamera = new CFreePlayerCamera();
@@ -68,26 +81,28 @@ void CCamera::SetViewPort(const glm::uvec2 _uv2ViewPort)
 	m_bUpdateProjectionMatrix = true;
 }
 
+/*Gives a boolean that shows the view mode of the camera. If the boolean is true, the camera is in perspective mode, otherwise, it is in orthographic mode*/
 const bool CCamera::GetProjection() const
 {
 	return m_bIsPerspective;
 }
 
+/*If the boolean given is true, the camera is set to perspective mode, otherwise, it is set to orthographic mode*/
 void CCamera::SetProjection(const bool _bIsPerspective)
 {
 	m_bIsPerspective = _bIsPerspective;
 	m_bUpdateProjectionMatrix = true;
 }
 
-const float CCamera::GetFOV(const bool _InRadians/* = false*/)
+const float CCamera::GetFieldOfView(const bool _InRadians)
 {
-	if (_InRadians) return glm::radians(m_fFOV);
-	else return m_fFOV;
+	if (_InRadians) return glm::radians(m_fFieldOfView);
+	else return m_fFieldOfView;
 }
 
-void CCamera::SetFOV(const float _FOV, const bool _IsRadians/* = false*/)
+void CCamera::SetFieldOfView(const float _FOV, const bool _IsRadians)
 {
-	m_fFOV = _IsRadians ? glm::degrees(_FOV) : _FOV;
+	m_fFieldOfView = _IsRadians ? glm::degrees(_FOV) : _FOV;
 	m_bUpdateProjectionMatrix = true;
 }
 
@@ -130,7 +145,7 @@ void CCamera::Update()
 	{
 		if (m_bIsPerspective)
 		{
-			m_mat4Projection = glm::perspective(glm::radians(m_fFOV), ((float)m_uv2ViewPort.x) / ((float)m_uv2ViewPort.y), m_fNearPlane, m_fFarPlane);
+			m_mat4Projection = glm::perspective(glm::radians(m_fFieldOfView), ((float)m_uv2ViewPort.x) / ((float)m_uv2ViewPort.y), m_fNearPlane, m_fFarPlane);
 		}
 		else
 		{
@@ -143,6 +158,7 @@ void CCamera::Update()
 		m_bUpdateProjectionMatrix = false;
 	}
 
+	//Update the view and camera matrices
 	m_mat4View = glm::lookAt(m_Transform.GetPosition(), m_Transform.GetPosition() + m_Transform.Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_mat4Camera = m_mat4Projection * m_mat4View;
 }

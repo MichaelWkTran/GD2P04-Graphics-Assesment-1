@@ -1,5 +1,4 @@
 #include "3DTextureObject.h"
-#include "Camera.h"
 #include "Texture.h"
 #include "Shader.h"
 
@@ -63,9 +62,11 @@ void Generate3DData()
 
 C3DTextureObject::C3DTextureObject()
 {
+	//Generate a 3D texture and apply it to the mesh
 	Generate3DData();
 	m_Mesh.m_mapTextures.insert(std::make_pair("uni_samp3DDiffuse0", p3DTexture));
-
+	
+	//Generate a new shader for the 3D object if none is found
 	m_Mesh.m_pShader = CShader::Find("3DTexture");
 	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = new CShader("3DTexture", "3DTexture.vert", "3DTexture.frag");
 }
