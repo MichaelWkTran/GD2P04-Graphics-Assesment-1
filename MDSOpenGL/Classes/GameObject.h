@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: GameObject.h																									*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #pragma once
 #include "UpdatedObject.h"
 #include "Transform.h"

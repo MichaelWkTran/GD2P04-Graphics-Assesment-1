@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: TextLabel.h																									*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

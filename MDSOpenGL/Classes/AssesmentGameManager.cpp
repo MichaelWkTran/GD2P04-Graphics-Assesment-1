@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: AssesmentGameManager.cpp																						*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #include "AssesmentGameManager.h"
 #include "Camera.h" //For accessing the camera
 #include "TinyObjectLoader.h" //For loading models

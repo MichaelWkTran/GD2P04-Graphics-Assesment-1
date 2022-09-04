@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: Shader.cpp																									*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #include "Shader.h"
 #include <fstream>
 #include <sstream>

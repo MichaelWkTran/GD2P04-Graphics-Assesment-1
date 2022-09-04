@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: Font.h																										*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #pragma once
 #include <glm/glm.hpp>
 #include <FREETYPE/ft2build.h>

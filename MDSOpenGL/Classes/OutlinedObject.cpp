@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: OutlinedObject.cpp																							*/
+/*  DATE: Aug 30th, 2022																								*/
+/************************************************************************************************************************/
+
 #include "OutlinedObject.h"
 #include "Camera.h"
 #include "Shader.h"

@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: FreePlayerCamera.cpp																							*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #include "FreePlayerCamera.h"
 #include "../Main.h"
 #include <glm/gtc/matrix_transform.hpp>

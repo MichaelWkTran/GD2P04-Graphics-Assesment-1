@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: 3DTextureObject.cpp																							*/
+/*  DATE: Aug 25th, 2022																								*/
+/************************************************************************************************************************/
+
 #include "3DTextureObject.h"
 #include "Texture.h"
 #include "Shader.h"
@@ -6,6 +13,11 @@ const int iTexHeight = 200, iTexWidth = 200, iTexDepth = 200, iGridSize = 10;
 bool bTex3Dpattern[iTexWidth][iTexHeight][iTexDepth];
 GLubyte* pData = nullptr;
 CTexture* p3DTexture = nullptr;
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Generate3DData()
+//	 Purpose: 
+//	 Returns: 
 
 void Generate3DData()
 {
@@ -59,6 +71,11 @@ void Generate3DData()
 
 	p3DTexture->Unbind();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Generate3DData()
+//	 Purpose: 
+//	 Returns: 
 
 C3DTextureObject::C3DTextureObject()
 {

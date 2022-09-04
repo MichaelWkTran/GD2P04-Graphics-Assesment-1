@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: GenerateMesh.cpp																								*/
+/*  DATE: Aug 27th, 2022																								*/
+/************************************************************************************************************************/
+
 #include "GenerateMesh.h"
 #include <glm/gtc/constants.hpp>
 

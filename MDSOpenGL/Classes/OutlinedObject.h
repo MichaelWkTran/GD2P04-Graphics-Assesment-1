@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: OutlinedObject.h																								*/
+/*  DATE: Aug 30th, 2022																								*/
+/************************************************************************************************************************/
+
 #pragma once
 #include "GameObject.h" 
 #include <glm/glm.hpp>

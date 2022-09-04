@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: Terrain.h																										*/
+/*  DATE: Aug 27th, 2022																								*/
+/************************************************************************************************************************/
+
 #pragma once
 #include "GameObject.h"
 #include "Mesh.h"

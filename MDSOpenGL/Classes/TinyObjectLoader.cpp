@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: TinyObjectLoader.cpp																							*/
+/*  DATE: Aug 23rd, 2022																								*/
+/************************************************************************************************************************/
+
 #include "TinyObjectLoader.h"
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../Include/TinyObjLoader/tiny_obj_loader.h"

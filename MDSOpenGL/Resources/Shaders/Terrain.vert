@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: Terrain.vert																									*/
+/*  DATE: Sep 3rd, 2022																									*/
+/************************************************************************************************************************/
+
 #version 430 core
 
 layout (location = 0) in vec3 in_v3Position;

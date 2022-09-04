@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: QuadMousePick.cpp																								*/
+/*  DATE: Aug 30th, 2022																								*/
+/************************************************************************************************************************/
+
 #include "QuadMousePick.h"
 #include "../GenerateMesh.h"
 #include "../Main.h"

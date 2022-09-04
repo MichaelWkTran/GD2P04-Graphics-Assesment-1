@@ -1,3 +1,10 @@
+/************************************************************************************************************************/
+/*	NAME: Michael Wai Kit Tran																							*/
+/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
+/*	FILE: Main.cpp																						        		*/
+/*  DATE: Aug 27th, 2022																								*/
+/************************************************************************************************************************/
+
 #include "Main.h"
 #include "Classes/GameManager.h"
 #include "Classes/Camera.h"
