@@ -13,16 +13,31 @@
 #include "AssesmentGameManager.h"
 #include "Main.h"
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: COutlinedObject()
+//	 Purpose: Initalises the variables of the outlined object.
+//			  _fOutLineThickness is the thickness of the outline rendered around the object.
+//			  _v3OutlineColour is the colour of that outline. 
+
 COutlinedObject::COutlinedObject(float _fOutLineThickness, glm::vec3 _v3OutlineColour)
 {
 	m_fOutLineThickness = _fOutLineThickness;
 	m_v3OutlineColour = _v3OutlineColour;
 }
 
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Update()
+//	 Purpose: Used to rotate the object every frame on its y axis. 
+
 void COutlinedObject::Update()
 {
 	m_Transform.RotateEuler(glm::vec3(0.0f, 10.0f * e_fDeltatime, 0.0f));
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Draw()
+//	 Purpose: Draws the object's mesh as well as an outline if m_bStencilTestEnabled is enabled in CAssesmentGameManager
 
 void COutlinedObject::Draw()
 {

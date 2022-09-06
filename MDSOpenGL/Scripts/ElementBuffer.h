@@ -16,7 +16,7 @@ private:
 
 public:
 	CElementBuffer();
-	CElementBuffer(const std::vector<unsigned int> _GLuIndicies);
+	CElementBuffer(const std::vector<unsigned int> _vIndicies);
 	CElementBuffer(CElementBuffer const&) = delete;
 	~CElementBuffer();
 

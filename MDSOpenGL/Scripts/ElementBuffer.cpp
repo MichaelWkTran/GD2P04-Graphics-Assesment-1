@@ -10,31 +10,57 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Generate an element buffer.
+
 CElementBuffer::CElementBuffer()
 {
     glGenBuffers(1, &m_GLuID);
 }
 
-CElementBuffer::CElementBuffer(const std::vector<unsigned int> _GLuIndicies)
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Generate an element buffer while giving indices to the buffer via _vIndices
+
+CElementBuffer::CElementBuffer(const std::vector<unsigned int> _vIndicies)
 {
     glGenBuffers(1, &m_GLuID);
-    SetIndicies(_GLuIndicies);
+    SetIndicies(_vIndicies);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Delete the element buffer
 
 CElementBuffer::~CElementBuffer()
 {
     glDeleteBuffers(1, &m_GLuID);
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Gets the ID of the element buffer
+//	 Returns: The ID of the element buffer
+
 const unsigned int& CElementBuffer::GetID()
 {
     return m_GLuID;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Gets the indices stored in the buffer
+//	 Returns: The indices stored in the buffer
+
 const std::vector<unsigned int> CElementBuffer::GetIndicies() const
 {
     return m_vIndicies;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Sets the indices stored in the buffer via _vIndices
 
 void CElementBuffer::SetIndicies(const std::vector<unsigned int> _vIndicies)
 {
@@ -45,10 +71,18 @@ void CElementBuffer::SetIndicies(const std::vector<unsigned int> _vIndicies)
     Unbind();
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Binds the element buffer
+
 void CElementBuffer::Bind()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_GLuID);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Unbinds the element buffer
 
 void CElementBuffer::Unbind()
 {

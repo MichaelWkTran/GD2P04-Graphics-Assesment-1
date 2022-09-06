@@ -11,6 +11,11 @@
 #include "Shader.h"
 #include "Camera.h"
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CCubeSkybox()
+//	 Purpose: Initalise the variables of the CCubeSkybox as well as setup the cube map texture.
+//			  _fSize is the size of the skybox while _pTextureDirectories is the array of directories that lead to the images to be loaded. 
+
 CCubeSkybox::CCubeSkybox(const float _fSize, const char* const _pTextureDirectories[6])
 {
 	//Set Shader
@@ -62,18 +67,30 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* const _pTextureDirector
 	CTexture::Unbind();
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: UpdateShaderUniforms()
+//	 Purpose: Apply the skybox uniform to the given shader, _pShader 
+
 void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
 {
-	//_pShader->Activate();
+	_pShader->Activate();
 	m_Mesh.m_mapTextures[0]->Uniform(*_pShader, "uni_sampSkybox");
 	CTexture::Unbind();
-	//_pShader->Deactivate();
+	_pShader->Deactivate();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: UpdateShaderUniforms()
+//	 Purpose: Apply the skybox uniform to the given vector of shaders, _vShaders
 
 void CCubeSkybox::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
 {
 	for (auto pShader : _vShaders) UpdateShaderUniforms(pShader);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Draw()
+//	 Purpose: Draw the cube map
 
 void CCubeSkybox::Draw()
 {

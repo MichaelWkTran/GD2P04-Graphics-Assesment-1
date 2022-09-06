@@ -18,10 +18,19 @@ std::vector<stPointLight> CLightManager::m_vPointLight;
 std::vector<stDirectionalLight> CLightManager::m_vDirectionalLight;
 std::vector<stSpotLight> CLightManager::m_vSpotLight;
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: TotalLights()
+//	 Purpose: Gets the total amount of lights present in the scene
+//	 Returns: The total amount of lights present in the scene
+
 const unsigned int CLightManager::TotalLights()
 {
 	return m_vInfinitePointLight.size() + m_vPointLight.size() + m_vDirectionalLight.size() + m_vSpotLight.size();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: UpdateShaderUniforms()
+//	 Purpose: Updates the light uniforms for a shader
 
 void CLightManager::UpdateShaderUniforms(CShader* _pShader)
 {
@@ -71,6 +80,10 @@ void CLightManager::UpdateShaderUniforms(CShader* _pShader)
 
 	_pShader->Deactivate();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: UpdateShaderUniforms()
+//	 Purpose: Updates the light uniforms for a vector of shaders
 
 void CLightManager::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
 {

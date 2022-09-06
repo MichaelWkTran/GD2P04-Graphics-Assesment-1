@@ -12,12 +12,21 @@
 
 CGameManager* CGameManager::m_pSingleton = nullptr;
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CGameManager()
+//	 Purpose: Ensure that the game manager is a singeton
+
 CGameManager::CGameManager()
 {
 	//Ensure that the game manager is a singleton class
 	if (m_pSingleton == nullptr) { m_pSingleton = this; }
 	else if (m_pSingleton != this) delete this;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetSingleton()
+//	 Purpose: Gets the current game manager, if none exists create one
+//	 Returns: The current game manager
 
 CGameManager& CGameManager::GetSingleton()
 {
@@ -32,12 +41,19 @@ CGameManager& CGameManager::GetSingleton()
 	return *m_pSingleton;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: ~CGameManager()
+//	 Purpose: Delete all stored game objects when the game manager is destroyed
+
 CGameManager::~CGameManager()
 {
 	Clear();
 }
 
-/*DestroyImmediate is used for destroying the updated object imediately outside of the update loop. */
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: DestroyImmediate()
+//	 Purpose: DestroyImmediate is used for destroying the given updated object, _pUpdatedObject, imediately outside of the update loop.
+
 void CGameManager::DestroyImmediate(CUpdatedObject* _pUpdatedObject)
 {
 	//Check whether the given pointer is valid
@@ -59,7 +75,10 @@ void CGameManager::DestroyImmediate(CUpdatedObject* _pUpdatedObject)
 	}
 }
 
-/*DestroyImmediate is used for destroying the updated object imediately outside of the update loop. */
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: DestroyImmediate()
+//	 Purpose: DestroyImmediate is used for destroying the given updated object, _pUpdatedObject, imediately outside of the update loop.
+
 void CGameManager::DestroyImmediate(CUpdatedObject*& _pUpdatedObject)
 {
 	//Check whether the given pointer is valid
@@ -84,7 +103,10 @@ void CGameManager::DestroyImmediate(CUpdatedObject*& _pUpdatedObject)
 	}
 }
 
-/*Delete all updated objects*/
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Clear()
+//	 Purpose: Delete all updated objects
+
 void CGameManager::Clear()
 {
 	const int iGameObjectsCount = m_dequeUpdatedObject.size();
@@ -95,7 +117,10 @@ void CGameManager::Clear()
 	}
 }
 
-/*Called every game frame and updates all game objects*/
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Update()
+//	 Purpose: Called every game frame and updates all game objects
+
 void CGameManager::Update()
 {
 	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Start();

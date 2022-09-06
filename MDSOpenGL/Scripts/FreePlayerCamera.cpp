@@ -14,11 +14,19 @@
 
 const glm::vec3 v3Up = glm::vec3(0.0f, 1.0f, 0.0f);
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CFreePlayerCamera()
+//	 Purpose: Initalise the free camera variables. 
+
 CFreePlayerCamera::CFreePlayerCamera()
 {
 	m_pWindow = e_pMainWindow;
 	m_bFirstClick = false;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Update()
+//	 Purpose: To move the camera using the WASD and arrow keys and to rotate the camera using the mouth. 
 
 void CFreePlayerCamera::Update()
 {

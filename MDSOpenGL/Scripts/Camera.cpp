@@ -17,6 +17,10 @@
 
 CCamera* CCamera::m_pMainCamera = nullptr;
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CCamera()
+//	 Purpose: Initalises variables of the created CCamera
+
 CCamera::CCamera()
 {
 	//Set the main camera if not assigned yet
@@ -45,11 +49,20 @@ CCamera::CCamera()
 	m_bUpdateProjectionMatrix = true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: ~CCamera()
+//	 Purpose: Ensures that m_pMainCamera never contains garbage data if it is destroyed
+
 CCamera::~CCamera()
 {
 	//Set m_pMainCamera to null if it is destroyed
 	if (m_pMainCamera == this) m_pMainCamera == nullptr;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: MainCamera()
+//	 Purpose: Gets the main camera if requested. If a main camera does not exist, create a free camera as the main camera
+//	 Returns: The current main camera
 
 CCamera& CCamera::MainCamera()
 {
@@ -62,25 +75,49 @@ CCamera& CCamera::MainCamera()
 	return *m_pMainCamera;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetViewMatrix()
+//	 Purpose: Gets the view matrix of the camera
+//	 Returns: The view matrix of the camera
+
 const glm::mat4 CCamera::GetViewMatrix() const
 {
 	return m_mat4View;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetProjectionMatrix()
+//	 Purpose: Gets the projection matrix of the camera
+//	 Returns: The projection matrix of the camera
 
 const glm::mat4 CCamera::GetProjectionMatrix() const
 {
 	return m_mat4Projection;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetCameraMatrix()
+//	 Purpose: Gets the camera matrix of the camera
+//	 Returns: The camera matrix of the camera
+
 const glm::mat4 CCamera::GetCameraMatrix() const
 {
 	return m_mat4Camera;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetViewPort()
+//	 Purpose: Gets the viewport size of the camera
+//	 Returns: The viewport size of the camera
+
 const glm::uvec2 CCamera::GetViewPort() const
 {
 	return m_uv2ViewPort;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetViewPort()
+//	 Purpose: Sets the viewport size of the camera where the passed in _uv2ViewPort is the new viewport
 
 void CCamera::SetViewPort(const glm::uvec2 _uv2ViewPort)
 {
@@ -88,18 +125,31 @@ void CCamera::SetViewPort(const glm::uvec2 _uv2ViewPort)
 	m_bUpdateProjectionMatrix = true;
 }
 
-/*Gives a boolean that shows the view mode of the camera. If the boolean is true, the camera is in perspective mode, otherwise, it is in orthographic mode*/
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetProjection()
+//	 Purpose: Gives a boolean that shows the view mode of the camera. If the boolean is true, the camera is in perspective mode, otherwise, it is in orthographic mode
+//	 Returns: True if the camera is in perspective mode, otherwise false if it is in orthographic mode
+
 const bool CCamera::GetProjection() const
 {
 	return m_bIsPerspective;
 }
 
-/*If the boolean given is true, the camera is set to perspective mode, otherwise, it is set to orthographic mode*/
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetProjection()
+//	 Purpose: Sets the view mode of the camera. If the boolean given is true, the camera is set to perspective mode, otherwise, it is set to orthographic mode
+
 void CCamera::SetProjection(const bool _bIsPerspective)
 {
 	m_bIsPerspective = _bIsPerspective;
 	m_bUpdateProjectionMatrix = true;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetFieldOfView()
+//	 Purpose: Gets the field of view of the camera. The function will return the field of view in radians if _bInRadians is true,
+//			  otherwise it will return the field of view in degrees.
+//	 Returns: The field of view in radians if _bInRadians is true, otherwise it will return the field of view in degrees.
 
 const float CCamera::GetFieldOfView(const bool _bInRadians)
 {
@@ -107,16 +157,29 @@ const float CCamera::GetFieldOfView(const bool _bInRadians)
 	else return m_fFieldOfView;
 }
 
-void CCamera::SetFieldOfView(const float _fFOV, const bool _bIsRadians)
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetFieldOfView()
+//	 Purpose: Sets the new field of view of the camera, _fFieldOfView. If the field of view is in radians, then _bIsRadians must be set to true.
+
+void CCamera::SetFieldOfView(const float _fFieldOfView, const bool _bIsRadians)
 {
-	m_fFieldOfView = _bIsRadians ? glm::degrees(_fFOV) : _fFOV;
+	m_fFieldOfView = _bIsRadians ? glm::degrees(_fFieldOfView) : _fFieldOfView;
 	m_bUpdateProjectionMatrix = true;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetOrthographicScale()
+//	 Purpose: Gets the orthographic scale of the camera.
+//	 Returns: The orthographic scale of the camera
 
 const float CCamera::GetOrthographicScale() const
 {
 	return m_fOrthographicScale;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetOrthographicScale()
+//	 Purpose: Sets the new orthographic scale, _fOrthographicScale, of the camera.
 
 void CCamera::SetOrthographicScale(const float _fOrthographicScale)
 {
@@ -124,10 +187,19 @@ void CCamera::SetOrthographicScale(const float _fOrthographicScale)
 	m_bUpdateProjectionMatrix = true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetNearPlane()
+//	 Purpose: Gets the near plane distance of the camera
+//	 Returns: The near plane distance of the camera
+
 const float CCamera::GetNearPlane() const
 {
 	return m_fNearPlane;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetNearPlane()
+//	 Purpose: Sets the new near plane distance, _fNearPlane, of the camera
 
 void CCamera::SetNearPlane(const float _fNearPlane)
 {
@@ -135,16 +207,29 @@ void CCamera::SetNearPlane(const float _fNearPlane)
 	m_bUpdateProjectionMatrix = true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetFarPlane()
+//	 Purpose: Gets the far plane distance of the camera
+//	 Returns: The far plane distance of the camera
+
 const float CCamera::GetFarPlane() const
 {
 	return m_fFarPlane;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: SetFarPlane()
+//	 Purpose: Sets the new far plane distance of the camera, _fFarPlane.
 
 void CCamera::SetFarPlane(const float _fFarPlane)
 {
 	m_fFarPlane = _fFarPlane;
 	m_bUpdateProjectionMatrix = true;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: void CCamera::Update()
+//	 Purpose: Updates the projection, view and camera matricies
 
 void CCamera::Update()
 {

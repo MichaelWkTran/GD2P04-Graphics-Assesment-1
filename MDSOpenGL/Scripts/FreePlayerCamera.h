@@ -15,7 +15,6 @@ public:
 	bool m_bFirstClick;
 
 	CFreePlayerCamera();
-	~CFreePlayerCamera() {};
 	
 	virtual void Update() override;
 };

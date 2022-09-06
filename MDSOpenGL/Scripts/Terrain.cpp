@@ -8,7 +8,12 @@
 #include "Terrain.h"
 #include <fstream>
 
-CTerrain::CTerrain(const char* const _strHeightmapDirectory, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor)
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CTerrain()
+//	 Purpose: To generate a terrain from the raw file, _pHeightmapDirectory. _uiNumRows is the height of the image or the number of verticies vertically,
+//			  and _uiNumCols is the width of the image or the number of vertices horizontally
+
+CTerrain::CTerrain(const char* const _pHeightmapDirectory, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor)
 {
 	unsigned int uiVertexCount = _uiNumRows * _uiNumCols;
 	std::vector<float> vHeightmap(uiVertexCount);
@@ -19,7 +24,7 @@ CTerrain::CTerrain(const char* const _strHeightmapDirectory, const unsigned int 
 
 		//Read From File
 		std::ifstream InFile;
-		InFile.open(_strHeightmapDirectory, std::ios_base::binary);
+		InFile.open(_pHeightmapDirectory, std::ios_base::binary);
 		if (InFile)
 		{
 			//Read the RAW bytes.
@@ -128,6 +133,11 @@ CTerrain::CTerrain(const char* const _strHeightmapDirectory, const unsigned int 
 	m_Mesh.SetVerticies(vVertices);
 	m_Mesh.SetIndicies(vIndices);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CTerrain()
+//	 Purpose: To generate a terrain from a unsigned char* stored on disk, _pTextureData. _uiNumRows is the height of the image or the number of verticies vertically,
+//			  and _uiNumCols is the width of the image or the number of vertices horizontally
 
 CTerrain::CTerrain(const unsigned char* _pTextureData, const unsigned int _uiNumRows, const unsigned int _uiNumCols, const float _fHeightScaleFactor)
 {

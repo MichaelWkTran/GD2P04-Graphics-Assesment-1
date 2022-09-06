@@ -13,6 +13,10 @@
 #include <string>
 #include <iostream>
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: C3DTextureObject()
+//	 Purpose: Assign a passed in mesh, _Mesh, data loaded from an OBJ file from the dirctory, _pOBJModelDirectory.
+
 void GetObjModelData(CMesh<stVertex>& _Mesh, const char* _pOBJModelDirectory)
 {
 	std::vector<stVertex> vVertices;

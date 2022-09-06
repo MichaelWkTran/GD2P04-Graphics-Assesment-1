@@ -24,6 +24,10 @@ int iHeightMapSeed = 0;
 const glm::uvec2 v2uTerrainSize(513U, 513U);
 unsigned char* pHeightImageData = nullptr;
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CAssesmentGameManager()
+//	 Purpose: To initalise variables and to setup the demo scene
+
 CAssesmentGameManager::CAssesmentGameManager()
 {
 	m_bScissorTestEnabled = false;
@@ -178,6 +182,10 @@ CAssesmentGameManager::CAssesmentGameManager()
 		p3DTextureObject->m_Transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f) * 0.35f);
 	}
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Update()
+//	 Purpose: To perform operations every frame such as enabling or disabling scissor tests
 
 void CAssesmentGameManager::Update()
 {

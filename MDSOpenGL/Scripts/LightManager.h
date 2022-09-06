@@ -53,9 +53,6 @@ struct stSpotLight
 
 class CLightManager
 {
-private:
-
-
 public:
 	static glm::vec4 m_v4AmbientColour;
 

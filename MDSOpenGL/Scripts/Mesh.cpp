@@ -13,6 +13,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Initalises variables of the mesh
+
 template<class T>
 inline CMesh<T>::CMesh()
 {
@@ -24,6 +28,13 @@ inline CMesh<T>::CMesh()
 	};
 	m_bUpdateVertexArray = false;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Initalises variables of the mesh._vVertices is the number of vertices of the mesh.
+//			  _vIndices is the number of indices in the element buffer.
+//			  _mapTextures is the textures stored in the mesh.
+//			  _pShader is the shader used by the mesh. 
 
 template<class T>
 inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _mapTextures, CShader* _pShader)
@@ -39,11 +50,19 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 	m_bUpdateVertexArray = true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Binds the vertex array of the mesh
+
 template<class T>
 inline void CMesh<T>::BindVertexArray()
 {
 	m_VertexArray.Bind();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Unbinds the mesh vertex array
 
 template<class T>
 inline void CMesh<T>::UnbindVertexArray()
@@ -51,11 +70,20 @@ inline void CMesh<T>::UnbindVertexArray()
 	m_VertexArray.Unbind();
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Gets the vertices of the mesh.
+//	 Returns: The vertices of the mesh.
+
 template<class T>
 inline const std::vector<T> CMesh<T>::GetVerticies() const
 {
 	return m_VertexBuffer.GetVertices();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Sets the vertices of the mesh via _vVertices.
 
 template<class T>
 inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
@@ -64,11 +92,20 @@ inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 	m_bUpdateVertexArray = true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Gets the indices stored in the mesh.
+//	 Returns: The indices stored in the mesh.
+
 template<class T>
 inline const std::vector<unsigned int> CMesh<T>::GetIndicies() const
 {
 	return m_ElementBuffer.GetIndicies();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Sets the indices stored in the mesh via _vIndices.
 
 template<class T>
 inline void CMesh<T>::SetIndicies(const std::vector<unsigned int> _vIndicies)
@@ -76,6 +113,10 @@ inline void CMesh<T>::SetIndicies(const std::vector<unsigned int> _vIndicies)
 	m_ElementBuffer.SetIndicies(_vIndicies);
 	m_bUpdateVertexArray = true;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetModel()
+//	 Purpose: Draws the mesh using the camera matrix from _Camera
 
 template<class T>
 inline void CMesh<T>::Draw(const CCamera& _Camera)

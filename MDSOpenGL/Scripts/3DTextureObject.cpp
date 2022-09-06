@@ -16,8 +16,8 @@ CTexture* p3DTexture = nullptr;
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: Generate3DData()
-//	 Purpose: 
-//	 Returns: 
+//	 Purpose: This function only calls once when a creates C3DTextureObject. It creates a 3D checkboard texture and
+//			  stores its raw texture data in GLubyte* pData while creating a texture stored in CTexture* p3DTexture
 
 void Generate3DData()
 {
@@ -73,9 +73,8 @@ void Generate3DData()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: Generate3DData()
-//	 Purpose: 
-//	 Returns: 
+// Procedure: C3DTextureObject()
+//	 Purpose: Setup the game object mesh for it to render a mesh using a 3D texture
 
 C3DTextureObject::C3DTextureObject()
 {

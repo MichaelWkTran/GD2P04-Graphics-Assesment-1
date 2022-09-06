@@ -8,6 +8,10 @@
 #include "UpdatedObject.h"
 #include "GameManager.h"
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CUpdatedObject()
+//	 Purpose: Initalise variables from the updated object
+
 CUpdatedObject::CUpdatedObject()
 {
 	m_bStartCalled = false;
