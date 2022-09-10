@@ -85,7 +85,7 @@ uniform stSpotLight uni_SpotLight[MAX_SPOT_LIGHT];
 
 //Fog Uniforms
 uniform vec3 uni_v3FogColour = vec3(0.0f, 0.0f, 0.0f);
-uniform float uni_fFogStart = 5.0f;
+uniform float uni_fFogStart = 20.0f;
 uniform float uni_fFogRange = 10.0f;
 
 //Global Variables

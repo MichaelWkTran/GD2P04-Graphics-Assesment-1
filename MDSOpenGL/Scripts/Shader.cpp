@@ -15,6 +15,13 @@
 std::map<const char*, CShader*> CShader::m_mapShaders;
 const char* CShader::m_strDirective = "Resources/Shaders/";
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CShader()
+//	 Purpose: Initalises a shader. _pName is the name of the shader which can be used to find it again from the map it is stored in. 
+//			  _strVertexFile is the file directory to the vertex shader file. _strFragmentFile is the file directory to the fragment shader file. 
+//			  _strGeometryFile is the file directory to the geometry shader file.
+//			  _pDefaultUniform is a function pointer used to store the default values of the shader so that it can be used later. 
+
 CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _strFragmentFile, std::string _strGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
 	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
@@ -59,12 +66,21 @@ CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _st
 	if (m_bUsesGeometryShader) glDeleteShader(GLuGeometryShader);
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: ~CShader()
+//	 Purpose: Deletes the shader.
+
 CShader::~CShader()
 {
 	m_mapShaders.at(m_strName) = nullptr;
 	m_mapShaders.erase(m_strName);
 	glDeleteProgram(m_uiID);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetFileContents()
+//	 Purpose: Reads the contents of a shader file.
+//	 Returns: The contents of a shader file.
 
 std::string CShader::GetFileContents(std::string _pFileName)
 {
@@ -81,6 +97,10 @@ std::string CShader::GetFileContents(std::string _pFileName)
 	}
 	throw errno;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: CompileErrors()
+//	 Purpose: To print an error when the shader file can not be read
 
 void CShader::CompileErrors(unsigned int _uShader, std::string _pType)
 {
@@ -107,50 +127,97 @@ void CShader::CompileErrors(unsigned int _uShader, std::string _pType)
 	}
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: operator int()
+//	 Purpose: Gets the ID of the shader.
+//	 Returns: The ID of the shader.
+
 CShader::operator int() const
 {
 	return m_uiID;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: operator int*()
+//	 Purpose: Prevents the shader from being cast to an integer pointer
+//	 Returns: nullptr
 
 CShader::operator int* ()
 {
 	return nullptr;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GetID()
+//	 Purpose: Gets the shader ID by casting the shader as an integer.
+//	 Returns: The Shader ID.
+
 const unsigned int& CShader::GetID()
 {
 	return m_uiID;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Activate()
+//	 Purpose: Use the Shader program.
 
 void CShader::Activate()
 {
 	glUseProgram(m_uiID);
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Activate()
+//	 Purpose: Use a shader program by passing in the shader ID via _uiID.
+
 void CShader::Activate(unsigned int _uiID)
 {
 	glUseProgram(_uiID);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Deactivate()
+//	 Purpose: Deactivates the shader
 
 void CShader::Deactivate()
 {
 	glUseProgram(0);
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Empty()
+//	 Purpose: Check whether there are any shaders created
+//	 Returns: A boolean indicating if any shaders have been created yet
+
 bool CShader::Empty()
 {
 	return m_mapShaders.empty();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Size()
+//	 Purpose: Gets how many shaders exist.
+//	 Returns: How many shaders have been created.
 
 unsigned int CShader::Size()
 {
 	return m_mapShaders.size();
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: MaxSize()
+//	 Purpose: Gets how many shaders can be stored at once
+//	 Returns: How many shaders can be stored at once.
+
 unsigned int CShader::MaxSize()
 {
 	return m_mapShaders.max_size();
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: At()
+//	 Purpose: Find a shader with the given ID, _uiID.
+//	 Returns: The shader that has the requested ID, _uiID.
 
 CShader* CShader::At(unsigned int _uiID)
 {
@@ -164,11 +231,20 @@ CShader* CShader::At(unsigned int _uiID)
 	return nullptr;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Find()
+//	 Purpose: Find a shader with the given namme, _pName.
+//	 Returns: The shader that has the requested name, _pName.
+
 CShader* CShader::Find(const char* _pName)
 {
 	if (m_mapShaders.find(_pName) == m_mapShaders.end()) return nullptr;
 	return m_mapShaders.at(_pName);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Erase()
+//	 Purpose: Deletes a shader by giving its ID via _uiID.
 
 void CShader::Erase(unsigned int _uiID)
 {
@@ -178,6 +254,10 @@ void CShader::Erase(unsigned int _uiID)
 	delete pShader;
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Erase()
+//	 Purpose: Deletes a shader by giVing its name via _strName.
+
 void CShader::Erase(std::string _strName)
 {
 	auto Iterator = m_mapShaders.find(_strName.c_str());
@@ -185,6 +265,10 @@ void CShader::Erase(std::string _strName)
 
 	delete (*Iterator).second;
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Clear()
+//	 Purpose: Deletes all shaders
 
 void CShader::Clear()
 {
@@ -199,6 +283,10 @@ void CShader::Clear()
 
 #pragma region Uniform Functions
 
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: ResetUniforms()
+//	 Purpose: Resets the shader uniforms to default uniforms using m_pDefaultUniform
+
 void CShader::ResetUniforms()
 {
 	if (m_pDefaultUniform != nullptr)
@@ -206,6 +294,10 @@ void CShader::ResetUniforms()
 		m_pDefaultUniform(*this);
 	}
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: Uniform1f() Uniform2f() Uniform3f() Uniform4f() Uniform1i() Uniform2i() Uniform3i() Uniform4i() Uniform1ui() Uniform2ui() Uniform3ui() Uniform4ui() UniformMatrix4fv()
+//	 Purpose: Assigns the shader uniform. _pUniform is the name of the uniform and value the rest of the variables are the given value
 
 void CShader::Uniform1f(std::string _pUniform, float _v0)
 {

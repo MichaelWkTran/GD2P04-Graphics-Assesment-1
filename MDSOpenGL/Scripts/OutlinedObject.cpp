@@ -23,6 +23,7 @@ COutlinedObject::COutlinedObject(float _fOutLineThickness, glm::vec3 _v3OutlineC
 {
 	m_fOutLineThickness = _fOutLineThickness;
 	m_v3OutlineColour = _v3OutlineColour;
+	m_fRotationSpeed = 10.0f;
 }
 
 
@@ -32,7 +33,7 @@ COutlinedObject::COutlinedObject(float _fOutLineThickness, glm::vec3 _v3OutlineC
 
 void COutlinedObject::Update()
 {
-	m_Transform.RotateEuler(glm::vec3(0.0f, 10.0f * e_fDeltatime, 0.0f));
+	m_Transform.RotateEuler(glm::vec3(0.0f, m_fRotationSpeed * e_fDeltatime, 0.0f));
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ void COutlinedObject::Draw()
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 		//1st pass - Set current stencil value
-		glStencilFunc(GL_ALWAYS, 1.0f, 0xFF);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
 	}
 	
@@ -61,21 +62,23 @@ void COutlinedObject::Draw()
 	if (bEnableStencil)
 	{
 		//2nd pass
-		glStencilFunc(GL_NOTEQUAL, 1.0f, 0xFF);
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilMask(0x00);
 
 		//Set Outline Uniforms
-		CShader* m_pUnlitShader = CShader::Find("Unlit");
-		glm::mat4 mat4Model = glm::scale(m_Transform.GetModel(), (1.0f + m_fOutLineThickness) * glm::vec3(1.0f, 1.0f, 1.0f));
-		m_pUnlitShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, mat4Model);
-		m_pUnlitShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());
-		m_pUnlitShader->Uniform3f("uni_v3Colour", m_v3OutlineColour);
+		CShader* pOutlineShader = CShader::Find("Outline");
+		if (pOutlineShader == nullptr) pOutlineShader = new CShader("Outline", "Outline.vert", "Outline.frag", "", [](CShader& _Shader) { _Shader.Uniform3f("uni_v3Colour", 1.0f, 1.0f, 1.0f); });
 
+		glm::mat4 mat4Model = glm::scale(m_Transform.GetModel(), (1.0f + m_fOutLineThickness) * glm::vec3(1.0f, 1.0f, 1.0f));
+		pOutlineShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, mat4Model);
+		pOutlineShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());
+		pOutlineShader->Uniform3f("uni_v3Colour", m_v3OutlineColour);
+		pOutlineShader->Uniform3f("uni_v3CameraPosition", GetMainCamera().m_Transform.GetPosition());
 		//Draw outline
 		m_Mesh.BindVertexArray();
-		m_pUnlitShader->Activate();
+		pOutlineShader->Activate();
 		m_Mesh.m_pDrawMethod(m_Mesh);
-		m_pUnlitShader->Deactivate();
+		pOutlineShader->Deactivate();
 		m_Mesh.UnbindVertexArray();
 	}
 

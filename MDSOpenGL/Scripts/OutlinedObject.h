@@ -16,6 +16,7 @@ class COutlinedObject : public GameObject
 public:
 	float m_fOutLineThickness;
 	glm::vec3 m_v3OutlineColour;
+	float m_fRotationSpeed;
 
 	COutlinedObject(float _fOutLineThickness = 1.0f, glm::vec3 _v3OutlineColour = {});
 	void Update() override;

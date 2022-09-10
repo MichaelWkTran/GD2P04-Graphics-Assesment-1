@@ -10,13 +10,14 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
+#include <iostream>
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CCubeSkybox()
 //	 Purpose: Initalise the variables of the CCubeSkybox as well as setup the cube map texture.
 //			  _fSize is the size of the skybox while _pTextureDirectories is the array of directories that lead to the images to be loaded. 
 
-CCubeSkybox::CCubeSkybox(const float _fSize, const char* const _pTextureDirectories[6])
+CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6])
 {
 	//Set Shader
 	m_Mesh.m_pShader = CShader::Find("CubeSkybox");
@@ -44,7 +45,9 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* const _pTextureDirector
 	stbi_set_flip_vertically_on_load(false);
 	for (int i = 0; i < 6; i++)
 	{
-		unsigned char* pImageData = stbi_load(_pTextureDirectories[i], &iImageWidth, &iImageHeight, &iImageComponents, 0);
+		unsigned char* pImageData = stbi_load((std::string(CTexture::m_pDirective) + std::string(*(_pTextureDirectories + i))).c_str(), &iImageWidth, &iImageHeight, &iImageComponents, 0);
+		if (pImageData == nullptr) { std::cout << stbi_failure_reason() << "\n"; }
+
 		unsigned int uiLoadedComponents = (iImageComponents == 4) ? GL_RGBA : GL_RGB;
 
 		glTexImage2D

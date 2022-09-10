@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: CElementBuffer()
 //	 Purpose: Generate an element buffer.
 
 CElementBuffer::CElementBuffer()
@@ -20,7 +20,7 @@ CElementBuffer::CElementBuffer()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: CElementBuffer()
 //	 Purpose: Generate an element buffer while giving indices to the buffer via _vIndices
 
 CElementBuffer::CElementBuffer(const std::vector<unsigned int> _vIndicies)
@@ -30,7 +30,7 @@ CElementBuffer::CElementBuffer(const std::vector<unsigned int> _vIndicies)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: ~CElementBuffer()
 //	 Purpose: Delete the element buffer
 
 CElementBuffer::~CElementBuffer()
@@ -39,7 +39,7 @@ CElementBuffer::~CElementBuffer()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GetID()
 //	 Purpose: Gets the ID of the element buffer
 //	 Returns: The ID of the element buffer
 
@@ -49,7 +49,7 @@ const unsigned int& CElementBuffer::GetID()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GetIndicies()
 //	 Purpose: Gets the indices stored in the buffer
 //	 Returns: The indices stored in the buffer
 
@@ -59,7 +59,7 @@ const std::vector<unsigned int> CElementBuffer::GetIndicies() const
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: SetIndicies()
 //	 Purpose: Sets the indices stored in the buffer via _vIndices
 
 void CElementBuffer::SetIndicies(const std::vector<unsigned int> _vIndicies)
@@ -72,7 +72,7 @@ void CElementBuffer::SetIndicies(const std::vector<unsigned int> _vIndicies)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: Bind()
 //	 Purpose: Binds the element buffer
 
 void CElementBuffer::Bind()
@@ -81,7 +81,7 @@ void CElementBuffer::Bind()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: Unbind()
 //	 Purpose: Unbinds the element buffer
 
 void CElementBuffer::Unbind()

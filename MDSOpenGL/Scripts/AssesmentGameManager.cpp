@@ -19,10 +19,12 @@
 #include "GenerateTexture.h" //For generating a perlin texture
 #include <time.h> //For generating a random seed
 #include <fstream> //For writing height map data to raw files
+#include <iostream> //For printing messages to console
+#include <stb/stb_image_write.h>
 
 int iHeightMapSeed = 0;
 const glm::uvec2 v2uTerrainSize(513U, 513U);
-unsigned char* pHeightImageData = nullptr;
+float *pHeightImageData = nullptr;
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CAssesmentGameManager()
@@ -56,16 +58,15 @@ CAssesmentGameManager::CAssesmentGameManager()
 				//Save the Height Map as a raw file
 				if (pHeightImageData == nullptr) break;
 				
-				std::ofstream binaryFile("file.raw", std::ios::out | std::ios::trunc);
-				binaryFile.write(reinterpret_cast<char*>(&pHeightImageData), v2uTerrainSize.x * v2uTerrainSize.y);
-				binaryFile.close();
+				stbi_write_jpg("Resources/Height Maps/GeneratedHeightMap.jpg", v2uTerrainSize.x, v2uTerrainSize.y, 1, (char*)pHeightImageData, 100);
+				std::cout << "\nTerrain Height Map is Saved\n";
+
 				break;
 			}
 		}
 	);
 
 	//Create Shaders
-	CShader* pUnlit = new CShader("Unlit", "Unlit.vert", "Unlit.frag", "", [](CShader& _Shader) { _Shader.Uniform3f("uni_v3Colour", 1.0f, 1.0f, 1.0f); });
 	CShader* pDiffuse = new CShader("Diffuse", "Diffuse.vert", "Diffuse.frag");
 	pDiffuse->m_pDefaultUniform = [](CShader& _Shader)
 	{
@@ -102,13 +103,13 @@ CAssesmentGameManager::CAssesmentGameManager()
 		new CCubeSkybox(2000.0f, pCubeMapDirectories);
 	}
 
-	//Draw RAW Terrain
-	{
-		CTerrain* pTerrain = new CTerrain("Resources/Height Maps/coastMountain513.raw", v2uTerrainSize.x, v2uTerrainSize.y);
-		pTerrain->m_Mesh.m_pShader = new CShader("Terrain", "Terrain.vert", "Terrain.frag", "", [](CShader& _Shader) { _Shader.Uniform3f("uni_v3Colour", 1.0f, 1.0f, 1.0f); });
-		pTerrain->m_Mesh.m_pShader->m_pDefaultUniform = [](CShader& _Shader)
+	//Setup Terrain Shader and textures
+	new CShader
+	(
+		"Terrain", "Terrain.vert", "Terrain.frag", "", 
+		[](CShader& _Shader)
 		{
-			_Shader.Uniform2f("uni_v2Tiling", 100.0f, 100.0f);
+			_Shader.Uniform2f("uni_v2Tiling", 200.0f, 200.0f);
 
 			_Shader.Uniform1f("uni_fSpecularStrength", 0.3f);
 			_Shader.Uniform1f("uni_fShininess", 16.0f);
@@ -116,35 +117,60 @@ CAssesmentGameManager::CAssesmentGameManager()
 			_Shader.Uniform1f("uni_fRimExponent", 16.0f);
 			_Shader.Uniform1f("uni_fShininess", 16.0f);
 			_Shader.Uniform4f("uni_v4RimColour", 1.0f, 1.0f, 1.0f, 0.0f);
-		};
+		}
+	);
+	CLightManager::UpdateShaderUniforms(CShader::Find("Terrain"));
 
-		CLightManager::UpdateShaderUniforms(pTerrain->m_Mesh.m_pShader);
-		
-		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSnow",  new CTexture("Snow",  "Snow.png",  0, GL_RGBA, GL_UNSIGNED_BYTE));
-		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", new CTexture("Stone", "Stone.png", 1, GL_RGBA, GL_UNSIGNED_BYTE));
-		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", new CTexture("Grass", "Grass.png", 2, GL_RGBA, GL_UNSIGNED_BYTE));
-		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand",  new CTexture("Sand",  "Sand.png",  3, GL_RGBA, GL_UNSIGNED_BYTE));
-		
+	new CTexture("Snow", "Snow.png", 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	new CTexture("Stone", "Stone.png", 1, GL_RGBA, GL_UNSIGNED_BYTE);
+	new CTexture("Grass", "Grass.png", 2, GL_RGBA, GL_UNSIGNED_BYTE);
+	new CTexture("Sand", "Sand.png", 3, GL_RGBA, GL_UNSIGNED_BYTE);
+
+	//Create RAW Terrain
+	{
+		CTerrain* pTerrain = new CTerrain("Resources/Height Maps/coastMountain513.jpg");
+		pTerrain->m_Mesh.m_pShader = CShader::Find("Terrain");
 		pTerrain->m_Transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f) * 0.1f);
-		pTerrain->m_Transform.SetPosition(glm::vec3((float)v2uTerrainSize.x / 2.0f, 0.0f, 0.0f));
+		pTerrain->m_Transform.SetPosition(glm::vec3(3.0f * (float)v2uTerrainSize.x / 2.0f, 0.0f, 0.0f));
+	
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSnow",  CTexture::Find("Snow"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", CTexture::Find("Grass"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand",  CTexture::Find("Sand"));
 	}
 
-	//Draw Perlin Terrain
+	//Create Perlin Terrain
 	{
-		pHeightImageData = new unsigned char[v2uTerrainSize.x * v2uTerrainSize.y];
-		iHeightMapSeed = time(0);
-	
+		pHeightImageData = new float[v2uTerrainSize.x * v2uTerrainSize.y];
+		srand((int)time(0));
+		iHeightMapSeed = rand();
+
 		//Set Perlin Noise Image Data
-		for (int x = 0; x < v2uTerrainSize.x; x++) for (int y = 0; y < v2uTerrainSize.y; y++)
-		{
-			pHeightImageData[x + (y * v2uTerrainSize.x)] = (unsigned char)(255.0f * gt::PerlinNoise(x, y, 4, 128.0f, 2.0f, iHeightMapSeed));
-		}
-	
+		for (int x = 0; x < (int)v2uTerrainSize.x; x++)
+			for (int y = 0; y < (int)v2uTerrainSize.y; y++)
+			{
+				pHeightImageData[x + (y * v2uTerrainSize.x)] = 225.0f * gt::PerlinNoise((float)x, (float)y, 6, 64.0f, 0.5f, iHeightMapSeed);
+			}
+
 		//Create Terrain
 		CTerrain* pTerrain = new CTerrain(pHeightImageData, v2uTerrainSize.x, v2uTerrainSize.y, 0.03f);
 		pTerrain->m_Mesh.m_pShader = CShader::Find("Terrain");
 		pTerrain->m_Transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f) * 0.1f);
 		pTerrain->m_Transform.SetPosition(glm::vec3(-(float)v2uTerrainSize.x / 2.0f, 0.0f, 0.0f));
+
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSnow", CTexture::Find("Snow"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", CTexture::Find("Grass"));
+		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand", CTexture::Find("Sand"));
+	}
+
+	//Create Saved Terrain
+	{
+		//Create Terrain
+		CTerrain* pTerrain = new CTerrain("Resources/Height Maps/GeneratedHeightMap.jpg", 0.03f);
+		pTerrain->m_Mesh.m_pShader = CShader::Find("Terrain");
+		pTerrain->m_Transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f) * 0.1f);
+		pTerrain->m_Transform.SetPosition(glm::vec3((float)v2uTerrainSize.x / 2.0f, 0.0f, 0.0f));
 
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSnow",  CTexture::Find("Snow"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));

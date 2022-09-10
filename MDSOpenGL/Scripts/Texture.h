@@ -21,8 +21,8 @@ private:
 	unsigned int m_uiID;
 
 public:
-	static const char* m_strDirective;
-	const char* m_strName;
+	static const char* m_pDirective;
+	const char* m_pName;
 	GLenum m_GLeTarget;
 	unsigned int m_uiUnit;
 	

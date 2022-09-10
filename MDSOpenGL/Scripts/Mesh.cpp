@@ -14,7 +14,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: CMesh()
 //	 Purpose: Initalises variables of the mesh
 
 template<class T>
@@ -30,7 +30,7 @@ inline CMesh<T>::CMesh()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: CMesh()
 //	 Purpose: Initalises variables of the mesh._vVertices is the number of vertices of the mesh.
 //			  _vIndices is the number of indices in the element buffer.
 //			  _mapTextures is the textures stored in the mesh.
@@ -51,7 +51,7 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: BindVertexArray()
 //	 Purpose: Binds the vertex array of the mesh
 
 template<class T>
@@ -61,7 +61,7 @@ inline void CMesh<T>::BindVertexArray()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: UnbindVertexArray()
 //	 Purpose: Unbinds the mesh vertex array
 
 template<class T>
@@ -71,7 +71,7 @@ inline void CMesh<T>::UnbindVertexArray()
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GetVerticies()
 //	 Purpose: Gets the vertices of the mesh.
 //	 Returns: The vertices of the mesh.
 
@@ -82,7 +82,7 @@ inline const std::vector<T> CMesh<T>::GetVerticies() const
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: SetVerticies()
 //	 Purpose: Sets the vertices of the mesh via _vVertices.
 
 template<class T>
@@ -93,7 +93,7 @@ inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GetIndicies()
 //	 Purpose: Gets the indices stored in the mesh.
 //	 Returns: The indices stored in the mesh.
 
@@ -104,7 +104,7 @@ inline const std::vector<unsigned int> CMesh<T>::GetIndicies() const
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: SetIndicies()
 //	 Purpose: Sets the indices stored in the mesh via _vIndices.
 
 template<class T>
@@ -115,7 +115,7 @@ inline void CMesh<T>::SetIndicies(const std::vector<unsigned int> _vIndicies)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: Draw()
 //	 Purpose: Draws the mesh using the camera matrix from _Camera
 
 template<class T>

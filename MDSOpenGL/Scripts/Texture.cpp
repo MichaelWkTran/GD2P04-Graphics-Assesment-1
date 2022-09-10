@@ -9,28 +9,27 @@
 #include "Shader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-#include <iostream>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb/stb_image_write.h>
 
-const char* CTexture::m_strDirective = "Resources/Textures/";
+const char* CTexture::m_pDirective = "Resources/Textures/";
 std::map<const char*, CTexture*> CTexture::m_mapTextures;
 
 CTexture::CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget)
 {
-	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
-	m_mapTextures.emplace(std::make_pair(m_strName = _pName, this));
+	std::string strName = std::to_string(m_uiID);
+	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str();
+	m_mapTextures.emplace(std::make_pair(m_pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = _GLeTarget;
 	m_uiUnit = _uiSlot;
-	
-	_uiSlot = 0U;
-	_GLeTarget = 0U;
 }
 
 CTexture::CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
-	//Set up CTexture
-	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
-	m_mapTextures.emplace(std::make_pair(m_strName = _pName, this));
+	std::string strName = std::to_string(m_uiID);
+	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str(); 
+	m_mapTextures.emplace(std::make_pair(m_pName = _pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = GL_TEXTURE_2D;
 	m_uiUnit = _uiSlot;	
@@ -38,7 +37,7 @@ CTexture::CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSl
 	//Load 2D Image
 	int iImageWidth, iImageHeight, iChannelNum;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* pImageData = stbi_load((std::string(m_strDirective) + _pImage).c_str(), &iImageWidth, &iImageHeight, &iChannelNum, 0);
+	unsigned char* pImageData = stbi_load((std::string(m_pDirective) + _pImage).c_str(), &iImageWidth, &iImageHeight, &iChannelNum, 0);
 
 	Bind();
 
@@ -51,16 +50,12 @@ CTexture::CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSl
 	stbi_image_free(pImageData);
 
 	Unbind();
-	
-	_uiSlot = 0U;
-	_GLeFormat = 0U;
-	_GLePixelType = 0U;
 }
 
 CTexture::~CTexture()
 {
-	m_mapTextures.at(m_strName) = nullptr;
-	m_mapTextures.erase(m_strName);
+	m_mapTextures.at(m_pName) = nullptr;
+	m_mapTextures.erase(m_pName);
 	glDeleteTextures(1, &m_uiID);
 }
 

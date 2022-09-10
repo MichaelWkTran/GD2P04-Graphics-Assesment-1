@@ -56,7 +56,7 @@ CCamera::CCamera()
 CCamera::~CCamera()
 {
 	//Set m_pMainCamera to null if it is destroyed
-	if (m_pMainCamera == this) m_pMainCamera == nullptr;
+	if (m_pMainCamera == this) m_pMainCamera = nullptr;
 }
 
 //------------------------------------------------------------------------------------------------------------------------

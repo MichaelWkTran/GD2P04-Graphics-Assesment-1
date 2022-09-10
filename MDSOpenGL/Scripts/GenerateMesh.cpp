@@ -9,7 +9,7 @@
 #include <glm/gtc/constants.hpp>
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GenerateCube()
 //	 Purpose: Generates a cube mesh and assigns it to _Mesh. _v3Scale is the size of the generated cube applied to the vertices themselves rather than the transform of the mesh
 
 void gm::GenerateCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,1.0f,1.0f)*/)
@@ -48,7 +48,7 @@ void gm::GenerateCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,1.0f
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GenerateFlatCube()
 //	 Purpose: Generates a cube mesh with flat shading and assigns it to _Mesh. _v3Scale is the size of the generated cube applied to the vertices themselves rather than the transform of the mesh
 
 void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,1.0f,1.0f)*/)
@@ -108,7 +108,7 @@ void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GeneratePlane()
 //	 Purpose: Generates a flat plane mesh and assigns it to _v3Scale. If _bXZAxis is true, the plane is created on the XZ plane and if it is false, it is created on the XY plane
 
 void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale, bool _bXZAxis)
@@ -132,7 +132,7 @@ void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale, bool _bXZAxis)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
+// Procedure: GenerateSphere()
 //	 Purpose: Generates a sphere mesh and assigns ito the _Mesh. _fRadius is the radius of the mesh and _iFidelity is the quality of the mesh
 
 void gm::GenerateSphere(CMesh<>& _Mesh, const float _fRadius, const int _iFidelity)
