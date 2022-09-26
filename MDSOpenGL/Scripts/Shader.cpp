@@ -18,52 +18,60 @@ const char* CShader::m_strDirective = "Resources/Shaders/";
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CShader()
 //	 Purpose: Initalises a shader. _pName is the name of the shader which can be used to find it again from the map it is stored in. 
-//			  _strVertexFile is the file directory to the vertex shader file. _strFragmentFile is the file directory to the fragment shader file. 
+//			  _strVertexFile is the file directory to the vertex shader file.
+//			  _strTessControlFile is the file directory to the tessellation control shader file.		  
+//			  _strTessEvaluationFile is the file directory to the tessellation evaluation shader file. 
 //			  _strGeometryFile is the file directory to the geometry shader file.
+//			  _strFragmentFile is the file directory to the fragment shader file.
 //			  _pDefaultUniform is a function pointer used to store the default values of the shader so that it can be used later. 
 
-CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _strFragmentFile, std::string _strGeometryFile, void(*_pDefaultUniform)(CShader& _Shader))
+CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _strFragmentFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
 	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
 	m_mapShaders.emplace(std::make_pair(m_strName = _pName, this));
 	m_pDefaultUniform = _pDefaultUniform;
 
-	//Set up Shaders
-	std::string strVertexCode = GetFileContents(m_strDirective + _strVertexFile); const char* pVertexSource = strVertexCode.c_str();
-	unsigned int GLuVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(GLuVertexShader, 1, &pVertexSource, NULL);
-	glCompileShader(GLuVertexShader);
-	CompileErrors(GLuVertexShader, "VERTEX");
-
-	std::string strFragmentCode = GetFileContents(m_strDirective + _strFragmentFile); const char* pFragmentSource = strFragmentCode.c_str();
-	unsigned int GLuFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(GLuFragmentShader, 1, &pFragmentSource, NULL);
-	glCompileShader(GLuFragmentShader);
-	CompileErrors(GLuFragmentShader, "FRAGMENT");
-
-	unsigned int GLuGeometryShader = 0;
-	if (m_bUsesGeometryShader = (_strGeometryFile != ""))
-	{
-		std::string strGeometryCode = GetFileContents(m_strDirective + _strGeometryFile); const char* pGeometrySource = strGeometryCode.c_str();
-		GLuGeometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-		glShaderSource(GLuGeometryShader, 1, &pGeometrySource, NULL);
-		glCompileShader(GLuGeometryShader);
-		CompileErrors(GLuGeometryShader, "GEOMETRY");
-	}
-
-	//Create and link to Program
+	//Create Program
 	m_uiID = glCreateProgram();
 
-	glAttachShader(m_uiID, GLuVertexShader);
-	glAttachShader(m_uiID, GLuFragmentShader);
-	if (m_bUsesGeometryShader) glAttachShader(m_uiID, GLuGeometryShader);
+	//Set up Shaders
+	auto lamCreateShaders = [&](std::string _strShaderDirectory, int _iShaderType, std::string _strShaderType)->const int
+	{
+		if (_strShaderDirectory != "") return -1;
 
+		//Read shader
+		std::string strShaderCode = GetFileContents(m_strDirective + _strShaderDirectory); const char* pVertexSource = strShaderCode.c_str();
+		
+		//Create and Compile Shader
+		unsigned int uiShaderID = glCreateShader(_iShaderType);
+		glShaderSource(uiShaderID, 1, &pVertexSource, NULL);
+		glCompileShader(uiShaderID);
+		
+		//Print any errors in creating and compiling a shader
+		CompileErrors(uiShaderID, _strShaderType);
+
+		//Attach shader to program
+		glAttachShader(m_uiID, uiShaderID);
+
+		return (int)uiShaderID;
+	};
+
+	int iVertexShader = lamCreateShaders(m_strDirective + _strVertexFile, GL_VERTEX_SHADER, "VERTEX");
+	int iTessControlShader = lamCreateShaders(m_strDirective + _strTessControlFile, GL_TESS_CONTROL_SHADER, "TESSELLATION_CONTROL_SHADER");
+	int iTessEvaluationShader = lamCreateShaders(m_strDirective + _strTessEvaluationFile, GL_TESS_EVALUATION_SHADER, "TESSELLATION_EVALUATION_SHADER");
+	int iGeometryShader = lamCreateShaders(m_strDirective + _strGeometryFile, GL_GEOMETRY_SHADER, "GEOMETRY");
+	int iFragmentShader = lamCreateShaders(m_strDirective + _strFragmentFile, GL_FRAGMENT_SHADER, "FRAGMENT");
+
+	//Link shaders to program
 	glLinkProgram(m_uiID);
 	CompileErrors(m_uiID, "PROGRAM");
 
-	glDeleteShader(GLuVertexShader);
-	glDeleteShader(GLuFragmentShader);
-	if (m_bUsesGeometryShader) glDeleteShader(GLuGeometryShader);
+	//Delete Shaders
+	if (iVertexShader	>= 0) glDeleteShader(iVertexShader);
+	if (iTessControlShader >= 0) glDeleteShader(iTessControlShader);
+	if (iTessEvaluationShader >= 0) glDeleteShader(iTessEvaluationShader);
+	if (iGeometryShader	>= 0) glDeleteShader(iGeometryShader);
+	if (iFragmentShader	>= 0) glDeleteShader(iFragmentShader);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
