@@ -14,7 +14,7 @@ in vec3 vs_v3Position;
 uniform sampler3D uni_samp3DDiffuse0;
 uniform vec3 uni_v3CameraPosition;
 uniform vec3 uni_v3FogColour = vec3(0.0f, 0.0f, 0.0f);
-uniform float uni_fFogStart = 5.0f;
+uniform float uni_fFogStart = 20.0f;
 uniform float uni_fFogRange = 10.0f;
 
 vec4 MixFogColour(vec4 _v4Colour)

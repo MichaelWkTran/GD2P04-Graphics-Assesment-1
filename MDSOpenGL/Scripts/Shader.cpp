@@ -37,7 +37,7 @@ CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _st
 	//Set up Shaders
 	auto lamCreateShaders = [&](std::string _strShaderDirectory, int _iShaderType, std::string _strShaderType)->const int
 	{
-		if (_strShaderDirectory != "") return -1;
+		if (_strShaderDirectory == "") return -1;
 
 		//Read shader
 		std::string strShaderCode = GetFileContents(m_strDirective + _strShaderDirectory); const char* pVertexSource = strShaderCode.c_str();
@@ -56,22 +56,22 @@ CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _st
 		return (int)uiShaderID;
 	};
 
-	int iVertexShader = lamCreateShaders(m_strDirective + _strVertexFile, GL_VERTEX_SHADER, "VERTEX");
-	int iTessControlShader = lamCreateShaders(m_strDirective + _strTessControlFile, GL_TESS_CONTROL_SHADER, "TESSELLATION_CONTROL_SHADER");
-	int iTessEvaluationShader = lamCreateShaders(m_strDirective + _strTessEvaluationFile, GL_TESS_EVALUATION_SHADER, "TESSELLATION_EVALUATION_SHADER");
-	int iGeometryShader = lamCreateShaders(m_strDirective + _strGeometryFile, GL_GEOMETRY_SHADER, "GEOMETRY");
-	int iFragmentShader = lamCreateShaders(m_strDirective + _strFragmentFile, GL_FRAGMENT_SHADER, "FRAGMENT");
+	int iVertexShader = lamCreateShaders(_strVertexFile, GL_VERTEX_SHADER, "VERTEX");
+	int iTessControlShader = lamCreateShaders(_strTessControlFile, GL_TESS_CONTROL_SHADER, "TESSELLATION_CONTROL_SHADER");
+	int iTessEvaluationShader = lamCreateShaders(_strTessEvaluationFile, GL_TESS_EVALUATION_SHADER, "TESSELLATION_EVALUATION_SHADER");
+	int iGeometryShader = lamCreateShaders(_strGeometryFile, GL_GEOMETRY_SHADER, "GEOMETRY");
+	int iFragmentShader = lamCreateShaders(_strFragmentFile, GL_FRAGMENT_SHADER, "FRAGMENT");
 
 	//Link shaders to program
 	glLinkProgram(m_uiID);
 	CompileErrors(m_uiID, "PROGRAM");
 
 	//Delete Shaders
-	if (iVertexShader	>= 0) glDeleteShader(iVertexShader);
-	if (iTessControlShader >= 0) glDeleteShader(iTessControlShader);
+	if (iVertexShader	>= 0)		glDeleteShader(iVertexShader);
+	if (iTessControlShader >= 0)	glDeleteShader(iTessControlShader);
 	if (iTessEvaluationShader >= 0) glDeleteShader(iTessEvaluationShader);
-	if (iGeometryShader	>= 0) glDeleteShader(iGeometryShader);
-	if (iFragmentShader	>= 0) glDeleteShader(iFragmentShader);
+	if (iGeometryShader	>= 0)		glDeleteShader(iGeometryShader);
+	if (iFragmentShader	>= 0)		glDeleteShader(iFragmentShader);
 }
 
 //------------------------------------------------------------------------------------------------------------------------

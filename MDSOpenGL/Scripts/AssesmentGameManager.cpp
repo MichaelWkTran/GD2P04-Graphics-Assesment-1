@@ -106,7 +106,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 	//Setup Terrain Shader and textures
 	new CShader
 	(
-		"Terrain", "Terrain.vert", "Terrain.frag", "", 
+		"Terrain", "Grass.vert", "Grass.geom", "Grass.frag",
 		[](CShader& _Shader)
 		{
 			_Shader.Uniform2f("uni_v2Tiling", 200.0f, 200.0f);
@@ -137,6 +137,11 @@ CAssesmentGameManager::CAssesmentGameManager()
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", CTexture::Find("Grass"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand",  CTexture::Find("Sand"));
+
+		pTerrain->m_Mesh.m_pDrawMethod = [](CMesh<stVertex>& _Mesh)
+		{
+			glDrawArrays(GL_POINTS, 0, 1);
+		};
 	}
 
 	//Create Perlin Terrain
@@ -162,6 +167,11 @@ CAssesmentGameManager::CAssesmentGameManager()
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", CTexture::Find("Grass"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand", CTexture::Find("Sand"));
+
+		pTerrain->m_Mesh.m_pDrawMethod = [](CMesh<stVertex>& _Mesh)
+		{
+			glDrawArrays(GL_POINTS, 0, 1);
+		};
 	}
 
 	//Create Saved Terrain
@@ -176,6 +186,11 @@ CAssesmentGameManager::CAssesmentGameManager()
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseStone", CTexture::Find("Stone"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseGrass", CTexture::Find("Grass"));
 		pTerrain->m_Mesh.m_mapTextures.emplace("uni_samp2DDiffuseSand",  CTexture::Find("Sand"));
+
+		pTerrain->m_Mesh.m_pDrawMethod = [](CMesh<stVertex>& _Mesh)
+		{
+			glDrawArrays(GL_POINTS, 0, 1);
+		};
 	}
 
 	//Draw Outlined Object
