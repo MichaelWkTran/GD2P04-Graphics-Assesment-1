@@ -54,7 +54,7 @@ CGameManager::~CGameManager()
 // Procedure: DestroyImmediate()
 //	 Purpose: DestroyImmediate is used for destroying the given updated object, _pUpdatedObject, imediately outside of the update loop.
 
-void CGameManager::DestroyImmediate(CUpdatedObject* _pUpdatedObject)
+void CGameManager::DestroyImmediate(CUpdatedObject*&& _pUpdatedObject)
 {
 	//Check whether the given pointer is valid
 	if (_pUpdatedObject == nullptr)

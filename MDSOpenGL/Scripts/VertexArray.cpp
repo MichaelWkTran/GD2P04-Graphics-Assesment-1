@@ -48,8 +48,8 @@ void CVertexArray::LinkAttribute
     void* _pOffset
 )
 {
-    glVertexAttribPointer(_uiLayout, _uiNumComponents, _GLeType, GL_FALSE, _Stride, _pOffset);
     glEnableVertexAttribArray(_uiLayout);
+    glVertexAttribPointer(_uiLayout, _uiNumComponents, _GLeType, GL_FALSE, _Stride, _pOffset);
 }
 
 //------------------------------------------------------------------------------------------------------------------------

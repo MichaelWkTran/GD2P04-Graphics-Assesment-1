@@ -109,17 +109,18 @@ void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: GeneratePlane()
-//	 Purpose: Generates a flat plane mesh and assigns it to _v3Scale. If _bXZAxis is true, the plane is created on the XZ plane and if it is false, it is created on the XY plane
+//	 Purpose: Generates a flat plane mesh and assigns it to _Mesh. _v3Scale is the size of the generated plane applied to the vertices themselves rather than the transform of the mesh
+//			  The plane is generated on the XY Plane
 
-void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale, bool _bXZAxis)
+void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale)
 {
 	std::vector<stVertex> vVertices =
 	{
 		//Coordinates                                     Normals                      Texture Cordinate
-		stVertex{glm::vec3(-0.5f,-0.5f * !_bXZAxis,-0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,1.0f)},
-		stVertex{glm::vec3(-0.5f, 0.5f * !_bXZAxis, 0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f, 0.5f * !_bXZAxis, 0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f,-0.5f * !_bXZAxis,-0.5f * _bXZAxis) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,1.0f)},
 	};
 	std::vector<unsigned int> vIndices =
 	{
@@ -130,6 +131,53 @@ void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale, bool _bXZAxis)
 	_Mesh.SetVerticies(vVertices);
 	_Mesh.SetIndicies(vIndices);
 }
+
+//------------------------------------------------------------------------------------------------------------------------
+// Procedure: GenerateGrid()
+//	 Purpose: Generates a flat grid mesh and assigns it to _Mesh. _v3Scale is the size of the generated grid applied to the vertices themselves rather than the transform of the mesh
+//			  The plane is generated on the XY Plane
+
+//void gm::GenerateGrid(CMesh<>& _Mesh, unsigned int _uiWidth, unsigned int _uiHeight, glm::vec3 _v3Scale)
+//{
+//	//Calculate Mesh Vertices
+//	std::vector<stVertex> vVertices;
+//	for (unsigned int y = 0; y < _uiHeight; y++)
+//		for (unsigned int x = 0; x < _uiWidth; x++)
+//		{
+//			vVertices.emplace_back
+//			(
+//				stVertex
+//				{
+//					glm::vec3((float)x, (float)y, 0.0f) - ((glm::vec3((float)_uiWidth, (float)_uiHeight, 0.0f) / 2.0f)),
+//					glm::vec3(0.0f, 0.0f, 1.0f),
+//					glm::vec2((float)x / (float)_uiWidth, (float)y / (float)_uiHeight)
+//				}
+//			);
+//		}
+//
+//	//Calculate Mesh Indices
+//	const unsigned int uiFaceNumber = (_uiHeight - 1) * (_uiWidth - 1) * 2;
+//	std::vector<unsigned int> vIndices(uiFaceNumber * 3);
+//
+//	unsigned int k = 0;
+//	for (unsigned int i = 0; i < _uiHeight - 1; i++)
+//		for (unsigned int j = 0; j < _uiWidth - 1; j++)
+//		{
+//			vIndices[k] = (i * _uiWidth) + j;
+//			vIndices[k + 1] = ((i + 1) * _uiWidth) + j;
+//			vIndices[k + 2] = (i * _uiWidth) + j + 1;
+//
+//			vIndices[k + 3] = ((i + 1) * _uiWidth) + j;
+//			vIndices[k + 4] = ((i + 1) * _uiWidth) + j + 1;
+//			vIndices[k + 5] = (i * _uiWidth) + j + 1;
+//
+//			k += 6; // next quad
+//		}
+//
+//	//Set verticies and indicies of mesh
+//	_Mesh.SetVerticies(vVertices);
+//	_Mesh.SetIndicies(vIndices);
+//}
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: GenerateSphere()

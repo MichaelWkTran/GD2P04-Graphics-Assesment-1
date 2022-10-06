@@ -151,9 +151,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts\3DTextureObject.cpp" />
     <ClCompile Include="Scripts\AssesmentGameManager.cpp" />
     <ClCompile Include="Scripts\Camera.cpp" />
+    <ClCompile Include="Scripts\FrameBuffer.cpp" />
+    <ClCompile Include="Scripts\GeoSphere.cpp" />
     <ClCompile Include="Scripts\CubeSkybox.cpp" />
     <ClCompile Include="Scripts\ElementBuffer.cpp" />
     <ClCompile Include="Scripts\Font.cpp" />
@@ -162,13 +163,12 @@
     <ClCompile Include="Scripts\GameObject.cpp" />
     <ClCompile Include="Scripts\GenerateMesh.cpp" />
     <ClCompile Include="Scripts\GenerateTexture.cpp" />
+    <ClCompile Include="Scripts\GeoStar.cpp" />
     <ClCompile Include="Scripts\LightManager.cpp" />
     <ClCompile Include="Scripts\Main.cpp" />
     <ClCompile Include="Scripts\Mesh.cpp" />
-    <ClCompile Include="Scripts\OutlinedObject.cpp" />
     <ClCompile Include="Scripts\QuadMousePick.cpp" />
     <ClCompile Include="Scripts\Shader.cpp" />
-    <ClCompile Include="Scripts\Terrain.cpp" />
     <ClCompile Include="Scripts\TextLabel.cpp" />
     <ClCompile Include="Scripts\Texture.cpp" />
     <ClCompile Include="Scripts\TinyObjectLoader.cpp" />
@@ -177,9 +177,10 @@
     <ClCompile Include="Scripts\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scripts\3DTextureObject.h" />
     <ClInclude Include="Scripts\AssesmentGameManager.h" />
     <ClInclude Include="Scripts\Camera.h" />
+    <ClInclude Include="Scripts\FrameBuffer.h" />
+    <ClInclude Include="Scripts\GeoSphere.h" />
     <ClInclude Include="Scripts\CubeSkybox.h" />
     <ClInclude Include="Scripts\ElementBuffer.h" />
     <ClInclude Include="Scripts\Font.h" />
@@ -188,13 +189,12 @@
     <ClInclude Include="Scripts\GameObject.h" />
     <ClInclude Include="Scripts\GenerateMesh.h" />
     <ClInclude Include="Scripts\GenerateTexture.h" />
+    <ClInclude Include="Scripts\GeoStar.h" />
     <ClInclude Include="Scripts\LightManager.h" />
     <ClInclude Include="Scripts\Main.h" />
     <ClInclude Include="Scripts\Mesh.h" />
-    <ClInclude Include="Scripts\OutlinedObject.h" />
     <ClInclude Include="Scripts\QuadMousePick.h" />
     <ClInclude Include="Scripts\Shader.h" />
-    <ClInclude Include="Scripts\Terrain.h" />
     <ClInclude Include="Scripts\TextLabel.h" />
     <ClInclude Include="Scripts\Texture.h" />
     <ClInclude Include="Scripts\TinyObjectLoader.h" />

@@ -32,10 +32,3 @@
 # Folders
 ipch/
 FileContentIndex/
-
-*.log
-*.ilk
-*.tlog
-*.idb
-*.pdb
-Debug/

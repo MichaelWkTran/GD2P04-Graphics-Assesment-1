@@ -22,15 +22,15 @@ private:
 
 protected:
 	std::deque<CUpdatedObject*> m_dequeUpdatedObject;
-	
 	~CGameManager();
 
 public:
+	//Game Manager Methods
 	CGameManager();
 	CGameManager(const CGameManager&) = delete;
 	CGameManager& operator= (const CGameManager&) = delete;
 	
-	void DestroyImmediate(CUpdatedObject* _pUpdatedObject);
+	void DestroyImmediate(CUpdatedObject*&& _pUpdatedObject);
 	void DestroyImmediate(CUpdatedObject*& _pUpdatedObject);
 	void Clear();
 

@@ -128,7 +128,7 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	if (m_bUpdateVertexArray)
 	{
 		m_bUpdateVertexArray = false;
-		T::LinkAttributes(&m_VertexArray, &m_VertexBuffer, &m_ElementBuffer);
+		T::LinkAttributes(m_VertexArray, m_VertexBuffer, &m_ElementBuffer);
 	}
 
 	//Set GameObject Uniform

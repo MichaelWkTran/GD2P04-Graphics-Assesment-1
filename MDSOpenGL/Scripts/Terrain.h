@@ -105,4 +105,6 @@ public:
 		m_Mesh.SetVerticies(vVertices);
 		m_Mesh.SetIndicies(vIndices);
 	}
+
+	void Draw() override;
 };

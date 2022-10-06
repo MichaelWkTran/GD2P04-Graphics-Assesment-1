@@ -11,22 +11,22 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-template <class T>
+template <class VertexType>
 class CVertexBuffer
 {
 protected:
 	unsigned int m_uiID;
-	std::vector <T> m_vVertices;
+	std::vector<VertexType> m_vVertices;
 
 public:
 	CVertexBuffer();
-	CVertexBuffer(const std::vector<T> _vVerticies);
+	CVertexBuffer(const std::vector<VertexType> _vVerticies);
 	CVertexBuffer(CVertexBuffer const&) = delete;
 	~CVertexBuffer();
 
 	const unsigned int& GetID();
-	const std::vector<T> GetVertices() const;
-	void SetVertices(const std::vector<T> _vVertices);
+	const std::vector<VertexType> GetVertices() const;
+	void SetVertices(const std::vector<VertexType> _vVertices);
 	void Bind();
 	void Unbind();
 };
@@ -35,8 +35,8 @@ public:
 // Procedure: GetModel()
 //	 Purpose: Generates a vertex buffer.
 
-template<class T>
-inline CVertexBuffer<T>::CVertexBuffer()
+template<class VertexType>
+inline CVertexBuffer<VertexType>::CVertexBuffer()
 {
 	glGenBuffers(1, &m_uiID);
 }
@@ -45,8 +45,8 @@ inline CVertexBuffer<T>::CVertexBuffer()
 // Procedure: GetModel()
 //	 Purpose: Generates a vertex buffer and assigns it with vertex data via _vVerticies
 
-template<class T>
-inline CVertexBuffer<T>::CVertexBuffer(const std::vector<T> _vVerticies)
+template<class VertexType>
+inline CVertexBuffer<VertexType>::CVertexBuffer(const std::vector<VertexType> _vVerticies)
 {
 	glGenBuffers(1, &m_uiID);
 	SetVertices(_vVerticies);
@@ -56,8 +56,8 @@ inline CVertexBuffer<T>::CVertexBuffer(const std::vector<T> _vVerticies)
 // Procedure: GetModel()
 //	 Purpose: Deletes the vertex buffer
 
-template<class T>
-inline CVertexBuffer<T>::~CVertexBuffer()
+template<class VertexType>
+inline CVertexBuffer<VertexType>::~CVertexBuffer()
 {
 	glDeleteBuffers(1, &m_uiID);
 }
@@ -67,8 +67,8 @@ inline CVertexBuffer<T>::~CVertexBuffer()
 //	 Purpose: Gets the vertex buffer ID
 //	 Returns: The vertex buffer ID
 
-template<class T>
-inline const unsigned int& CVertexBuffer<T>::GetID()
+template<class VertexType>
+inline const unsigned int& CVertexBuffer<VertexType>::GetID()
 {
 	return m_uiID;
 }
@@ -78,8 +78,8 @@ inline const unsigned int& CVertexBuffer<T>::GetID()
 //	 Purpose: Gets the vertices stored in the vertex buffer
 //	 Returns: The vertices stored in the vertex buffer.
 
-template<class T>
-inline const std::vector<T> CVertexBuffer<T>::GetVertices() const
+template<class VertexType>
+inline const std::vector<VertexType> CVertexBuffer<VertexType>::GetVertices() const
 {
 	return m_vVertices;
 }
@@ -88,13 +88,13 @@ inline const std::vector<T> CVertexBuffer<T>::GetVertices() const
 // Procedure: GetModel()
 //	 Purpose: Sets the vertices stored in the vertex buffer via _vVertices.
 
-template<class T>
-inline void CVertexBuffer<T>::SetVertices(const std::vector<T> _vVertices)
+template<class VertexType>
+inline void CVertexBuffer<VertexType>::SetVertices(const std::vector<VertexType> _vVertices)
 {
 	m_vVertices = _vVertices;
 
 	Bind();
-	glBufferData(GL_ARRAY_BUFFER, m_vVertices.size() * sizeof(T), m_vVertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_vVertices.size() * sizeof(VertexType), m_vVertices.data(), GL_STATIC_DRAW);
 	Unbind();
 }
 
@@ -102,8 +102,8 @@ inline void CVertexBuffer<T>::SetVertices(const std::vector<T> _vVertices)
 // Procedure: GetModel()
 //	 Purpose: Binds the vertex buffer.
 
-template<class T>
-inline void CVertexBuffer<T>::Bind()
+template<class VertexType>
+inline void CVertexBuffer<VertexType>::Bind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiID);
 }
@@ -112,8 +112,8 @@ inline void CVertexBuffer<T>::Bind()
 // Procedure: GetModel()
 //	 Purpose: Unbinds the vertex buffer
 
-template<class T>
-inline void CVertexBuffer<T>::Unbind()
+template<class VertexType>
+inline void CVertexBuffer<VertexType>::Unbind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

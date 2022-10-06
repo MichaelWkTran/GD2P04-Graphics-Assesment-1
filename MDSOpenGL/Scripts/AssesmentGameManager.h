@@ -8,12 +8,17 @@
 #pragma once
 #include "GameManager.h"
 
+enum class FrameBufferEffect
+{
+	None,
+	Rain,
+	ChromaticAberration,
+	CRT
+};
+
 class CAssesmentGameManager : public CGameManager
 {
 public:
-	bool m_bScissorTestEnabled;
-	bool m_bStencilTestEnabled;
-
 	CAssesmentGameManager();
 	void Update() override;
 };

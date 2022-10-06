@@ -22,17 +22,15 @@ struct stVertex
 	glm::vec3 v3Normal;
 	glm::vec2 v2TextureUV;
 	
-	static void LinkAttributes(CVertexArray* _pVertexArray, CVertexBuffer<stVertex>* _pVertexBuffer, CElementBuffer* _pElementBuffer)
+	static void LinkAttributes(CVertexArray& _VertexArray, CVertexBuffer<stVertex>& _VertexBuffer, CElementBuffer* _pElementBuffer = nullptr)
 	{
-		if (_pVertexArray == nullptr || _pVertexBuffer == nullptr || _pElementBuffer == nullptr) return;
+		_VertexArray.Bind(); _VertexBuffer.Bind(); if (_pElementBuffer) _pElementBuffer->Bind();
 
-		_pVertexArray->Bind(); _pVertexBuffer->Bind(); _pElementBuffer->Bind();
+		_VertexArray.LinkAttribute(0 /*m_v3Position*/,	   3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Position)));
+		_VertexArray.LinkAttribute(1 /*m_v3Normal*/,	   3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Normal)));
+		_VertexArray.LinkAttribute(2 /*m_v2TextureCoord*/, 2, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v2TextureUV)));
 
-		_pVertexArray->LinkAttribute(0 /*m_v3Position*/,	 3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Position)));
-		_pVertexArray->LinkAttribute(1 /*m_v3Normal*/,		 3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Normal)));
-		_pVertexArray->LinkAttribute(2 /*m_v2TextureCoord*/, 2, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v2TextureUV)));
-
-		_pVertexArray->Unbind(); _pVertexBuffer->Unbind(); _pElementBuffer->Unbind();
+		_VertexArray.Unbind(); _VertexBuffer.Unbind(); if (_pElementBuffer) _pElementBuffer->Unbind();
 	}
 };
 

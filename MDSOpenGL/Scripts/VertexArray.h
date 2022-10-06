@@ -22,8 +22,8 @@ public:
 	const unsigned int& GetID();
 	void LinkAttribute
 	(
-		unsigned int  GluLayout,
-		unsigned int  _GLuNumComponents,
+		unsigned int _GluLayout,
+		unsigned int _GLuNumComponents,
 		GLenum _GLeType,
 		GLsizeiptr _Stride,
 		void* _pOffset
