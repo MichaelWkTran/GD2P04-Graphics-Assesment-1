@@ -32,4 +32,8 @@
 # Folders
 ipch/
 FileContentIndex/
-MDSOpenGL/Debug/
+*.log
+*.ilk
+*.tlog
+*.idb
+*.pdb
