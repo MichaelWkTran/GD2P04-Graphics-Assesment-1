@@ -8,6 +8,37 @@
 #include "LightManager.h"
 #include <fstream>
 #include "Shader.h"
+#include "Texture.h"
+#include "Main.h"
+
+CLightManager* CLightManager::m_pSingleton = nullptr;
+
+CLightManager::CLightManager()
+{
+	// depth texture
+	CTexture* m_pDepthMap = new CTexture("DepthMap", 0);
+	m_pDepthMap->Bind();
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, e_uViewPortW, e_uViewPortH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+	unsigned int depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+
+	// attach depth texture as FBO's depth buffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *m_pDepthMap, 0);
+
+	//disable writes to color buffer
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	// unbind buffer 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (Status != GL_FRAMEBUFFER_COMPLETE) {
+		printf("FB error, status: 0x%x\n", Status);
+	}
+}
 
 //Set Ambient Colour
 glm::vec4 CLightManager::m_v4AmbientColour = glm::vec4(1.0f,1.0f,1.0f,0.2f);

@@ -111,8 +111,14 @@ int main()
     }
 
     //Setup Window Viewport
-    glViewport(0, 0, e_uViewPortW, e_uViewPortH);
-    glfwSetFramebufferSizeCallback(e_pMainWindow, [](GLFWwindow* _pMainWindow, int _iWidth, int _iHeight) {glViewport(0, 0, _iWidth, _iHeight); });
+    glViewport(0, 0, (int)e_uViewPortW, (int)e_uViewPortH);
+    glfwSetFramebufferSizeCallback(e_pMainWindow, [](GLFWwindow* _pMainWindow, int _iWidth, int _iHeight)
+    {
+        glViewport(0, 0, _iWidth, _iHeight);
+        //e_uViewPortW = (int)_iWidth;
+        //e_uViewPortH = (int)_iHeight;
+        //GetMainCamera().SetViewPort(glm::uvec2(_iWidth, _iHeight));
+    });
 
     //Set up Culling
     glEnable(GL_DEPTH_TEST);

@@ -53,6 +53,12 @@ struct stSpotLight
 
 class CLightManager
 {
+private:
+	static CLightManager* m_pSingleton;
+
+	~CLightManager() {};
+	CLightManager();
+
 public:
 	static glm::vec4 m_v4AmbientColour;
 
@@ -64,4 +70,14 @@ public:
 	static const unsigned int TotalLights();
 	static void UpdateShaderUniforms(CShader* _pShader);
 	static void UpdateShaderUniforms(std::vector<CShader*> _vShaders);
+
+	CLightManager(const CLightManager&) = delete;
+	CLightManager& operator= (const CLightManager&) = delete;
+	static CLightManager& GetSingleton()
+	{
+		if (m_pSingleton == nullptr) m_pSingleton = new CLightManager();
+		return *m_pSingleton;
+	}
 };
+
+#define GetLightManager CLightManager::GetSingeton

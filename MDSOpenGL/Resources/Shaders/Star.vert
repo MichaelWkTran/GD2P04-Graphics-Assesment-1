@@ -4,7 +4,7 @@ layout (location = 0) in vec3 in_v3Position;
 
 out VS_GS_VERTEX
 {
-	out vec4 v3Position;
+	out vec4 v4Position;
 	out mat4 mat4CameraMatrix;
 } vs_out;
 
@@ -14,6 +14,6 @@ void main()
 {
 	gl_Position = uni_mat4CameraMatrix * vec4(in_v3Position, 1.0f);
 	
-	vs_out.v3Position = gl_Position;
+	vs_out.v4Position = gl_Position;
 	vs_out.mat4CameraMatrix = uni_mat4CameraMatrix;
 }

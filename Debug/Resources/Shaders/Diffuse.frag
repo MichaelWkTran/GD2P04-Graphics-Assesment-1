@@ -14,6 +14,8 @@ in vec3 vs_v3Normal;
 in vec2 vs_v2TextureCoord;
 
 //Unique Uniforms---------------------------------------------------------
+uniform vec4 uni_v4Colour = vec4(1.0);
+
 //Texture Uniforms
 uniform sampler2D uni_samp2DDiffuse0;
 uniform sampler2D uni_samp2DSpecular0;
@@ -24,7 +26,7 @@ uniform float uni_fSpecularStrength = 0.3f;
 uniform float uni_fShininess = 16.0f;
 
 uniform float uni_fRimExponent = 16.0f;
-uniform vec4 uni_v4RimColour = vec4(1.0f, 1.0f, 1.0f, 0.0f);
+uniform vec4 uni_v4RimColour = vec4(1.0, 1.0, 1.0, 0.0);
 
 uniform float uni_fReflectionStrength = 0;
 
@@ -84,13 +86,13 @@ uniform int uni_iSpotLightNum = 0;
 uniform stSpotLight uni_SpotLight[MAX_SPOT_LIGHT];
 
 //Fog Uniforms
-uniform vec3 uni_v3FogColour = vec3(0.0f, 0.0f, 0.0f);
+uniform vec3 uni_v3FogColour = vec3(0.0);
 uniform float uni_fFogStart = 20.0f;
 uniform float uni_fFogRange = 10.0f;
 
 //Global Variables
-vec3 g_v3Diffuse = vec3(0);
-vec3 g_v3Specular = vec3(0);
+vec3 g_v3Diffuse = vec3(0.0);
+vec3 g_v3Specular = vec3(0.0);
 
 void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _fIntensity)
 {
@@ -109,7 +111,7 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 
 vec3 RimColour()
 {
-	if (uni_v4RimColour.w <= 0) return vec3(0);
+	if (uni_v4RimColour.w <= 0) return vec3(0.0);
 
 	float fRimFactor = 1.0f - dot(vs_v3Normal, uni_v3CameraPosition - vs_v3Position);
 	fRimFactor = smoothstep(0.0f, 1.0f, fRimFactor);
@@ -210,7 +212,7 @@ void main()
 	}
 
 	//Calculate Final Fragment Colour
-	fs_v4Colour = vec4(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
+	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_v3Specular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
 	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);

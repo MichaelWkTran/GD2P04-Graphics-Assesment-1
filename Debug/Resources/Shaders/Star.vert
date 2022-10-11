@@ -1,6 +1,6 @@
 #version 430 core
 
-layout (locatsdion = 0) in vec3 in_v3Position;
+layout (location = 0) in vec3 in_v3Position;
 
 out VS_GS_VERTEX
 {

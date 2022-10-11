@@ -7,6 +7,9 @@
 
 #pragma once
 #include "GameManager.h"
+#include "Mesh.h"
+
+class CTexture;
 
 enum class FrameBufferEffect
 {
@@ -18,8 +21,16 @@ enum class FrameBufferEffect
 
 class CAssesmentGameManager : public CGameManager
 {
+private:
+	unsigned int m_uiFrameBuffer;
+	unsigned int m_uiRenderBuffer;
+	CMesh<> m_RenderQuad;
+
 public:
+	FrameBufferEffect m_FrameBufferEffect;
+
 	CAssesmentGameManager();
+	~CAssesmentGameManager();
 	void Update() override;
 };
 

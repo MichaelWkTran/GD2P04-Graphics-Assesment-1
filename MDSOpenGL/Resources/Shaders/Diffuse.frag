@@ -212,7 +212,7 @@ void main()
 	}
 
 	//Calculate Final Fragment Colour
-	fs_v4Colour = vec4(uni_v4Colour * v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
+	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_v3Specular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
 	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);

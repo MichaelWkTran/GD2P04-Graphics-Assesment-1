@@ -37,8 +37,8 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 	m_Mesh.SetIndicies(vIndicies);
 
 	//Set up texture
-	CTexture* pTexture = new CTexture("CubeSkybox", 0, GL_TEXTURE_CUBE_MAP);
-	m_Mesh.m_mapTextures.insert(std::make_pair("uni_sampCube", new CTexture("CubeSkybox", 0, GL_TEXTURE_CUBE_MAP)));
+	CTexture* pTexture = new CTexture("CubeSkybox", GL_TEXTURE_CUBE_MAP);
+	m_Mesh.m_mapTextures.insert(std::make_pair("uni_sampCube", new CTexture("CubeSkybox", GL_TEXTURE_CUBE_MAP)));
 	pTexture->Bind();
 
 	int iImageWidth, iImageHeight, iImageComponents;
@@ -76,6 +76,8 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 
 void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
 {
+	//[Texture slot is zero]
+
 	_pShader->Activate();
 	m_Mesh.m_mapTextures[0]->Uniform(*_pShader, "uni_sampSkybox");
 	CTexture::Unbind();

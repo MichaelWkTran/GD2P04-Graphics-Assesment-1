@@ -1,2 +1,5 @@
-﻿  GeoSphere.cpp
-  MDSOpenGL.vcxproj -> D:\Projects\GitHub\GD2P02-1\Debug\MDSOpenGL.exe
+﻿  Mesh.cpp
+  TextLabel.cpp
+  Texture.cpp
+  Generating Code...
+  MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe

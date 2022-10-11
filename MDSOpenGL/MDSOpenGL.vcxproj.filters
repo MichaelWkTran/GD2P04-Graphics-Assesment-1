@@ -70,7 +70,6 @@
     <ClCompile Include="Scripts\GeoStar.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\FrameBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Main.h">
@@ -145,7 +144,6 @@
     <ClInclude Include="Scripts\GeoStar.h">
       <Filter>Assesment</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assesment">

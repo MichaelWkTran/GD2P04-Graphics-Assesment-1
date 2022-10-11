@@ -237,7 +237,12 @@ void CCamera::Update()
 	{
 		if (m_bIsPerspective)
 		{
-			m_mat4Projection = glm::perspective(glm::radians(m_fFieldOfView), ((float)m_uv2ViewPort.x) / ((float)m_uv2ViewPort.y), m_fNearPlane, m_fFarPlane);
+			m_mat4Projection = glm::perspective
+			(
+				glm::radians(m_fFieldOfView),
+				((float)m_uv2ViewPort.x) / ((float)m_uv2ViewPort.y),
+				m_fNearPlane, m_fFarPlane
+			);
 		}
 		else
 		{
