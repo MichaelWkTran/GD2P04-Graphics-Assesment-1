@@ -5,58 +5,16 @@
 /*  DATE: Aug 23rd, 2022																								*/
 /************************************************************************************************************************/
 
-#include "LightManager.h"
-#include <fstream>
+#include "Lights.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Main.h"
 
-std::vector<CLight*> CLight::m_vLightsInWorld;
+
+CShader* CLight::m_pFrameBufferShader = nullptr;
+std::set<CLight*> CLight::m_setLightsInWorld;
 glm::vec4 CLight::m_v4AmbientColour = glm::vec4(1.0f, 1.0f, 1.0f, 0.2f);
-
-CLight::CLight(glm::vec4 _v4LightColour)
-{
-	m_vLightsInWorld.emplace_back(this);
-
-	//Initialise Light
-	m_uiFrameBuffer = 0U;
-	m_v4LightColour = _v4LightColour;
-	m_mat4Projection = glm::mat4(1.0f);
-	m_bUpdateProjectionMatrix = false;
-
-	//Depth Texture
-	CTexture* m_pDepthMap = new CTexture("DepthMap");
-	m_pDepthMap->Bind();
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, e_uViewPortW, e_uViewPortH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	
-	//Create Depth Frame Buffer
-	unsigned int m_uiFrameBuffer;
-	glGenFramebuffers(1, &m_uiFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
-
-	//Attach Depth Texture as FBO's Depth Buffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *m_pDepthMap, 0);
-
-	//Disable Writes to Color Buffer
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	//Unbind Buffer 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//Check Frame Buffer Validation
-	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (Status != GL_FRAMEBUFFER_COMPLETE)
-	{
-		printf("FB error, status: 0x%x\n", Status);
-	}
-}
-
-CLight::~CLight()
-{
-
-}
 
 void CLight::UpdateShaderUniforms(CShader* _pShader)
 {
@@ -66,7 +24,7 @@ void CLight::UpdateShaderUniforms(CShader* _pShader)
 	unsigned int uiSpotLightIndex		   = 0U;
 
 	//Set light type uniforms
-	for (auto& pLight : m_vLightsInWorld)
+	for (auto& pLight : m_setLightsInWorld)
 	{
 		if (auto pObject = dynamic_cast<CInfinitePointLight*>(pLight))
 		{
@@ -132,4 +90,59 @@ void CLight::UpdateShaderUniforms(CShader* _pShader)
 
 	//Set uni_v4AmbientColour
 	_pShader->Uniform4f("uni_v4AmbientColour", m_v4AmbientColour);
+}
+
+CLight::CLight(glm::vec4 _v4LightColour)
+{
+	m_setLightsInWorld.emplace(this);
+	if (m_pFrameBufferShader == nullptr) m_pFrameBufferShader = new CShader("ShadowMap", "ShadowMap.vert", "Empty.frag");
+
+	//Initialise Light
+	m_v4LightColour = _v4LightColour;
+	m_mat4Projection = glm::mat4(1.0f);
+	m_bUpdateProjectionMatrix = false;
+
+	//Depth Texture
+	m_pDepthMap = new CTexture("DepthMap");
+	m_pDepthMap->Bind();
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, e_uViewPortW, e_uViewPortH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+	//Create Depth Frame Buffer
+	glGenFramebuffers(1, &m_uiFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
+
+	//Attach Depth Texture as FBO's Depth Buffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *m_pDepthMap, 0);
+
+	//Disable Writes to Color Buffer
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	//Unbind Buffer 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Check Frame Buffer Validation
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (Status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("FB error, status: 0x%x\n", Status);
+	}
+}
+
+CLight::~CLight()
+{
+	delete m_pDepthMap;
+	glDeleteFramebuffers(1U, &m_uiFrameBuffer);
+}
+
+void CDirectionalLight::CalculateProjectionMatrix()
+{
+	if (m_bUpdateProjectionMatrix == false) return;
+
+	glm::mat4 mat4Projection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 0.1f, 75.0f);
+	glm::mat4 mat4View = glm::lookAt(20.0f * -m_v3LightDirection, {}, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_mat4Projection = mat4Projection * mat4View;
+
+
 }

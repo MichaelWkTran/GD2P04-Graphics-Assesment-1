@@ -9,24 +9,26 @@
 #include <GLEW/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <vector>
-#include "Camera.h"
+#include <set>
 
 class CShader;
+class CTexture;
 
 class CLight
 {
 private:
-	static std::vector<CLight*> m_vLightsInWorld;
+	static std::set<CLight*> m_setLightsInWorld;
 
 protected:
 	unsigned int m_uiFrameBuffer;
+	CTexture* m_pDepthMap;
 	glm::mat4 m_mat4Projection;
 	bool m_bUpdateProjectionMatrix;
 
 	virtual void CalculateProjectionMatrix() = 0;
 
 public:
+	static CShader* m_pFrameBufferShader;
 	static glm::vec4 m_v4AmbientColour;
 	static void UpdateShaderUniforms(CShader* _pShader);
 
@@ -59,7 +61,7 @@ private:
 protected:
 	virtual void CalculateProjectionMatrix() override
 	{
-
+		
 	}
 
 public:
@@ -127,10 +129,7 @@ private:
 	glm::vec3 m_v3LightDirection;
 	
 protected:
-	virtual void CalculateProjectionMatrix() override
-	{
-
-	}
+	virtual void CalculateProjectionMatrix() override;
 
 public:
 	CDirectionalLight(glm::vec4 _v4LightColour = glm::vec4(1.0f), glm::vec3 _v3LightDirection = glm::vec3(-1.0f,-1.0f,1.0f))
