@@ -13,13 +13,10 @@
 #include <stb/stb_image_write.h>
 
 const char* CTexture::m_pDirective = "Resources/Textures/";
-std::map<const char*, CTexture*> CTexture::m_mapTextures;
 
 CTexture::CTexture(const char* _pName, GLenum&& _GLeTarget)
 {
 	std::string strName = std::to_string(m_uiID);
-	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str();
-	m_mapTextures.emplace(std::make_pair(m_pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = _GLeTarget;
 }
@@ -27,8 +24,6 @@ CTexture::CTexture(const char* _pName, GLenum&& _GLeTarget)
 CTexture::CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
 	std::string strName = std::to_string(m_uiID);
-	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str(); 
-	m_mapTextures.emplace(std::make_pair(m_pName = _pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = GL_TEXTURE_2D;
 
@@ -52,8 +47,6 @@ CTexture::CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat,
 
 CTexture::~CTexture()
 {
-	m_mapTextures.at(m_pName) = nullptr;
-	m_mapTextures.erase(m_pName);
 	glDeleteTextures(1, &m_uiID);
 }
 
@@ -93,64 +86,4 @@ void CTexture::Unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindTexture(GL_TEXTURE_3D, 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-}
-
-bool CTexture::Empty()
-{
-	return m_mapTextures.empty();
-}
-
-unsigned int CTexture::Size()
-{
-	return m_mapTextures.size();
-}
-
-unsigned int CTexture::MaxSize()
-{
-	return m_mapTextures.max_size();
-}
-
-CTexture* CTexture::At(unsigned int _uiID)
-{
-	//Seach through the map to find the texture
-	for (auto& pTexture : m_mapTextures)
-	{
-		if (pTexture.second->GetID() == _uiID) return pTexture.second;
-	}
-
-	//Return nullptr if no texture is found
-	return nullptr;
-}
-
-CTexture* CTexture::Find(const char* _pName)
-{
-	if (m_mapTextures.find(_pName) == m_mapTextures.end()) return nullptr;
-	return m_mapTextures.at(_pName);
-}
-
-void CTexture::Erase(unsigned int _uiID)
-{
-	CTexture* pTexture = At(_uiID);
-	if (pTexture == nullptr) return;
-
-	delete pTexture;
-}
-
-void CTexture::Erase(std::string _strName)
-{
-	auto Iterator = m_mapTextures.find(_strName.c_str());
-	if (Iterator == m_mapTextures.end()) return void();
-
-	delete (*Iterator).second;
-}
-
-void CTexture::Clear()
-{
-	for (auto& pTexture : m_mapTextures)
-	{
-		if (pTexture.second != nullptr) delete pTexture.second;
-		pTexture.second = nullptr;
-	}
-
-	m_mapTextures.clear();
 }
