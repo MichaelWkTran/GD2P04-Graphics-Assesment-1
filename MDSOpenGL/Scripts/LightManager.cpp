@@ -11,115 +11,125 @@
 #include "Texture.h"
 #include "Main.h"
 
-CLightManager* CLightManager::m_pSingleton = nullptr;
+std::vector<CLight*> CLight::m_vLightsInWorld;
+glm::vec4 CLight::m_v4AmbientColour = glm::vec4(1.0f, 1.0f, 1.0f, 0.2f);
 
-CLightManager::CLightManager()
+CLight::CLight(glm::vec4 _v4LightColour)
 {
-	// depth texture
-	CTexture* m_pDepthMap = new CTexture("DepthMap", 0);
+	m_vLightsInWorld.emplace_back(this);
+
+	//Initialise Light
+	m_uiFrameBuffer = 0U;
+	m_v4LightColour = _v4LightColour;
+	m_mat4Projection = glm::mat4(1.0f);
+	m_bUpdateProjectionMatrix = false;
+
+	//Depth Texture
+	CTexture* m_pDepthMap = new CTexture("DepthMap");
 	m_pDepthMap->Bind();
+	
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, e_uViewPortW, e_uViewPortH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	
+	//Create Depth Frame Buffer
+	unsigned int m_uiFrameBuffer;
+	glGenFramebuffers(1, &m_uiFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
 
-	unsigned int depthMapFBO;
-	glGenFramebuffers(1, &depthMapFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-
-	// attach depth texture as FBO's depth buffer
+	//Attach Depth Texture as FBO's Depth Buffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *m_pDepthMap, 0);
 
-	//disable writes to color buffer
+	//Disable Writes to Color Buffer
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 
-	// unbind buffer 
+	//Unbind Buffer 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	//Check Frame Buffer Validation
 	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (Status != GL_FRAMEBUFFER_COMPLETE) {
+	if (Status != GL_FRAMEBUFFER_COMPLETE)
+	{
 		printf("FB error, status: 0x%x\n", Status);
 	}
 }
 
-//Set Ambient Colour
-glm::vec4 CLightManager::m_v4AmbientColour = glm::vec4(1.0f,1.0f,1.0f,0.2f);
-
-//Set Light Vectors
-std::vector<stInfinitePointLight> CLightManager::m_vInfinitePointLight;
-std::vector<stPointLight> CLightManager::m_vPointLight;
-std::vector<stDirectionalLight> CLightManager::m_vDirectionalLight;
-std::vector<stSpotLight> CLightManager::m_vSpotLight;
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: TotalLights()
-//	 Purpose: Gets the total amount of lights present in the scene
-//	 Returns: The total amount of lights present in the scene
-
-const unsigned int CLightManager::TotalLights()
+CLight::~CLight()
 {
-	return m_vInfinitePointLight.size() + m_vPointLight.size() + m_vDirectionalLight.size() + m_vSpotLight.size();
+
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: UpdateShaderUniforms()
-//	 Purpose: Updates the light uniforms for a shader
-
-void CLightManager::UpdateShaderUniforms(CShader* _pShader)
+void CLight::UpdateShaderUniforms(CShader* _pShader)
 {
-	_pShader->Activate();
+	unsigned int uiInfinitePointLightIndex = 0U;
+	unsigned int uiPointLightIndex		   = 0U;
+	unsigned int uiDirectionalLightIndex   = 0U;
+	unsigned int uiSpotLightIndex		   = 0U;
 
-	//Set the uniforms foreach light type
-	for (int i = 0; i < (int)m_vInfinitePointLight.size(); i++)
+	//Set light type uniforms
+	for (auto& pLight : m_vLightsInWorld)
 	{
-		_pShader->Uniform3f(("uni_InfinitePointLight[" + std::to_string(i) + "].v3LightPosition").c_str(), m_vInfinitePointLight[i].v3LightPosition);
-		_pShader->Uniform4f(("uni_InfinitePointLight[" + std::to_string(i) + "].v4LightColour").c_str(), m_vInfinitePointLight[i].v4LightColour);
-	}
-	
-	for (int i = 0; i < (int)m_vPointLight.size(); i++)
-	{
-		_pShader->Uniform3f(("uni_PointLight[" + std::to_string(i) + "].v3LightPosition").c_str(), m_vPointLight[i].v3LightPosition);
-		_pShader->Uniform4f(("uni_PointLight[" + std::to_string(i) + "].v4LightColour").c_str(), m_vPointLight[i].v4LightColour);
-		_pShader->Uniform1f(("uni_PointLight[" + std::to_string(i) + "].fAttenuationExponent").c_str(), m_vPointLight[i].fAttenuationExponent);
-		_pShader->Uniform1f(("uni_PointLight[" + std::to_string(i) + "].fAttenuationLinear").c_str(), m_vPointLight[i].fAttenuationLinear);
-		_pShader->Uniform1f(("uni_PointLight[" + std::to_string(i) + "].fAttenuationConstant").c_str(), m_vPointLight[i].fAttenuationConstant);
+		if (auto pObject = dynamic_cast<CInfinitePointLight*>(pLight))
+		{
+			std::string pUniformObject = std::string("uni_InfinitePointLight") + '['+std::to_string(uiInfinitePointLightIndex)+']';
+
+			//Set the light uniforms
+			_pShader->Uniform3f(pUniformObject + ".v3LightPosition", pObject->GetPosition());
+			_pShader->Uniform4f(pUniformObject + ".v4LightColour", pObject->m_v4LightColour);
+			_pShader->UniformMatrix4fv(pUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pObject->GetProjection());
+
+			//Update light index
+			uiInfinitePointLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CPointLight*>(pLight))
+		{
+			std::string pUniformObject = std::string("uni_PointLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+
+			//Set the light uniforms
+			_pShader->Uniform3f(pUniformObject + ".v3LightPosition", pObject->GetPosition());
+			_pShader->Uniform4f(pUniformObject + ".v4LightColour", pObject->m_v4LightColour);
+			_pShader->Uniform1f(pUniformObject + ".fAttenuationExponent", pObject->m_fAttenuationExponent);
+			_pShader->Uniform1f(pUniformObject + ".fAttenuationLinear", pObject->m_fAttenuationLinear);
+			_pShader->Uniform1f(pUniformObject + ".fAttenuationConstant", pObject->m_fAttenuationConstant);
+			_pShader->UniformMatrix4fv(pUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pObject->GetProjection());
+
+			//Update light index
+			uiPointLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CDirectionalLight*>(pLight))
+		{
+			std::string pUniformObject = std::string("uni_DirectionalLight")  + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+
+			//Set the light uniforms
+			_pShader->Uniform3f(pUniformObject + ".v3LightDirection", pObject->GetLightDirection());
+			_pShader->Uniform4f(pUniformObject + ".v4LightColour", pObject->m_v4LightColour);
+			_pShader->UniformMatrix4fv(pUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pObject->GetProjection());
+
+			//Update light index
+			uiDirectionalLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CSpotLight*>(pLight))
+		{
+			std::string pUniformObject = std::string("uni_SpotLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+
+			//Set the light uniforms
+			_pShader->Uniform3f(pUniformObject + ".v3LightPosition", pObject->GetPosition());
+			_pShader->Uniform3f(pUniformObject + ".v3LightDirection", pObject->GetLightDirection());
+			_pShader->Uniform4f(pUniformObject + ".v4LightColour", pObject->m_v4LightColour);
+			_pShader->Uniform1f(pUniformObject + ".fOuterCone", pObject->m_fOuterCone);
+			_pShader->Uniform1f(pUniformObject + ".fInnerCone", pObject->m_fInnerCone);
+			_pShader->UniformMatrix4fv(pUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pObject->GetProjection());
+
+			//Update light index
+			uiSpotLightIndex++;
+		}
 	}
 
-	for (int i = 0; i < (int)m_vDirectionalLight.size(); i++)
-	{
-		_pShader->Uniform3f(("uni_DirectionalLight[" + std::to_string(i) + "].v3LightDirection").c_str(), m_vDirectionalLight[i].v3LightDirection);
-		_pShader->Uniform4f(("uni_DirectionalLight[" + std::to_string(i) + "].v4LightColour").c_str(), m_vDirectionalLight[i].v4LightColour);
-	}
-
-	for (int i = 0; i < (int)m_vSpotLight.size(); i++)
-	{
-		_pShader->Uniform3f(("uni_SpotLight[" + std::to_string(i) + "].v3LightPosition").c_str(), m_vSpotLight[i].v3LightPosition);
-		_pShader->Uniform3f(("uni_SpotLight[" + std::to_string(i) + "].v3LightDirection").c_str(), m_vSpotLight[i].v3LightDirection);
-		_pShader->Uniform4f(("uni_SpotLight[" + std::to_string(i) + "].v4LightColour").c_str(), m_vSpotLight[i].v4LightColour);
-		_pShader->Uniform1f(("uni_SpotLight[" + std::to_string(i) + "].fOuterCone").c_str(), m_vSpotLight[i].fOuterCone);
-		_pShader->Uniform1f(("uni_SpotLight[" + std::to_string(i) + "].fInnerCone").c_str(), m_vSpotLight[i].fInnerCone);
-	}
-	
-	//Check whether the type of light is used or not
-	
 	//Set the uniforms for how may lights are in the world for each type
-	_pShader->Uniform1i("uni_iInfinitePointLightNum", m_vInfinitePointLight.size());
-	_pShader->Uniform1i("uni_iPointLightNum"		, m_vPointLight.size());
-	_pShader->Uniform1i("uni_iDirectionalLightNum"	, m_vDirectionalLight.size());
-	_pShader->Uniform1i("uni_iSpotLightNum"			, m_vSpotLight.size());
+	_pShader->Uniform1i("uni_iInfinitePointLightNum", uiInfinitePointLightIndex);
+	_pShader->Uniform1i("uni_iPointLightNum", uiPointLightIndex);
+	_pShader->Uniform1i("uni_iDirectionalLightNum", uiDirectionalLightIndex);
+	_pShader->Uniform1i("uni_iSpotLightNum", uiSpotLightIndex);
 
 	//Set uni_v4AmbientColour
 	_pShader->Uniform4f("uni_v4AmbientColour", m_v4AmbientColour);
-
-	_pShader->Deactivate();
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: UpdateShaderUniforms()
-//	 Purpose: Updates the light uniforms for a vector of shaders
-
-void CLightManager::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
-{
-	for (auto pShader : _vShaders)
-	{
-		UpdateShaderUniforms(pShader);
-	}
 }

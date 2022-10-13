@@ -141,10 +141,12 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	m_pShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, _Camera.GetCameraMatrix());
 
 	//Set Texture Uniforms
+	int iUnit = 0;
 	for (auto& pTexture : m_mapTextures)
 	{
 		if (pTexture.second == nullptr) continue;
-		pTexture.second->Uniform(*m_pShader, pTexture.first);
+		pTexture.second->Uniform(*m_pShader, pTexture.first, iUnit);
+		iUnit++;
 	}
 
 	//Draw Mesh
@@ -152,8 +154,9 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	m_VertexArray.Bind();
 	m_pDrawMethod(*this);
 	m_VertexArray.Unbind();
-	CTexture::Unbind();
 	m_pShader->Deactivate();
+
+	CTexture::Unbind();
 }
 
 template class CMesh<stVertex>;

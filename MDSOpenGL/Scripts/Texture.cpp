@@ -15,24 +15,22 @@
 const char* CTexture::m_pDirective = "Resources/Textures/";
 std::map<const char*, CTexture*> CTexture::m_mapTextures;
 
-CTexture::CTexture(const char* _pName, unsigned int&& _uiSlot, GLenum&& _GLeTarget)
+CTexture::CTexture(const char* _pName, GLenum&& _GLeTarget)
 {
 	std::string strName = std::to_string(m_uiID);
 	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str();
 	m_mapTextures.emplace(std::make_pair(m_pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = _GLeTarget;
-	m_uiUnit = _uiSlot;
 }
 
-CTexture::CTexture(const char* _pName, std::string _pImage, unsigned int&& _uiSlot, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
+CTexture::CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
 	std::string strName = std::to_string(m_uiID);
 	m_pName = _pName; if (m_pName == "") m_pName = strName.c_str(); 
 	m_mapTextures.emplace(std::make_pair(m_pName = _pName, this));
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = GL_TEXTURE_2D;
-	m_uiUnit = _uiSlot;	
 
 	//Load 2D Image
 	int iImageWidth, iImageHeight, iChannelNum;
@@ -74,17 +72,19 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, const char* _pUniformName)
+void CTexture::Uniform(unsigned int _uiShaderID, const char* _pUniformName, unsigned int&& _uiSlot)
 {
 	glUseProgram(_uiShaderID);
+	glActiveTexture(GL_TEXTURE0 + _uiSlot);
 	Bind();
-	glUniform1i(glGetUniformLocation(_uiShaderID, _pUniformName), m_uiUnit);
+	glUniform1i(glGetUniformLocation(_uiShaderID, _pUniformName), _uiSlot);
 	glUseProgram(0);
+
+	_uiSlot = 0U;
 }
 
 void CTexture::Bind() const
 {
-	glActiveTexture(GL_TEXTURE0 + m_uiUnit);
 	glBindTexture(m_GLeTarget, m_uiID);
 }
 

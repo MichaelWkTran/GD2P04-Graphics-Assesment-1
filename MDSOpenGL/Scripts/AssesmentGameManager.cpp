@@ -34,7 +34,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
 
 		//Create and attach texture to frame buffer
-		CTexture* pRenderTexture = new CTexture("FrameBuffer", 0);
+		CTexture* pRenderTexture = new CTexture("FrameBuffer");
 		m_RenderQuad.m_mapTextures.emplace("renderTexture", pRenderTexture);
 		pRenderTexture->Bind();
 
@@ -68,7 +68,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		m_RenderQuad.SetIndicies({0, 1, 2, 1, 3, 2});
 
 		//Setup default frame buffer effect
-		m_FrameBufferEffect = FrameBufferEffect::ChromaticAberration;
+		m_FrameBufferEffect = FrameBufferEffect::None;
 
 		//Create Shaders
 		new CShader("FrameBuffer",		   "FrameBuffer.vert", "FrameBuffer.frag");
@@ -77,8 +77,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		new CShader("CRT",				   "FrameBuffer.vert", "CRT.frag");
 
 		//-------------------------------------------------------------------------------
-		m_RenderQuad.m_mapTextures.emplace("noise", new CTexture("Noise", "Noise.png", 1, GL_RGB, GL_UNSIGNED_BYTE));
-
+		m_RenderQuad.m_mapTextures.emplace("noise", new CTexture("Noise", "Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
 	}
 
 	//Create Shaders
@@ -97,8 +96,8 @@ CAssesmentGameManager::CAssesmentGameManager()
 	};
 
 	//Setup Lighting
-	CLightManager::m_vDirectionalLight.push_back(stDirectionalLight{ });
-	CLightManager::UpdateShaderUniforms(pDiffuse);
+	new CDirectionalLight;
+	CLight::UpdateShaderUniforms(pDiffuse);
 	
 	//Setup Camera
 	GetMainCamera().SetFarPlane(4000.0f);
