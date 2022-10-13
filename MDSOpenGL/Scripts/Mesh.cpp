@@ -37,7 +37,7 @@ inline CMesh<T>::CMesh()
 //			  _pShader is the shader used by the mesh. 
 
 template<class T>
-inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _mapTextures, CShader* _pShader)
+inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, CShader* _pShader)
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
 	m_ElementBuffer.SetIndicies(_vIndicies);

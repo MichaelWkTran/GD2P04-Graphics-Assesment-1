@@ -25,7 +25,7 @@ public:
 	
 	CTexture(const char* _pName, GLenum&& _GLeTarget = GL_TEXTURE_2D);
 	CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
-	CTexture(CTexture const&) = delete;
+	//CTexture(CTexture const&) = delete;
 	CTexture& operator=(const CTexture&) = delete;
 	~CTexture();
 
