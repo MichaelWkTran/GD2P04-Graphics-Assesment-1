@@ -40,6 +40,7 @@ struct stInfinitePointLight
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
+	sampler2D samp2DShadowMap;
 };
 
 struct stPointLight
@@ -50,6 +51,7 @@ struct stPointLight
 	float fAttenuationLinear;
 	float fAttenuationConstant;
 	mat4 mat4VPMatrix;
+	sampler2D samp2DShadowMap;
 };
 
 struct stDirectionalLight
@@ -57,6 +59,7 @@ struct stDirectionalLight
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
+	sampler2D samp2DShadowMap;
 };
 
 struct stSpotLight
@@ -67,11 +70,10 @@ struct stSpotLight
 	float fOuterCone;
 	float fInnerCone;
 	mat4 mat4VPMatrix;
+	sampler2D samp2DShadowMap;
 };
 
 //Light Uniforms
-uniform sampler2D uni_samp2DShadowMap;
-
 uniform vec3 uni_v3CameraPosition;
 uniform vec4 uni_v4AmbientColour;
 
@@ -116,7 +118,7 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 	g_v3Specular += vec3(1.0f,1.0f,1.0f) * fSpecularAmount * uni_fSpecularStrength * _fIntensity;
 }
 
-void UpdateShadows(vec4 fragPosLightSpace)
+void UpdateShadows(vec4 fragPosLightSpace, sampler2D shadowMap)
 {
 	// Perspective Divide To get NDC [-1, 1]
 	vec3 ndcSpace = fragPosLightSpace.xyz/fragPosLightSpace.w;
@@ -124,7 +126,7 @@ void UpdateShadows(vec4 fragPosLightSpace)
 	// Convert to Tex Coord Space [0,1]
 	vec3 texCoordSpace = (0.5f * ndcSpace) + 0.5f;
 	float currentDepth = texCoordSpace.z;
-	float shadowMapDepth = texture(uni_samp2DShadowMap, texCoordSpace.xy).r;
+	float shadowMapDepth = texture(shadowMap, texCoordSpace.xy).r;
 	
 	g_fShadow = currentDepth > shadowMapDepth ? 1.0 : 0.0;
 }
@@ -158,9 +160,6 @@ void InfinitePointLight(stInfinitePointLight _Light)
 
 	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, normalize(v3LightPosition - vs_v3Position), v4LightColour.w);
-
-	//Calculate Shadows
-	UpdateShadows(mat4VPMatrix * vec4(vs_v3Position, 1.0f));
 }
 
 void PointLight(stPointLight _Light)
@@ -189,6 +188,9 @@ void DirectionalLight(stDirectionalLight _Light)
 
 	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, v3LightDirection, v4LightColour.w);
+
+	//Calculate Shadows
+	UpdateShadows(mat4VPMatrix * vec4(vs_v3Position, 1.0f), _Light.samp2DShadowMap);
 }
 
 void SpotLight(stSpotLight _Light)
@@ -241,8 +243,10 @@ void main()
 	}
 
 	//Calculate Final Fragment Colour
-	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse + (uni_v4AmbientColour.rgb * uni_v4AmbientColour.w)), 1.0f);
+	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse), 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_v3Specular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
+	fs_v4Colour *= 1.0f - g_fShadow;
+	fs_v4Colour += uni_v4AmbientColour.rgb * uni_v4AmbientColour.w;
 	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);
 }

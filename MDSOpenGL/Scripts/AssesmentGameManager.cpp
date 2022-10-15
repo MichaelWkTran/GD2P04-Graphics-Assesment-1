@@ -10,7 +10,7 @@ float fTime = 0;
 #include "AssesmentGameManager.h"
 #include "Camera.h" //For accessing the camera
 #include "TinyObjectLoader.h" //For loading models
-#include "LightManager.h" //For adding lights to the scene
+#include "Lights.h" //For adding lights to the scene
 #include "Shader.h" //For creating shaders
 #include "Texture.h" //For creating textures
 #include "CubeSkybox.h" //For creating a skybox
@@ -34,7 +34,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
 
 		//Create and attach texture to frame buffer
-		CTexture* pRenderTexture = new CTexture("FrameBuffer");
+		CTexture* pRenderTexture = new CTexture();
 		m_RenderQuad.m_mapTextures.emplace("renderTexture", pRenderTexture);
 		pRenderTexture->Bind();
 
@@ -71,17 +71,17 @@ CAssesmentGameManager::CAssesmentGameManager()
 		m_FrameBufferEffect = FrameBufferEffect::None;
 
 		//Create Shaders
-		new CShader("FrameBuffer",		   "FrameBuffer.vert", "FrameBuffer.frag");
-		new CShader("Rain",				   "FrameBuffer.vert", "Rain.frag");
-		new CShader("ChromaticAberration", "FrameBuffer.vert", "ChromaticAberration.frag");
-		new CShader("CRT",				   "FrameBuffer.vert", "CRT.frag");
+		m_mapShaders.emplace("FrameBuffer",			std::make_shared<CShader>("FrameBuffer.vert", "FrameBuffer.frag"));
+		m_mapShaders.emplace("Rain",				std::make_shared<CShader>("FrameBuffer.vert", "Rain.frag"));
+		m_mapShaders.emplace("ChromaticAberration", std::make_shared<CShader>("FrameBuffer.vert", "ChromaticAberration.frag"));
+		m_mapShaders.emplace("CRT",					std::make_shared<CShader>("FrameBuffer.vert", "CRT.frag"));
 
-		//-------------------------------------------------------------------------------
-		m_RenderQuad.m_mapTextures.emplace("noise", new CTexture("Noise", "Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
+		//Set texture to render quad mesh
+		m_RenderQuad.m_mapTextures.emplace("noise", new CTexture("Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
 	}
 
 	//Create Shaders
-	CShader* pDiffuse = new CShader("Diffuse", "Diffuse.vert", "Diffuse.frag");
+	std::shared_ptr<CShader>pDiffuse(std::make_shared<CShader>("Diffuse.vert", "Diffuse.frag"));
 	pDiffuse->m_pDefaultUniform = [](CShader& _Shader)
 	{
 		//Light Uniforms
@@ -94,10 +94,11 @@ CAssesmentGameManager::CAssesmentGameManager()
 
 		_Shader.Uniform1f("uni_fReflectionStrength", 0.0f);
 	};
+	m_mapShaders.emplace("Diffuse", pDiffuse);
 
 	//Setup Lighting
 	new CDirectionalLight;
-	CLight::UpdateShaderUniforms(pDiffuse);
+	CLight::UpdateLightUniforms(*pDiffuse);
 	
 	//Setup Camera
 	GetMainCamera().SetFarPlane(4000.0f);
@@ -133,15 +134,19 @@ CAssesmentGameManager::~CAssesmentGameManager()
 
 void CAssesmentGameManager::Update()
 {
+	//Update Objects
+	UpdateObjectsInWorld();
+
+	//Update the shadows
+	CLight::UpdateShadowUniforms();
+
 	//Draw the scene to the frame buffer
-	glEnable(GL_DEPTH_TEST);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
 	
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	CGameManager::Update();
-
+	DrawObjectsInWorld();
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 	//Draw the renderTexture from the frame buffer to the screen
@@ -149,29 +154,32 @@ void CAssesmentGameManager::Update()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	//Set the render buffer shader
 	switch (m_FrameBufferEffect)
 	{
 	case FrameBufferEffect::None:
-		m_RenderQuad.m_pShader = CShader::Find("FrameBuffer");
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("FrameBuffer")).second;
 		break;
 	case FrameBufferEffect::Rain:
-		m_RenderQuad.m_pShader = CShader::Find("Rain");
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("Rain")).second;
 		fTime += e_fDeltatime;
 		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
 		break;
 	case FrameBufferEffect::ChromaticAberration:
-		m_RenderQuad.m_pShader = CShader::Find("ChromaticAberration");
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("ChromaticAberration")).second;
 		fTime += e_fDeltatime;
 		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
 		break;
 	case FrameBufferEffect::CRT:
-		m_RenderQuad.m_pShader = CShader::Find("CRT");
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("CRT")).second;
 		fTime += e_fDeltatime;
 		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
 		break;
 	}
 	
-	//Draw render quad
 	m_RenderQuad.Draw(GetMainCamera());
+	
+	glEnable(GL_DEPTH_TEST);
+
+	//Delete objects marked for deletion
+	DeleteObjectsInWorld();
 }

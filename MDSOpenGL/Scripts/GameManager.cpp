@@ -54,6 +54,11 @@ CGameManager::~CGameManager()
 // Procedure: DestroyImmediate()
 //	 Purpose: DestroyImmediate is used for destroying the given updated object, _pUpdatedObject, imediately outside of the update loop.
 
+const std::deque<CUpdatedObject*>& CGameManager::GetUpdatedObjects() const
+{
+	return m_dequeUpdatedObject;
+}
+
 void CGameManager::DestroyImmediate(CUpdatedObject*&& _pUpdatedObject)
 {
 	//Check whether the given pointer is valid
@@ -103,6 +108,14 @@ void CGameManager::DestroyImmediate(CUpdatedObject*& _pUpdatedObject)
 	}
 }
 
+void CGameManager::DestroyImmediate(unsigned int _uiIndex)
+{
+	CUpdatedObject* pUpdatedObject = m_dequeUpdatedObject[_uiIndex];
+
+	m_dequeUpdatedObject.erase(m_dequeUpdatedObject.begin() + _uiIndex);
+	delete pUpdatedObject;
+}
+
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: Clear()
 //	 Purpose: Delete all updated objects
@@ -117,25 +130,39 @@ void CGameManager::Clear()
 	}
 }
 
+void CGameManager::UpdateObjectsInWorld()
+{
+	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Start();
+	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->BeginUpdate();
+	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Update();
+	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->EndUpdate();
+}
+
+void CGameManager::DrawObjectsInWorld()
+{
+	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Draw();
+}
+
+void CGameManager::DeleteObjectsInWorld()
+{
+	//Search all objects in the world
+	for (int i = 0; i < (int)m_dequeUpdatedObject.size(); i++)
+	{
+		//Skip objects not maked for deletion
+		if (!m_dequeUpdatedObject[i]->GetDeleteUpdatedObject()) continue;
+
+		//Delete object
+		DestroyImmediate(i);
+	}
+}
+
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: Update()
 //	 Purpose: Called every game frame and updates all game objects
 
 void CGameManager::Update()
 {
-	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Start();
-	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->BeginUpdate();
-	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Update();
-	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->EndUpdate();
-	for (auto& pGameObject : m_dequeUpdatedObject) pGameObject->Draw();
-
-	//Delete GameObjects
-	for (int i = 0; i < (int)m_dequeUpdatedObject.size(); i++)
-	{
-		if (!m_dequeUpdatedObject[i]->GetDeleteUpdatedObject()) continue;
-
-		CUpdatedObject* pDeletedGameObject = m_dequeUpdatedObject[i];
-		m_dequeUpdatedObject.erase(m_dequeUpdatedObject.begin() + i);
-		delete pDeletedGameObject;
-	}
+	UpdateObjectsInWorld();
+	DrawObjectsInWorld();
+	DeleteObjectsInWorld();
 }

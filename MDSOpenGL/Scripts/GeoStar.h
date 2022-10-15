@@ -4,9 +4,10 @@
 class CShader;
 class CTexture;
 
-class CGeoStar : public GameObject
+class CGeoStar : public CGameObject
 {
 public:
+	static CShader* m_pShader;
 	static CTexture* m_pTexture;
 
 	CGeoStar();

@@ -30,9 +30,15 @@ public:
 	CGameManager(const CGameManager&) = delete;
 	CGameManager& operator= (const CGameManager&) = delete;
 	
+	const std::deque<CUpdatedObject*>& GetUpdatedObjects() const;
 	void DestroyImmediate(CUpdatedObject*&& _pUpdatedObject);
 	void DestroyImmediate(CUpdatedObject*& _pUpdatedObject);
+	void DestroyImmediate(unsigned int _uiIndex);
 	void Clear();
+
+	void UpdateObjectsInWorld();
+	void DrawObjectsInWorld();
+	void DeleteObjectsInWorld();
 
 	virtual void Update();
 

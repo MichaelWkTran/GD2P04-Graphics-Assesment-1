@@ -15,8 +15,6 @@
 class CShader
 {
 private:
-	static std::map<const char* /*Shader name*/, CShader*> m_mapShaders;
-	const char* m_strName;
 	unsigned int m_uiID;
 
 	void CompileErrors(unsigned int _uShader, std::string _pType);
@@ -27,7 +25,6 @@ public:
 
 	CShader
 	(
-		const char* _pName,
 		std::string _strVertexFile,
 		std::string _strTessControlFile,
 		std::string _strTessEvaluationFile,
@@ -37,19 +34,17 @@ public:
 	);
 	CShader
 	(
-		const char* _pName,
 		std::string _strVertexFile,
 		std::string _strFragmentFile,
 		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
-	) : CShader(_pName, _strVertexFile, "", "", "", _strFragmentFile, _pDefaultUniform) {}
+	) : CShader(_strVertexFile, "", "", "", _strFragmentFile, _pDefaultUniform) {}
 	CShader
 	(
-		const char* _pName,
 		std::string _strVertexFile,
 		std::string _strGeometryFile,
 		std::string _strFragmentFile,
 		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
-	) : CShader(_pName, _strVertexFile, "", "", _strGeometryFile, _strFragmentFile, _pDefaultUniform) {}
+	) : CShader(_strVertexFile, "", "", _strGeometryFile, _strFragmentFile, _pDefaultUniform) {}
 	CShader(CShader const&) = delete;
 	CShader& operator=(const CShader&) = delete;
 	~CShader();
@@ -62,15 +57,7 @@ public:
 	static void Deactivate();
 	
 	static std::string GetFileContents(std::string _pFileName);
-	static bool Empty();
-	static unsigned int Size();
-	static unsigned int MaxSize();
-	static CShader* At(unsigned int _uiID);
-	static CShader* Find(const char* _pName);
-	static void Erase(unsigned int _uiID);
-	static void Erase(std::string _strName);
-	static void Clear();
-
+	
 	void ResetUniforms();
 	void Uniform1f(std::string _pUniform, float _v0);
 	void Uniform2f(std::string _pUniform, float _v0, float _v1);

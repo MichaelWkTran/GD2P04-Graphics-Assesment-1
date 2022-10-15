@@ -47,11 +47,11 @@ protected:
 public:
 	CTransform* m_pTransform;
 	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_mapTextures;
-	CShader* m_pShader;
+	std::shared_ptr<CShader> m_pShader;
 	void (*m_pDrawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
-	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, CShader* _pShader);
+	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader = nullptr);
 
 	void BindVertexArray();
 	void UnbindVertexArray();

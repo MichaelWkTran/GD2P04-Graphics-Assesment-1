@@ -11,7 +11,7 @@
 #include "Mesh.h"
 #include <set>
 
-class GameObject : public CUpdatedObject
+class CGameObject : public CUpdatedObject
 {
 public:
 	//Refrencing variables
@@ -25,7 +25,7 @@ public:
 	bool m_bVisible;
 
 	//Methods
-	GameObject();
+	CGameObject();
 
 	const bool TagExists(const char* _pTagName);
 

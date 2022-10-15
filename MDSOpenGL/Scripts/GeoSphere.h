@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class CGeoSphere : public GameObject
+class CGeoSphere : public CGameObject
 {
 public:
 	static CShader* m_pNormalShader;

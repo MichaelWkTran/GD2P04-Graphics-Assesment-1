@@ -12,7 +12,7 @@
 // Procedure: GameObject()
 //	 Purpose: To initalise variables of the game object
 
-GameObject::GameObject()
+CGameObject::CGameObject()
 {
 	m_Mesh.m_pTransform = &m_Transform;
 	m_bVisible = true;
@@ -23,7 +23,7 @@ GameObject::GameObject()
 //	 Purpose: Check whether the tag, _pTagName, exists in m_setTags 
 //	 Returns: Whether the tag, _pTagName, exists in in m_setTags
 
-const bool GameObject::TagExists(const char* _pTagName)
+const bool CGameObject::TagExists(const char* _pTagName)
 {
 	if (m_setTags.find(_pTagName) != m_setTags.end()) return true;
 	else return false;
@@ -33,7 +33,7 @@ const bool GameObject::TagExists(const char* _pTagName)
 // Procedure: Draw()
 //	 Purpose: To draw the mesh stored in the game object
 
-void GameObject::Draw()
+void CGameObject::Draw()
 {
 	m_Mesh.Draw(GetMainCamera());
 }

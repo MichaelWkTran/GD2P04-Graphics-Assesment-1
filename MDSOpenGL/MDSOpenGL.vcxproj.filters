@@ -31,7 +31,7 @@
     <ClCompile Include="Scripts\GenerateTexture.cpp">
       <Filter>Library\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\LightManager.cpp">
+    <ClCompile Include="Scripts\Lights.cpp">
       <Filter>Library\Light</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Mesh.cpp">
@@ -102,7 +102,7 @@
     <ClInclude Include="Scripts\GenerateTexture.h">
       <Filter>Library\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\LightManager.h">
+    <ClInclude Include="Scripts\Lights.h">
       <Filter>Library\Light</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Mesh.h">

@@ -23,8 +23,8 @@ public:
 	static const char* m_pDirective;
 	GLenum m_GLeTarget;
 	
-	CTexture(const char* _pName, GLenum&& _GLeTarget = GL_TEXTURE_2D);
-	CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
+	CTexture(GLenum&& _GLeTarget = GL_TEXTURE_2D);
+	CTexture(std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType);
 	CTexture(CTexture const&) = delete;
 	CTexture& operator=(const CTexture&) = delete;
 	~CTexture();
@@ -32,7 +32,7 @@ public:
 	operator int() const;
 	explicit operator int* ();
 	const unsigned int GetID() const;
-	void Uniform(unsigned int _uiShaderID, const char* _pUniformName, unsigned int&& _uiSlot = 0);
+	void Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int&& _uiSlot = 0);
 	void Bind() const;
 	static void Unbind();
 };

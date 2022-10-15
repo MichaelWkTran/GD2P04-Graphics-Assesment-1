@@ -12,7 +12,6 @@
 #include <cerrno>
 #include <glm/gtc/type_ptr.hpp>
 
-std::map<const char*, CShader*> CShader::m_mapShaders;
 const char* CShader::m_strDirective = "Resources/Shaders/";
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -25,10 +24,8 @@ const char* CShader::m_strDirective = "Resources/Shaders/";
 //			  _strFragmentFile is the file directory to the fragment shader file.
 //			  _pDefaultUniform is a function pointer used to store the default values of the shader so that it can be used later. 
 
-CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _strFragmentFile, void(*_pDefaultUniform)(CShader& _Shader))
+CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _strFragmentFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
-	if (_pName == "") _pName = std::to_string(m_uiID).c_str();
-	m_mapShaders.emplace(std::make_pair(m_strName = _pName, this));
 	m_pDefaultUniform = _pDefaultUniform;
 
 	//Create Program
@@ -80,8 +77,6 @@ CShader::CShader(const char* _pName, std::string _strVertexFile, std::string _st
 
 CShader::~CShader()
 {
-	m_mapShaders.at(m_strName) = nullptr;
-	m_mapShaders.erase(m_strName);
 	glDeleteProgram(m_uiID);
 }
 
@@ -190,103 +185,6 @@ void CShader::Activate(unsigned int _uiID)
 void CShader::Deactivate()
 {
 	glUseProgram(0);
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Empty()
-//	 Purpose: Check whether there are any shaders created
-//	 Returns: A boolean indicating if any shaders have been created yet
-
-bool CShader::Empty()
-{
-	return m_mapShaders.empty();
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Size()
-//	 Purpose: Gets how many shaders exist.
-//	 Returns: How many shaders have been created.
-
-unsigned int CShader::Size()
-{
-	return m_mapShaders.size();
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: MaxSize()
-//	 Purpose: Gets how many shaders can be stored at once
-//	 Returns: How many shaders can be stored at once.
-
-unsigned int CShader::MaxSize()
-{
-	return m_mapShaders.max_size();
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: At()
-//	 Purpose: Find a shader with the given ID, _uiID.
-//	 Returns: The shader that has the requested ID, _uiID.
-
-CShader* CShader::At(unsigned int _uiID)
-{
-	//Seach through the map to find the shader
-	for (auto& pShader : m_mapShaders)
-	{
-		if (pShader.second->GetID() == _uiID) return pShader.second;
-	}
-
-	//Return nullptr if no shader is found
-	return nullptr;
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Find()
-//	 Purpose: Find a shader with the given namme, _pName.
-//	 Returns: The shader that has the requested name, _pName.
-
-CShader* CShader::Find(const char* _pName)
-{
-	if (m_mapShaders.find(_pName) == m_mapShaders.end()) return nullptr;
-	return m_mapShaders.at(_pName);
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Erase()
-//	 Purpose: Deletes a shader by giving its ID via _uiID.
-
-void CShader::Erase(unsigned int _uiID)
-{
-	CShader* pShader = At(_uiID);
-	if (pShader == nullptr) return;
-
-	delete pShader;
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Erase()
-//	 Purpose: Deletes a shader by giVing its name via _strName.
-
-void CShader::Erase(std::string _strName)
-{
-	auto Iterator = m_mapShaders.find(_strName.c_str());
-	if (Iterator == m_mapShaders.end()) return void();
-
-	delete (*Iterator).second;
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: Clear()
-//	 Purpose: Deletes all shaders
-
-void CShader::Clear()
-{
-	for (auto& pShader : m_mapShaders)
-	{
-		if (pShader.second != nullptr) delete pShader.second;
-		pShader.second = nullptr;
-	}
-
-	m_mapShaders.clear();
 }
 
 #pragma region Uniform Functions

@@ -8,7 +8,7 @@
 #pragma once
 #include "GameObject.h"
 
-class CQuadMousePick : GameObject
+class CQuadMousePick : CGameObject
 {
 private:
 	glm::vec2 m_v2Size;

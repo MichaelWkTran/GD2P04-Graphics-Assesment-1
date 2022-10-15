@@ -20,7 +20,7 @@ private:
 public:
 	CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]);
 	
-	void UpdateShaderUniforms(CShader* _pShader);
-	void UpdateShaderUniforms(std::vector<CShader*> _vShaders);
+	void UpdateLightUniforms(CShader* _pShader);
+	void UpdateLightUniforms(std::vector<CShader*> _vShaders);
 	virtual void Draw() override;
 };

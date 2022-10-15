@@ -20,8 +20,8 @@
 CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6])
 {
 	//Set Shader
-	m_Mesh.m_pShader = CShader::Find("CubeSkybox");
-	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = new CShader("CubeSkybox", "CubeMap.vert", "CubeMap.frag");
+	//m_Mesh.m_pShader = CShader::Find("CubeSkybox");
+	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = std::make_shared<CShader>("CubeMap.vert", "CubeMap.frag");
 
 	//Generate Mesh
 	gm::GenerateFlatCube(m_Mesh, glm::vec3(1.0f, 1.0f, 1.0f) * _fSize);
@@ -37,8 +37,8 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 	m_Mesh.SetIndicies(vIndicies);
 
 	//Set up texture
-	CTexture* pTexture = new CTexture("CubeSkybox", GL_TEXTURE_CUBE_MAP);
-	m_Mesh.m_mapTextures.emplace(std::make_pair("uni_sampCube", std::make_shared<CTexture>(CTexture("CubeSkybox", GL_TEXTURE_CUBE_MAP))));
+	std::shared_ptr<CTexture>pTexture(std::make_shared<CTexture>(GL_TEXTURE_CUBE_MAP));
+	m_Mesh.m_mapTextures.emplace(std::make_pair("uni_sampCube", pTexture));
 	pTexture->Bind();
 
 	int iImageWidth, iImageHeight, iImageComponents;
@@ -71,10 +71,10 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: UpdateShaderUniforms()
+// Procedure: UpdateLightUniforms()
 //	 Purpose: Apply the skybox uniform to the given shader, _pShader 
 
-void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
+void CCubeSkybox::UpdateLightUniforms(CShader* _pShader)
 {
 	//[Texture slot is zero]
 
@@ -85,12 +85,12 @@ void CCubeSkybox::UpdateShaderUniforms(CShader* _pShader)
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-// Procedure: UpdateShaderUniforms()
+// Procedure: UpdateLightUniforms()
 //	 Purpose: Apply the skybox uniform to the given vector of shaders, _vShaders
 
-void CCubeSkybox::UpdateShaderUniforms(std::vector<CShader*> _vShaders)
+void CCubeSkybox::UpdateLightUniforms(std::vector<CShader*> _vShaders)
 {
-	for (auto pShader : _vShaders) UpdateShaderUniforms(pShader);
+	for (auto pShader : _vShaders) UpdateLightUniforms(pShader);
 }
 
 //------------------------------------------------------------------------------------------------------------------------

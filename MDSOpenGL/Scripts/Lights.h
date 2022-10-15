@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <set>
+#include <memory>
 
 class CShader;
 class CTexture;
@@ -21,16 +22,17 @@ private:
 
 protected:
 	unsigned int m_uiFrameBuffer;
-	CTexture* m_pDepthMap;
 	glm::mat4 m_mat4Projection;
 	bool m_bUpdateProjectionMatrix;
 
-	virtual void CalculateProjectionMatrix() = 0;
+	virtual void UpdateProjectionMatrix() = 0;
 
 public:
-	static CShader* m_pFrameBufferShader;
+	static std::shared_ptr<CShader> m_pShadowMapShader;
+	CTexture* m_pShadowMapTexture;
 	static glm::vec4 m_v4AmbientColour;
-	static void UpdateShaderUniforms(CShader* _pShader);
+	static void UpdateLightUniforms(CShader& _Shader);
+	static void UpdateShadowUniforms();
 
 	glm::vec4 m_v4LightColour;
 	
@@ -59,7 +61,7 @@ private:
 	glm::vec3 m_v3Position;
 
 protected:
-	virtual void CalculateProjectionMatrix() override
+	virtual void UpdateProjectionMatrix() override
 	{
 		
 	}
@@ -87,7 +89,7 @@ private:
 	glm::vec3 m_v3Position;
 
 protected:
-	virtual void CalculateProjectionMatrix() override
+	virtual void UpdateProjectionMatrix() override
 	{
 
 	}
@@ -129,7 +131,7 @@ private:
 	glm::vec3 m_v3LightDirection;
 	
 protected:
-	virtual void CalculateProjectionMatrix() override;
+	virtual void UpdateProjectionMatrix() override;
 
 public:
 	CDirectionalLight(glm::vec4 _v4LightColour = glm::vec4(1.0f), glm::vec3 _v3LightDirection = glm::vec3(-1.0f,-1.0f,1.0f))
@@ -156,7 +158,7 @@ private:
 	glm::vec3 m_v3LightDirection;
 
 protected:
-	virtual void CalculateProjectionMatrix() override
+	virtual void UpdateProjectionMatrix() override
 	{
 
 	}

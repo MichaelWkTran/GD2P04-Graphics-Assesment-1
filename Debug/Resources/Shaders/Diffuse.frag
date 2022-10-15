@@ -39,6 +39,7 @@ struct stInfinitePointLight
 {
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
+	mat4 mat4VPMatrix;
 };
 
 struct stPointLight
@@ -48,12 +49,14 @@ struct stPointLight
 	float fAttenuationExponent;
 	float fAttenuationLinear;
 	float fAttenuationConstant;
+	mat4 mat4VPMatrix;
 };
 
 struct stDirectionalLight
 {
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
+	mat4 mat4VPMatrix;
 };
 
 struct stSpotLight
@@ -63,9 +66,12 @@ struct stSpotLight
 	vec4 v4LightColour;
 	float fOuterCone;
 	float fInnerCone;
+	mat4 mat4VPMatrix;
 };
 
 //Light Uniforms
+uniform sampler2D uni_samp2DShadowMap;
+
 uniform vec3 uni_v3CameraPosition;
 uniform vec4 uni_v4AmbientColour;
 
@@ -93,6 +99,7 @@ uniform float uni_fFogRange = 10.0f;
 //Global Variables
 vec3 g_v3Diffuse = vec3(0.0);
 vec3 g_v3Specular = vec3(0.0);
+float g_fShadow = 0.0f;
 
 void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _fIntensity)
 {
@@ -107,6 +114,19 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 	float fSpecularAmount = pow(max(dot(vs_v3Normal, v3HalfwayVector), 0.0f), uni_fShininess);
 
 	g_v3Specular += vec3(1.0f,1.0f,1.0f) * fSpecularAmount * uni_fSpecularStrength * _fIntensity;
+}
+
+void UpdateShadows(vec4 fragPosLightSpace)
+{
+	// Perspective Divide To get NDC [-1, 1]
+	vec3 ndcSpace = fragPosLightSpace.xyz/fragPosLightSpace.w;
+
+	// Convert to Tex Coord Space [0,1]
+	vec3 texCoordSpace = (0.5f * ndcSpace) + 0.5f;
+	float currentDepth = texCoordSpace.z;
+	float shadowMapDepth = texture(uni_samp2DShadowMap, texCoordSpace.xy).r;
+	
+	g_fShadow = currentDepth > shadowMapDepth ? 1.0 : 0.0;
 }
 
 vec3 RimColour()
@@ -130,50 +150,63 @@ vec4 MixFogColour(vec4 _v4Colour)
 	return mix(_v4Colour, vec4(uni_v3FogColour, 1.0f), fFogContribution);
 }
 
-void InfinitePointLight(stInfinitePointLight _InfinitePointLight)
+void InfinitePointLight(stInfinitePointLight _Light)
 {
-	vec3 v3LightPosition = _InfinitePointLight.v3LightPosition;
-	vec4 v4LightColour = _InfinitePointLight.v4LightColour;
-	
+	vec3 v3LightPosition = _Light.v3LightPosition;
+	vec4 v4LightColour = _Light.v4LightColour;
+	mat4 mat4VPMatrix = _Light.mat4VPMatrix;
+
+	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, normalize(v3LightPosition - vs_v3Position), v4LightColour.w);
+
+	//Calculate Shadows
+	UpdateShadows(mat4VPMatrix * vec4(vs_v3Position, 1.0f));
 }
 
-void PointLight(stPointLight _PointLight)
+void PointLight(stPointLight _Light)
 {
-	vec3 v3LightPosition = _PointLight.v3LightPosition;
-	vec4 v4LightColour = _PointLight.v4LightColour;
-	float fAttenuationExponent = _PointLight.fAttenuationExponent;
-	float fAttenuationLinear = _PointLight.fAttenuationLinear;
-	float fAttenuationConstant = _PointLight.fAttenuationConstant;
-
+	vec3 v3LightPosition = _Light.v3LightPosition;
+	vec4 v4LightColour = _Light.v4LightColour;
+	float fAttenuationExponent = _Light.fAttenuationExponent;
+	float fAttenuationLinear = _Light.fAttenuationLinear;
+	float fAttenuationConstant = _Light.fAttenuationConstant;
+	mat4 mat4VPMatrix = _Light.mat4VPMatrix;
+	
+	//---------------------------------------------------------------------------------
 	vec3 v3LightVector = v3LightPosition - vs_v3Position;
 	float fLightDistance = length(v3LightVector);
 	float fIntensity = v4LightColour.w / ((fAttenuationExponent * fLightDistance * fLightDistance) + (fAttenuationLinear * fLightDistance) + fAttenuationConstant);
 	
+	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, normalize(v3LightVector), fIntensity);
 }
 
-void DirectionalLight(stDirectionalLight _DirectionalLight)
+void DirectionalLight(stDirectionalLight _Light)
 {
-	vec3 v3LightDirection = -normalize(_DirectionalLight.v3LightDirection);
-	vec4 v4LightColour = _DirectionalLight.v4LightColour;
+	vec3 v3LightDirection = -normalize(_Light.v3LightDirection);
+	vec4 v4LightColour = _Light.v4LightColour;
+	mat4 mat4VPMatrix = _Light.mat4VPMatrix;
 
+	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, v3LightDirection, v4LightColour.w);
 }
 
-void SpotLight(stSpotLight _SpotLight)
+void SpotLight(stSpotLight _Light)
 {
-	vec3 v3LightPosition = _SpotLight.v3LightPosition;
-	vec3 v3SpotLightDirection = normalize(_SpotLight.v3LightDirection);
-	vec4 v4LightColour = _SpotLight.v4LightColour;
-	float fOuterCone = _SpotLight.fOuterCone;
-	float fInnerCone = _SpotLight.fInnerCone;
+	vec3 v3LightPosition = _Light.v3LightPosition;
+	vec3 v3SpotLightDirection = normalize(_Light.v3LightDirection);
+	vec4 v4LightColour = _Light.v4LightColour;
+	float fOuterCone = _Light.fOuterCone;
+	float fInnerCone = _Light.fInnerCone;
+	mat4 mat4VPMatrix = _Light.mat4VPMatrix;
 
+	//---------------------------------------------------------------------------------
 	vec3 v3LightDirection = normalize(v3LightPosition - vs_v3Position);
 
 	float fAngle = dot(v3SpotLightDirection, -v3LightDirection);
 	float fIntensity = v4LightColour.w * clamp((fAngle - fOuterCone) / (fInnerCone - fOuterCone), 0.0f, 1.0f);
 
+	//Update g_v3Diffuse and g_v3Specular Colours
 	UpdateDiffuseSpecular(v4LightColour.rgb, v3LightDirection, fIntensity);
 }
 
@@ -187,18 +220,14 @@ void main()
 	
 	//Calculate Diffuse and Specular Colours	
 	for (int i = 0; i < uni_iInfPointLightNum; i++) InfinitePointLight(uni_InfinitePointLight[i]);
-	
 	for (int i = 0; i < uni_iPointLightNum; i++) PointLight(uni_PointLight[i]);
-	
 	for (int i = 0; i < uni_iDirectionalLightNum; i++) DirectionalLight(uni_DirectionalLight[i]);
-
 	for (int i = 0; i < uni_iSpotLightNum; i++) SpotLight(uni_SpotLight[i]);
 
 	//Calculate Reflection
 	if (textureSize(uni_sampCubeSkybox, 0) != ivec2(1,1) && uni_fReflectionStrength > 0)
 	{
 		vec3 v3ReflectDirection = reflect(normalize(vs_v3Position - uni_v3CameraPosition), vs_v3Normal);
-	
 		vec4 v4ReflectTexture = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4ReflectTexture = texture(uni_samp2DReflect0, vs_v2TextureCoord);
 		

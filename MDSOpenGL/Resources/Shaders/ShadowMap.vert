@@ -7,10 +7,12 @@
 
 #version 430 core
 
-uniform mat4 lightVPMatrix;
-uniform mat4 model;
+layout (location = 0) in vec3 in_v3Position;
+
+uniform mat4 uni_mat4LightProjection;
+uniform mat4 uni_mat4Model;
 
 void main()
 {
-	gl_Position = lightVPMatrix * model * vec4(position, 1.0);
+	gl_Position = uni_mat4LightProjection * uni_mat4Model * vec4(in_v3Position, 1.0);
 }

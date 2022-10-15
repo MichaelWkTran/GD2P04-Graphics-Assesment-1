@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
+CShader* CGeoStar::m_pShader = nullptr;
 CTexture* CGeoStar::m_pTexture = nullptr;
 
 CGeoStar::CGeoStar()
@@ -10,10 +11,10 @@ CGeoStar::CGeoStar()
 	m_Mesh.SetVerticies(std::vector<stVertex>{ stVertex{} });
 	
 	//Set mesh shader and vertex
-	m_Mesh.m_pShader = CShader::Find("Star");
-	if (m_Mesh.m_pShader == nullptr ) m_Mesh.m_pShader = new CShader("Star", "Star.vert", "Star.geom", "Star.frag");
+	if (m_pShader == nullptr) m_pShader = new CShader("Star.vert", "Star.geom", "Star.frag");
+	m_Mesh.m_pShader = std::shared_ptr<CShader>(m_pShader);
 	
-	if (m_pTexture == nullptr) m_pTexture = new CTexture("Star", "Eye.png", GL_RGB, GL_UNSIGNED_BYTE);
+	if (m_pTexture == nullptr) m_pTexture = new CTexture("Eye.png", GL_RGB, GL_UNSIGNED_BYTE);
 	m_Mesh.m_mapTextures.emplace(std::make_pair("", m_pTexture));
 
 	m_Mesh.m_pTransform = &m_Transform;

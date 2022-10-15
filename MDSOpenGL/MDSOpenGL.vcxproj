@@ -163,7 +163,7 @@
     <ClCompile Include="Scripts\GenerateMesh.cpp" />
     <ClCompile Include="Scripts\GenerateTexture.cpp" />
     <ClCompile Include="Scripts\GeoStar.cpp" />
-    <ClCompile Include="Scripts\LightManager.cpp" />
+    <ClCompile Include="Scripts\Lights.cpp" />
     <ClCompile Include="Scripts\Main.cpp" />
     <ClCompile Include="Scripts\Mesh.cpp" />
     <ClCompile Include="Scripts\QuadMousePick.cpp" />
@@ -188,7 +188,7 @@
     <ClInclude Include="Scripts\GenerateMesh.h" />
     <ClInclude Include="Scripts\GenerateTexture.h" />
     <ClInclude Include="Scripts\GeoStar.h" />
-    <ClInclude Include="Scripts\LightManager.h" />
+    <ClInclude Include="Scripts\Lights.h" />
     <ClInclude Include="Scripts\Main.h" />
     <ClInclude Include="Scripts\Mesh.h" />
     <ClInclude Include="Scripts\QuadMousePick.h" />

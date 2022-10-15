@@ -14,16 +14,14 @@
 
 const char* CTexture::m_pDirective = "Resources/Textures/";
 
-CTexture::CTexture(const char* _pName, GLenum&& _GLeTarget)
+CTexture::CTexture(GLenum&& _GLeTarget)
 {
-	std::string strName = std::to_string(m_uiID);
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = _GLeTarget;
 }
 
-CTexture::CTexture(const char* _pName, std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
+CTexture::CTexture(std::string _pImage, GLenum&& _GLeFormat, GLenum&& _GLePixelType)
 {
-	std::string strName = std::to_string(m_uiID);
 	glGenTextures(1, &m_uiID);
 	m_GLeTarget = GL_TEXTURE_2D;
 
@@ -65,12 +63,12 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, const char* _pUniformName, unsigned int&& _uiSlot)
+void CTexture::Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int&& _uiSlot)
 {
 	glUseProgram(_uiShaderID);
 	glActiveTexture(GL_TEXTURE0 + _uiSlot);
 	Bind();
-	glUniform1i(glGetUniformLocation(_uiShaderID, _pUniformName), _uiSlot);
+	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName.c_str()), _uiSlot);
 	glUseProgram(0);
 
 	_uiSlot = 0U;
