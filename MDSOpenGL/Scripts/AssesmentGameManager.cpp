@@ -27,6 +27,33 @@ float fTime = 0;
 
 CAssesmentGameManager::CAssesmentGameManager()
 {
+	//Set Key Inputs
+	e_setKeyCallbackFunctions.emplace
+	(
+		[](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
+		{
+			CAssesmentGameManager* pGameManager = ((CAssesmentGameManager*)&GetGameManager());
+			if (_iAction != GLFW_PRESS) return;
+
+			switch (_iKey)
+			{
+			//Change Frame Buffer Effect
+			case GLFW_KEY_1:
+				pGameManager->m_FrameBufferEffect = FrameBufferEffect::None;
+				break;
+			case GLFW_KEY_2:
+				pGameManager->m_FrameBufferEffect = FrameBufferEffect::Rain;
+				break;
+			case GLFW_KEY_3:
+				pGameManager->m_FrameBufferEffect = FrameBufferEffect::ChromaticAberration;
+				break;
+			case GLFW_KEY_4:
+				pGameManager->m_FrameBufferEffect = FrameBufferEffect::CRT;
+				break;
+			}
+		}
+	);
+
 	//Setup frame and render buffer
 	{
 		//Create frame buffer
@@ -147,51 +174,49 @@ void CAssesmentGameManager::Update()
 	//Update Objects
 	UpdateObjectsInWorld();
 
+	//Update the shadows
+	CLight::UpdateShadowUniforms();
+	CLight::UpdateLightUniforms(*m_mapShaders.find("Diffuse")->second.get());
+
+	//Draw the scene to the frame buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
+	
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	DrawObjectsInWorld();
-
-	////Update the shadows
-	//CLight::UpdateShadowUniforms();
-	//CLight::UpdateLightUniforms(*m_mapShaders.find("Diffuse")->second.get());
-
-	////Draw the scene to the frame buffer
-	//glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
-	//
-	//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//DrawObjectsInWorld();
-	//
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//
-	////Draw the renderTexture from the frame buffer to the screen
-	//glDisable(GL_DEPTH_TEST);
-	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//switch (m_FrameBufferEffect)
-	//{
-	//case FrameBufferEffect::None:
-	//	m_RenderQuad.m_pShader = (*m_mapShaders.find("FrameBuffer")).second;
-	//	break;
-	//case FrameBufferEffect::Rain:
-	//	m_RenderQuad.m_pShader = (*m_mapShaders.find("Rain")).second;
-	//	fTime += e_fDeltatime;
-	//	m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
-	//	break;
-	//case FrameBufferEffect::ChromaticAberration:
-	//	m_RenderQuad.m_pShader = (*m_mapShaders.find("ChromaticAberration")).second;
-	//	fTime += e_fDeltatime;
-	//	m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
-	//	break;
-	//case FrameBufferEffect::CRT:
-	//	m_RenderQuad.m_pShader = (*m_mapShaders.find("CRT")).second;
-	//	fTime += e_fDeltatime;
-	//	m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
-	//	break;
-	//}
-	//
-	//m_RenderQuad.Draw(GetMainCamera());
-	//
-	//glEnable(GL_DEPTH_TEST);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+	//Draw the renderTexture from the frame buffer to the screen
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
+	switch (m_FrameBufferEffect)
+	{
+	case FrameBufferEffect::None:
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("FrameBuffer")).second;
+		break;
+	case FrameBufferEffect::Rain:
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("Rain")).second;
+		fTime += e_fDeltatime;
+		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		break;
+	case FrameBufferEffect::ChromaticAberration:
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("ChromaticAberration")).second;
+		fTime += e_fDeltatime;
+		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		break;
+	case FrameBufferEffect::CRT:
+		m_RenderQuad.m_pShader = (*m_mapShaders.find("CRT")).second;
+		fTime += e_fDeltatime;
+		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		break;
+	}
+	
+	m_RenderQuad.Draw(GetMainCamera());
+	
+	glEnable(GL_DEPTH_TEST);
 
 	//Delete objects marked for deletion
 	DeleteObjectsInWorld();
