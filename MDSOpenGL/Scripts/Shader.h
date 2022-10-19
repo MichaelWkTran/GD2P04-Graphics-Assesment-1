@@ -45,6 +45,14 @@ public:
 		std::string _strFragmentFile,
 		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
 	) : CShader(_strVertexFile, "", "", _strGeometryFile, _strFragmentFile, _pDefaultUniform) {}
+	CShader
+	(
+		std::string _strVertexFile,
+		std::string _strTessControlFile,
+		std::string _strTessEvaluationFile,
+		std::string _strFragmentFile,
+		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
+	) : CShader(_strVertexFile, _strTessControlFile, _strTessEvaluationFile, "", _strFragmentFile, _pDefaultUniform) {}
 	CShader(CShader const&) = delete;
 	CShader& operator=(const CShader&) = delete;
 	~CShader();
