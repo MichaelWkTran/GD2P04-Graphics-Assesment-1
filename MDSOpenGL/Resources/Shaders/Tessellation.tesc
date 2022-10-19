@@ -1,18 +1,12 @@
-/************************************************************************************************************************/
-/*	NAME: Michael Wai Kit Tran																							*/
-/*	ORGN: Bachelor of Software Engineering, Media Design School															*/
-/*	FILE: Diffuse.Frag																									*/
-/*  DATE: Aug 23rd, 2022																								*/
-/************************************************************************************************************************/
-
 #version 430 core
-
-out vec4 fs_v4Colour;
-
-uniform sampler2D renderTexture;
-in vec2 vs_v2TextureCoord;
+layout (vertices = 3) out;
 
 void main()
 {
-	fs_v4Colour = texture(renderTexture, vs_v2TextureCoord);
+	gl_TessLevelOuter[0] = 5.0;
+	gl_TessLevelOuter[1] = 5.0;
+	gl_TessLevelOuter[2] = 5.0;
+	gl_TessLevelInner[0] = 7.0;
+
+	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 }

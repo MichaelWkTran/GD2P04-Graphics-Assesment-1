@@ -1,12 +1,2 @@
-﻿  AssesmentGameManager.cpp
-  CTessModel.cpp
-  CubeSkybox.cpp
-  GeoSphere.cpp
-  GeoStar.cpp
-  Lights.cpp
-  Mesh.cpp
-  Shader.cpp
-  TextLabel.cpp
-  Texture.cpp
-  Generating Code...
-  MDSOpenGL.vcxproj -> D:\Projects\GitHub\GD2P02-1\Debug\MDSOpenGL.exe
+﻿  TessModel.cpp
+  MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe

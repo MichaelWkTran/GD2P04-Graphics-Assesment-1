@@ -70,7 +70,7 @@
     <ClCompile Include="Scripts\GeoStar.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\CTessModel.cpp">
+    <ClCompile Include="Scripts\TessModel.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,7 +147,7 @@
     <ClInclude Include="Scripts\GeoStar.h">
       <Filter>Assesment</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\CTessModel.h">
+    <ClInclude Include="Scripts\TessModel.h">
       <Filter>Assesment</Filter>
     </ClInclude>
   </ItemGroup>
