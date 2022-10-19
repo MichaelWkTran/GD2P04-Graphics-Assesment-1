@@ -28,7 +28,7 @@ public:
 	const std::vector<VertexType> GetVertices() const;
 	void SetVertices(const std::vector<VertexType> _vVertices);
 	void Bind();
-	void Unbind();
+	static void Unbind();
 };
 
 //------------------------------------------------------------------------------------------------------------------------

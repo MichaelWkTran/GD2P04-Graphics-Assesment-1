@@ -24,6 +24,6 @@ public:
 	const std::vector<unsigned int> GetIndicies() const;
 	void SetIndicies(const std::vector<unsigned int> _vIndicies);
 	void Bind();
-	void Unbind();
+	static void Unbind();
 };
 

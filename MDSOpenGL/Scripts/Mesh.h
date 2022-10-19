@@ -23,15 +23,16 @@ struct stVertex
 	glm::vec3 v3Normal;
 	glm::vec2 v2TextureUV;
 	
-	static void LinkAttributes(CVertexArray& _VertexArray, CVertexBuffer<stVertex>& _VertexBuffer, CElementBuffer* _pElementBuffer = nullptr)
+	static void LinkAttributes()
 	{
-		_VertexArray.Bind(); _VertexBuffer.Bind(); if (_pElementBuffer) _pElementBuffer->Bind();
+		glEnableVertexAttribArray(0 /*m_v3Position*/);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Position)));
 
-		_VertexArray.LinkAttribute(0 /*m_v3Position*/,	   3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Position)));
-		_VertexArray.LinkAttribute(1 /*m_v3Normal*/,	   3, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Normal)));
-		_VertexArray.LinkAttribute(2 /*m_v2TextureCoord*/, 2, GL_FLOAT, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v2TextureUV)));
+		glEnableVertexAttribArray(1 /*m_v3Normal*/);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v3Normal)));
 
-		_VertexArray.Unbind(); _VertexBuffer.Unbind(); if (_pElementBuffer) _pElementBuffer->Unbind();
+		glEnableVertexAttribArray(2 /*m_v2TextureCoord*/);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(stVertex), (void*)(offsetof(stVertex, stVertex::v2TextureUV)));
 	}
 };
 
@@ -54,7 +55,8 @@ public:
 	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader = nullptr);
 
 	void BindVertexArray();
-	void UnbindVertexArray();
+	void BindElementBuffer();
+	void BindVertexBuffer();
 	const std::vector<T> GetVerticies() const;
 	void SetVerticies(const std::vector<T> _vVerticies);
 	const std::vector<unsigned int> GetIndicies() const;

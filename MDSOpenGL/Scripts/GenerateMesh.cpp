@@ -117,10 +117,10 @@ void gm::GeneratePlane(CMesh<>& _Mesh, glm::vec3 _v3Scale)
 	std::vector<stVertex> vVertices =
 	{
 		//Coordinates                                     Normals                      Texture Cordinate
-		stVertex{glm::vec3(-0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,1.0f)},
-		stVertex{glm::vec3(-0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,0.0f)},
-		stVertex{glm::vec3( 0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f,1.0f)},
+		stVertex{glm::vec3(-0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f, 0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f,0.0f)},
+		stVertex{glm::vec3( 0.5f,-0.5f, 0.0f) * _v3Scale, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f,1.0f)},
 	};
 	std::vector<unsigned int> vIndices =
 	{

@@ -60,14 +60,16 @@ inline void CMesh<T>::BindVertexArray()
 	m_VertexArray.Bind();
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: UnbindVertexArray()
-//	 Purpose: Unbinds the mesh vertex array
+template<class T>
+void CMesh<T>::BindElementBuffer()
+{
+	m_ElementBuffer.Bind();
+}
 
 template<class T>
-inline void CMesh<T>::UnbindVertexArray()
+void CMesh<T>::BindVertexBuffer()
 {
-	m_VertexArray.Unbind();
+	m_VertexBuffer.Bind();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +130,10 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	if (m_bUpdateVertexArray)
 	{
 		m_bUpdateVertexArray = false;
-		T::LinkAttributes(m_VertexArray, m_VertexBuffer, &m_ElementBuffer);
+
+		m_VertexArray.Bind(); m_VertexBuffer.Bind(); m_ElementBuffer.Bind();
+		T::LinkAttributes();
+		m_VertexArray.Unbind(); m_VertexBuffer.Unbind(); m_ElementBuffer.Unbind();
 	}
 
 	//Set GameObject Uniform

@@ -16,7 +16,7 @@ uniform mat4 uni_mat4Model;
 void main()
 {
 	m_v3CurrentPosition = vec3(uni_mat4Model * vec4(in_v3Position, 1.0f));
-	m_v3Normal = in_v3Normal;
+	m_v3Normal = vec3(uni_mat4Model * vec4(in_v3Normal, 1.0f));
 	m_v2TextureCoord = in_v2TextureCoord;
 	m_v3Color = in_v3Color;
 

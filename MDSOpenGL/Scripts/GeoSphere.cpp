@@ -29,6 +29,6 @@ void CGeoSphere::Draw()
 	
 	glDrawArrays(GL_POINTS, 0, m_Mesh.GetVerticies().size());
 	
-	m_Mesh.UnbindVertexArray();
+	CVertexArray::Unbind();
 	m_pNormalShader->Deactivate();
 }

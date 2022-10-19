@@ -76,11 +76,11 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			//Update light index
 			uiSpotLightIndex++;
 		}
-
+		
 		//Set CLight uniforms
 		_Shader.Uniform4f(strUniformObject + ".v4LightColour", pLight->m_v4LightColour);
 		_Shader.UniformMatrix4fv(strUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pLight->GetProjection());
-		pLight->m_pShadowMapTexture->Uniform(_Shader, strUniformObject + ".samp2DShadowMap", 10); //[Change Later]
+		pLight->m_pShadowMapTexture->Uniform(_Shader, strUniformObject + ".samp2DShadowMap", 10); //[Change Unit Later]
 	}
 
 	//Set the uniforms for how may lights are in the world for each type
@@ -166,34 +166,35 @@ CLight::CLight(glm::vec4 _v4LightColour)
 	//Initialise Light
 	m_v4LightColour = _v4LightColour;
 	m_mat4Projection = glm::mat4(1.0f);
-	m_bUpdateProjectionMatrix = false;
+	m_bUpdateProjectionMatrix = true;
 
 	//Depth Texture
 	m_pShadowMapTexture = new CTexture();
 	m_pShadowMapTexture->Bind();
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, e_uViewPortW, e_uViewPortH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float fClampColour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, fClampColour);
 
-	//Create Depth Frame Buffer
+	//Depth Frame Buffer
 	glGenFramebuffers(1, &m_uiFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
-
-	//Attach Depth Texture as FBO's Depth Buffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *m_pShadowMapTexture, 0);
-
-	//Disable Writes to Color Buffer
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
-
-	//Unbind Buffer 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	m_pShadowMapTexture->Unbind();
 
 	//Check Frame Buffer Validation
-	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (Status != GL_FRAMEBUFFER_COMPLETE)
+	GLenum uiStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (uiStatus != GL_FRAMEBUFFER_COMPLETE)
 	{
-		printf("FB error, status: 0x%x\n", Status);
+		printf("FB error, status: 0x%x\n", uiStatus);
 	}
 }
 

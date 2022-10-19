@@ -18,6 +18,7 @@ float fTime = 0;
 #include <iostream> //For printing messages to console
 #include "GeoStar.h"
 #include "GeoSphere.h"
+#include "GenerateMesh.h"
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CAssesmentGameManager()
@@ -96,10 +97,6 @@ CAssesmentGameManager::CAssesmentGameManager()
 	};
 	m_mapShaders.emplace("Diffuse", pDiffuse);
 
-	//Setup Lighting
-	new CDirectionalLight;
-	CLight::UpdateLightUniforms(*pDiffuse);
-	
 	//Setup Camera
 	GetMainCamera().SetFarPlane(4000.0f);
 	GetMainCamera().m_Transform.Move(glm::vec3(0, 0, 5));
@@ -121,6 +118,17 @@ CAssesmentGameManager::CAssesmentGameManager()
 
 	new CGeoSphere();
 	new CGeoStar();
+	{
+		CGameObject* pPlaneObject = new CGameObject();
+		gm::GeneratePlane(pPlaneObject->m_Mesh, glm::vec3(1.0f) * 100.0f);
+		pPlaneObject->m_Mesh.m_pShader = pDiffuse;
+		pPlaneObject->m_Transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
+		pPlaneObject->m_Transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+	}
+	
+	//Setup Lighting
+	new CDirectionalLight;
+	CLight::UpdateLightUniforms(*pDiffuse);
 }
 
 CAssesmentGameManager::~CAssesmentGameManager()
@@ -139,6 +147,7 @@ void CAssesmentGameManager::Update()
 
 	//Update the shadows
 	CLight::UpdateShadowUniforms();
+	CLight::UpdateLightUniforms(*m_mapShaders.find("Diffuse")->second.get());
 
 	//Draw the scene to the frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);

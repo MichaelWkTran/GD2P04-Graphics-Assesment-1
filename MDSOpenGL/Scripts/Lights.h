@@ -33,6 +33,7 @@ public:
 	static glm::vec4 m_v4AmbientColour;
 	static void UpdateLightUniforms(CShader& _Shader);
 	static void UpdateShadowUniforms();
+	static const std::set<CLight*>& GetLightsInWorld() { return m_setLightsInWorld; };
 
 	glm::vec4 m_v4LightColour;
 	
