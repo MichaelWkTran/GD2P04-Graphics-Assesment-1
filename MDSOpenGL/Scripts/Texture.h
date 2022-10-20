@@ -24,7 +24,7 @@ public:
 	GLenum m_GLeTarget;
 	
 	CTexture(GLenum&& _GLeTarget = GL_TEXTURE_2D);
-	CTexture(std::string _pImage, GLenum&& _GLeFormat = GL_RGBA, GLenum&& _GLePixelType = GL_UNSIGNED_BYTE);
+	CTexture(std::string _pImage, GLenum&& _GLeFormat = GL_RGB, GLenum&& _GLePixelType = GL_UNSIGNED_BYTE);
 	CTexture(CTexture const&) = delete;
 	CTexture& operator=(const CTexture&) = delete;
 	~CTexture();

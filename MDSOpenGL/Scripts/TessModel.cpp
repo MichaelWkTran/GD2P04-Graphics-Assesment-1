@@ -5,28 +5,8 @@
 
 CTessModel::CTessModel()
 {
-	//Create and Assign Texture
-	CTexture* pTextures = new CTexture();
-
-	//Load 2D Image
-	int iImageWidth, iImageHeight, iChannelNum;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* pImageData = stbi_load((std::string(CTexture::m_pDirective) + "Height Maps/coastMountain513.jpg").c_str(),
-		&iImageWidth, &iImageHeight, &iChannelNum, 0);
-
-	pTextures->Bind();
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iImageWidth, iImageHeight, 0, GL_R, GL_UNSIGNED_BYTE, pImageData);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(pImageData);
-
-	pTextures->Unbind();
-	
-	m_Mesh.m_mapTextures.emplace("uni_samp2DHeightMap", pTextures);
+	//Set Texture
+	m_Mesh.m_mapTextures.emplace("uni_samp2DHeightMap", std::make_shared<CTexture>("Height Maps/coastMountain513.jpg"));
 
 	//Set Mesh Verticies
 	std::vector<stVertex> vVerticies;
@@ -38,10 +18,10 @@ CTessModel::CTessModel()
 		{
 			stVertex SegemntVerticies[4]
 			{
-				stVertex{fPlaneScale * glm::vec3((float)x - 0.5f, 0.0f, (float)y - 0.5f), {}, glm::vec2((float)x, (float)y) + (glm::vec2(0.0f, 0.0f) / (float)uiSegmentWidthHeight)},
-				stVertex{fPlaneScale * glm::vec3((float)x + 0.5f, 0.0f, (float)y - 0.5f), {}, glm::vec2((float)x, (float)y) + (glm::vec2(0.0f, 1.0f) / (float)uiSegmentWidthHeight)},
-				stVertex{fPlaneScale * glm::vec3((float)x - 0.5f, 0.0f, (float)y + 0.5f), {}, glm::vec2((float)x, (float)y) + (glm::vec2(1.0f, 0.0f) / (float)uiSegmentWidthHeight)},
-				stVertex{fPlaneScale * glm::vec3((float)x + 0.5f, 0.0f, (float)y + 0.5f), {}, glm::vec2((float)x, (float)y) + (glm::vec2(1.0f, 1.0f) / (float)uiSegmentWidthHeight)}
+				stVertex{fPlaneScale * glm::vec3(x-0.5f,0.0f,y-0.5f), {}, glm::vec2(x+0.0f, y+0.0f) / ((float)uiSegmentWidthHeight+1)},
+				stVertex{fPlaneScale * glm::vec3(x+0.5f,0.0f,y-0.5f), {}, glm::vec2(x+1.0f, y+0.0f) / ((float)uiSegmentWidthHeight+1)},
+				stVertex{fPlaneScale * glm::vec3(x-0.5f,0.0f,y+0.5f), {}, glm::vec2(x+0.0f, y+1.0f) / ((float)uiSegmentWidthHeight+1)},
+				stVertex{fPlaneScale * glm::vec3(x+0.5f,0.0f,y+0.5f), {}, glm::vec2(x+1.0f, y+1.0f) / ((float)uiSegmentWidthHeight+1)}
 			};
 
 			vVerticies.push_back(SegemntVerticies[0]);
@@ -73,13 +53,4 @@ CTessModel::CTessModel()
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	stVertex::LinkAttributes();
 	CVertexArray::Unbind(); CVertexBuffer<stVertex>::Unbind(); CElementBuffer::Unbind();
-}
-
-void CTessModel::Draw()
-{
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	CGameObject::Draw();
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

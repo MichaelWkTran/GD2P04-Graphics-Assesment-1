@@ -144,7 +144,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		new CCubeSkybox(2000.0f, pCubeMapDirectories);
 	}
 
-	//new CGeoSphere();
+	new CGeoSphere();
 	//new CGeoStar();
 	new CTessModel();
 	//{

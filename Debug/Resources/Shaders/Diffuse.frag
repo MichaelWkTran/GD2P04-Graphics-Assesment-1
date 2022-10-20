@@ -197,12 +197,31 @@ void DirectionalLight(stDirectionalLight _Light)
 	// Perspective Divide To get NDC [-1, 1]
 	vec3 ndcSpace = fragPosLightSpace.xyz/fragPosLightSpace.w;
 
-	// Convert to Tex Coord Space [0,1]
-	vec3 texCoordSpace = (0.5f * ndcSpace) + 0.5f;
-	float currentDepth = texCoordSpace.z;
-	float shadowMapDepth = texture(_Light.samp2DShadowMap, texCoordSpace.xy).r;
-	
-	g_fShadow = currentDepth > shadowMapDepth ? 1.0 : 0.0;
+	// Sets ndcSpace to cull space
+	if(ndcSpace.z <= 1.0f)
+	{
+		// Get from [-1, 1] range to [0, 1] range just like the shadow map
+		ndcSpace = (ndcSpace + 1.0f) / 2.0f;
+		float currentDepth = ndcSpace.z;
+		// Prevents shadow acne
+		float bias = max(0.025f * (1.0f - dot(vs_v3Normal, v3LightDirection)), 0.0005f);
+
+		// Smoothens out the shadows
+		int sampleRadius = 2;
+		vec2 pixelSize = 1.0 / textureSize(_Light.samp2DShadowMap, 0);
+		for(int y = -sampleRadius; y <= sampleRadius; y++)
+		{
+		    for(int x = -sampleRadius; x <= sampleRadius; x++)
+		    {
+		        float closestDepth = texture(_Light.samp2DShadowMap, ndcSpace.xy + vec2(x, y) * pixelSize).r;
+				if (currentDepth > closestDepth + bias)
+					g_fShadow += 1.0f;     
+		    }    
+		}
+		// Get average shadow
+		g_fShadow /= pow((sampleRadius * 2 + 1), 2);
+
+	}
 }
 
 void SpotLight(stSpotLight _Light)
