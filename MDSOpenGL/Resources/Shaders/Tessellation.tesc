@@ -1,8 +1,12 @@
 #version 430 core
 layout (vertices = 3) out;
+in vec2 TexCoord[];
+out vec2 TextureCoord[];
 
 void main()
 {
+	TextureCoord[gl_InvocationID] = TexCoord[gl_InvocationID];
+
 	gl_TessLevelOuter[0] = 5.0;
 	gl_TessLevelOuter[1] = 5.0;
 	gl_TessLevelOuter[2] = 5.0;

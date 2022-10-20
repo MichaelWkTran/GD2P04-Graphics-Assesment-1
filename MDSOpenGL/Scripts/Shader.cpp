@@ -64,11 +64,11 @@ CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, st
 	CompileErrors(m_uiID, "PROGRAM");
 
 	//Delete Shaders
-	if (iVertexShader	>= 0)		glDeleteShader(iVertexShader);
-	if (iTessControlShader >= 0)	glDeleteShader(iTessControlShader);
+	if (iVertexShader		  >= 0)	glDeleteShader(iVertexShader);
+	if (iTessControlShader	  >= 0)	glDeleteShader(iTessControlShader);
 	if (iTessEvaluationShader >= 0) glDeleteShader(iTessEvaluationShader);
-	if (iGeometryShader	>= 0)		glDeleteShader(iGeometryShader);
-	if (iFragmentShader	>= 0)		glDeleteShader(iFragmentShader);
+	if (iGeometryShader		  >= 0)	glDeleteShader(iGeometryShader);
+	if (iFragmentShader		  >= 0)	glDeleteShader(iFragmentShader);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
