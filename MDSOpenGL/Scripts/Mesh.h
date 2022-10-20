@@ -10,9 +10,10 @@
 #include "VertexBuffer.h"
 #include "ElementBuffer.h"
 #include <map>
+#include <set>
 #include <memory>
+#include "Transform.h"
 
-class CTransform;
 class CTexture;
 class CShader;
 class CCamera;
@@ -36,31 +37,44 @@ struct stVertex
 	}
 };
 
-template <class T = stVertex>
-class CMesh
+class CBaseMesh
 {
 protected:
-	CVertexArray m_VertexArray;
-	CElementBuffer m_ElementBuffer;
-	CVertexBuffer<T> m_VertexBuffer;
 	bool m_bUpdateVertexArray;
+	static std::set<CBaseMesh*> Meshes;
+
+	CBaseMesh() { Meshes.emplace(this); m_bHaveShadows = true; m_bUpdateVertexArray = false; };
+	~CBaseMesh() { Meshes.erase(this); };
 
 public:
-	CTransform* m_pTransform;
+	static std::set<CBaseMesh*>::iterator GetMeshesBegin() { return Meshes.begin(); }
+	static std::set<CBaseMesh*>::iterator GetMeshesEnd() { return Meshes.end(); }
+	
+	CVertexArray m_VertexArray;
+	CElementBuffer m_ElementBuffer;
+	CTransform m_Transform;
 	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_mapTextures;
 	std::shared_ptr<CShader> m_pShader;
+	bool m_bHaveShadows;
+
+	const std::vector<unsigned int> GetIndicies() const;
+	void SetIndicies(const std::vector<unsigned int> _vIndicies);
+	virtual void Draw(const CCamera& _Camera) = 0;
+};
+
+template <class T = stVertex>
+class CMesh : public CBaseMesh
+{
+public:
+	CVertexBuffer<T> m_VertexBuffer;
 	void (*m_pDrawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
 	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader = nullptr);
 
-	void BindVertexArray();
-	void BindElementBuffer();
-	void BindVertexBuffer();
+	void UpdateVertexArray();
 	const std::vector<T> GetVerticies() const;
 	void SetVerticies(const std::vector<T> _vVerticies);
-	const std::vector<unsigned int> GetIndicies() const;
-	void SetIndicies(const std::vector<unsigned int> _vIndicies);
 	
-	virtual void Draw(const CCamera& _Camera);
+	virtual void Draw(const CCamera& _Camera) override;
 };

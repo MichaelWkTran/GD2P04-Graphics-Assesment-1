@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+std::set<CBaseMesh*> CBaseMesh::Meshes;
+
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CMesh()
 //	 Purpose: Initalises variables of the mesh
@@ -20,7 +22,6 @@
 template<class T>
 inline CMesh<T>::CMesh()
 {
-	m_pTransform = nullptr;
 	m_pShader = nullptr;
 	m_pDrawMethod = [](CMesh<T>& _Mesh)
 	{
@@ -50,26 +51,12 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 	m_bUpdateVertexArray = true;
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: BindVertexArray()
-//	 Purpose: Binds the vertex array of the mesh
-
 template<class T>
-inline void CMesh<T>::BindVertexArray()
+void CMesh<T>::UpdateVertexArray()
 {
-	m_VertexArray.Bind();
-}
-
-template<class T>
-void CMesh<T>::BindElementBuffer()
-{
-	m_ElementBuffer.Bind();
-}
-
-template<class T>
-void CMesh<T>::BindVertexBuffer()
-{
-	m_VertexBuffer.Bind();
+	m_VertexArray.Bind(); m_VertexBuffer.Bind(); m_ElementBuffer.Bind();
+	T::LinkAttributes();
+	m_VertexArray.Unbind(); m_VertexBuffer.Unbind(); m_ElementBuffer.Unbind();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -99,8 +86,7 @@ inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 //	 Purpose: Gets the indices stored in the mesh.
 //	 Returns: The indices stored in the mesh.
 
-template<class T>
-inline const std::vector<unsigned int> CMesh<T>::GetIndicies() const
+const std::vector<unsigned int> CBaseMesh::GetIndicies() const
 {
 	return m_ElementBuffer.GetIndicies();
 }
@@ -109,8 +95,7 @@ inline const std::vector<unsigned int> CMesh<T>::GetIndicies() const
 // Procedure: SetIndicies()
 //	 Purpose: Sets the indices stored in the mesh via _vIndices.
 
-template<class T>
-inline void CMesh<T>::SetIndicies(const std::vector<unsigned int> _vIndicies)
+void CBaseMesh::SetIndicies(const std::vector<unsigned int> _vIndicies)
 {
 	m_ElementBuffer.SetIndicies(_vIndicies);
 	m_bUpdateVertexArray = true;
@@ -130,15 +115,11 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	if (m_bUpdateVertexArray)
 	{
 		m_bUpdateVertexArray = false;
-
-		m_VertexArray.Bind(); m_VertexBuffer.Bind(); m_ElementBuffer.Bind();
-		T::LinkAttributes();
-		m_VertexArray.Unbind(); m_VertexBuffer.Unbind(); m_ElementBuffer.Unbind();
+		UpdateVertexArray();
 	}
 
 	//Set GameObject Uniform
-	if (m_pTransform != nullptr) m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_pTransform->GetModel());
-	else m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, glm::mat4(1));
+	m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_Transform.GetModel());
 
 	//Set Mesh Uniforms
 	m_pShader->ResetUniforms();

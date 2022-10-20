@@ -103,15 +103,13 @@ void CLight::UpdateShadowUniforms()
 	
 	//Set the shader of the meshes creating shadows
 	std::queue<std::shared_ptr<CShader>> queueOriginalShaders;
-	for (auto& i : GetGameManager().GetUpdatedObjects())
+	for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
 	{
-		//Check whether the object is a game object
-		CGameObject* pGameObject = dynamic_cast<CGameObject*>(i);
-		if (pGameObject == nullptr) continue;
+		if (!(*i)->m_bHaveShadows) continue;
 
 		//Store original shader and set the mesh shader as the shadow map shader
-		queueOriginalShaders.emplace(pGameObject->m_Mesh.m_pShader);
-		pGameObject->m_Mesh.m_pShader = m_pShadowMapShader;
+		queueOriginalShaders.emplace((*i)->m_pShader);
+		(*i)->m_pShader = m_pShadowMapShader;
 	}
 
 	//Enable depth test
@@ -129,15 +127,8 @@ void CLight::UpdateShadowUniforms()
 		m_pShadowMapShader->UniformMatrix4fv("uni_mat4LightProjection", 1, false, pLight->GetProjection());
 
 		//Draw scene
-		for (auto& i : GetGameManager().GetUpdatedObjects())
-		{
-			//Check whether the object is a game object
-			CGameObject* pGameObject = dynamic_cast<CGameObject*>(i);
-			if (pGameObject == nullptr) continue;
-
-			//Draw the game object onto the frame buffer
-			pGameObject->Draw();
-		}
+		for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
+			(*i)->Draw(GetMainCamera());
 	}
 
 	//Unbind frame buffer and return viewport to original properties
@@ -146,14 +137,12 @@ void CLight::UpdateShadowUniforms()
 	glViewport(0, 0, e_uViewPortW, e_uViewPortH);
 
 	//Restore the original shader to the mesh
-	for (auto& i : GetGameManager().GetUpdatedObjects())
+	for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
 	{
-		//Check whether the object is a game object
-		CGameObject* pGameObject = dynamic_cast<CGameObject*>(i);
-		if (pGameObject == nullptr) continue;
+		if (!(*i)->m_bHaveShadows) continue;
 
 		//Store original shader and set the mesh shader as the shadow map shader
-		pGameObject->m_Mesh.m_pShader = queueOriginalShaders.front();
+		(*i)->m_pShader = queueOriginalShaders.front();
 		queueOriginalShaders.pop();
 	}
 }

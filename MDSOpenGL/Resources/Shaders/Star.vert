@@ -9,10 +9,11 @@ out VS_GS_VERTEX
 } vs_out;
 
 uniform mat4 uni_mat4CameraMatrix;
+uniform mat4 uni_mat4Model;
 
 void main()
 {
-	gl_Position = uni_mat4CameraMatrix * vec4(in_v3Position, 1.0f);
+	gl_Position = uni_mat4CameraMatrix * uni_mat4Model * vec4(in_v3Position, 1.0f);
 	
 	vs_out.v4Position = gl_Position;
 	vs_out.mat4CameraMatrix = uni_mat4CameraMatrix;

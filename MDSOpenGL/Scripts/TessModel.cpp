@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "GenerateMesh.h"
 #include "Texture.h"
+#include "Lights.h"
 
 CTessModel::CTessModel()
 {
@@ -49,8 +50,14 @@ CTessModel::CTessModel()
 	m_Mesh.m_pShader = std::make_shared<CShader>("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
 
 	//Set Mesh Attributes
-	m_Mesh.BindVertexArray(); m_Mesh.BindVertexArray(); m_Mesh.BindElementBuffer();
+	m_Mesh.m_VertexArray.Bind(); m_Mesh.m_VertexArray.Bind(); m_Mesh.m_ElementBuffer.Bind();
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	stVertex::LinkAttributes();
 	CVertexArray::Unbind(); CVertexBuffer<stVertex>::Unbind(); CElementBuffer::Unbind();
+}
+
+void CTessModel::Draw()
+{
+	CLight::UpdateLightUniforms(*m_Mesh.m_pShader.get());
+	CGameObject::Draw();
 }

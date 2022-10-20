@@ -20,6 +20,8 @@ private:
 
 public:
 	CTransform();
+	CTransform(CTransform const& _Other);
+	CTransform& operator=(const CTransform& _Other);
 
 	const glm::mat4x4 GetModel() const;
 	

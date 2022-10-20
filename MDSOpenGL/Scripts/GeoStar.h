@@ -11,4 +11,5 @@ public:
 	static CTexture* m_pTexture;
 
 	CGeoStar();
+	void Draw() override;
 };

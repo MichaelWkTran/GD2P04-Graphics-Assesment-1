@@ -35,36 +35,25 @@ uniform float uni_fReflectionStrength = 0;
 uniform samplerCube uni_sampCubeSkybox;
 
 //Light Structs
-struct stLight
-{
-	vec4 v4LightColour;
-	mat4 mat4VPMatrix;
-};
-
 struct stInfinitePointLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
-	//samplerCube samp2DShadowMap;
 };
 
 struct stPointLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
 	float fAttenuationExponent;
 	float fAttenuationLinear;
 	float fAttenuationConstant;
 	mat4 mat4VPMatrix;
-	//samplerCube samp2DShadowMap;
 };
 
 struct stDirectionalLight
 {
-	stLight Base;
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
@@ -73,7 +62,6 @@ struct stDirectionalLight
 
 struct stSpotLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
@@ -126,11 +114,6 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 	float fSpecularAmount = pow(max(dot(vs_v3Normal, v3HalfwayVector), 0.0f), uni_fShininess);
 
 	g_fSpecular += fSpecularAmount * uni_fSpecularStrength * _fIntensity;
-}
-
-void UpdateShadows(vec4 fragPosLightSpace, sampler2D shadowMap)
-{
-	
 }
 
 vec3 RimColour()
@@ -249,7 +232,7 @@ void main()
 	vec4 v4DiffuseTexture = vec4(1.0f);
 	if (textureSize(uni_samp2DDiffuse0, 0) != vec2(1,1)) v4DiffuseTexture *= texture(uni_samp2DDiffuse0, vs_v2TextureCoord);
 	vec4 v4SpecularTexture = vec4(1.0f);
-	 if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4SpecularTexture = texture(uni_samp2DSpecular0, vs_v2TextureCoord);
+	if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4SpecularTexture = texture(uni_samp2DSpecular0, vs_v2TextureCoord);
 	
 	//Calculate Diffuse and Specular Colours	
 	for (int i = 0; i < uni_iInfPointLightNum; i++) InfinitePointLight(uni_InfinitePointLight[i]);

@@ -144,16 +144,9 @@ CAssesmentGameManager::CAssesmentGameManager()
 		new CCubeSkybox(2000.0f, pCubeMapDirectories);
 	}
 
-	new CGeoSphere();
-	//new CGeoStar();
+	(new CGeoSphere())->m_Transform.SetPosition(glm::vec3(0.0f, 30.0f, 0.0f));
+	(new CGeoStar())->m_Transform.SetPosition(glm::vec3(-10.0f, 30.0f, 0.0f));
 	new CTessModel();
-	//{
-	//	CGameObject* pPlaneObject = new CGameObject();
-	//	gm::GeneratePlane(pPlaneObject->m_Mesh, glm::vec3(1.0f) * 100.0f);
-	//	pPlaneObject->m_Mesh.m_pShader = pDiffuse;
-	//	pPlaneObject->m_Transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
-	//	pPlaneObject->m_Transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	//}
 	
 	//Setup Lighting
 	new CDirectionalLight;

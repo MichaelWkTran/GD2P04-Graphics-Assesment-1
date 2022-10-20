@@ -21,6 +21,24 @@ CTransform::CTransform()
     UpdateModelMatrix();
 }
 
+CTransform::CTransform(CTransform const& _Other)
+{
+    m_v3Position = _Other.GetPosition();
+    m_fquatRotation = _Other.GetRotation();
+    m_v3Scale = _Other.GetScale();
+    m_mat4Model = _Other.GetModel();
+}
+
+CTransform& CTransform::operator=(const CTransform& _Other)
+{
+    m_v3Position = _Other.GetPosition();
+    m_fquatRotation = _Other.GetRotation();
+    m_v3Scale = _Other.GetScale();
+    m_mat4Model = _Other.GetModel();
+
+    return *this;
+}
+
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: UpdateModelMatrix()
 //	 Purpose: Update the model matrix of the transform to incorporate the scale, position, and rotation

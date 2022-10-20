@@ -14,7 +14,6 @@
 
 CGameObject::CGameObject()
 {
-	m_Mesh.m_pTransform = &m_Transform;
 	m_bVisible = true;
 }
 
@@ -35,5 +34,6 @@ const bool CGameObject::TagExists(const char* _pTagName)
 
 void CGameObject::Draw()
 {
+	m_Mesh.m_Transform = m_Transform;
 	m_Mesh.Draw(GetMainCamera());
 }

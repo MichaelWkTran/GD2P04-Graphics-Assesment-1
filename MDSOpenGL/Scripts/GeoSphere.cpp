@@ -10,8 +10,7 @@ CGeoSphere::CGeoSphere()
 {
 	gm::GenerateSphere(m_Mesh, 0.5f, 20);
 	m_Mesh.m_pShader = (*dynamic_cast<CAssesmentGameManager*>(&GetGameManager())->m_mapShaders.find("Diffuse")).second;
-	m_Mesh.m_pTransform = &m_Transform;
-
+	
 	//Create normal shader
 	if (m_pNormalShader == nullptr) m_pNormalShader = new CShader("Normal.vert", "Normal.geom", "Normal.frag");
 }
@@ -23,9 +22,10 @@ void CGeoSphere::Draw()
 
 	//Draw Normals
 	m_pNormalShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());
-	
+	m_pNormalShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_Transform.GetModel());
+
 	m_pNormalShader->Activate();
-	m_Mesh.BindVertexArray();
+	m_Mesh.m_VertexArray.Bind();
 	
 	glDrawArrays(GL_POINTS, 0, m_Mesh.GetVerticies().size());
 	

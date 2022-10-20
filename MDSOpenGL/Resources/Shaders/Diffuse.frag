@@ -116,11 +116,6 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 	g_fSpecular += fSpecularAmount * uni_fSpecularStrength * _fIntensity;
 }
 
-void UpdateShadows(vec4 fragPosLightSpace, sampler2D shadowMap)
-{
-	
-}
-
 vec3 RimColour()
 {
 	if (uni_v4RimColour.w <= 0) return vec3(0.0);
