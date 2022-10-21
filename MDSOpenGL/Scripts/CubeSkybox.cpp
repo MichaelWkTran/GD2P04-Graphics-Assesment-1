@@ -20,8 +20,8 @@
 CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6])
 {
 	//Set Shader
-	//m_Mesh.m_pShader = CShader::Find("CubeSkybox");
 	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = std::make_shared<CShader>("CubeMap.vert", "CubeMap.frag");
+	m_Mesh.m_pShadowShader = nullptr;
 
 	//Generate Mesh
 	gm::GenerateFlatCube(m_Mesh, glm::vec3(1.0f, 1.0f, 1.0f) * _fSize);

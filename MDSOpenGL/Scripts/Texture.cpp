@@ -63,7 +63,7 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int&& _uiSlot)
+void CTexture::Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int _uiSlot)
 {
 	glUseProgram(_uiShaderID);
 	glActiveTexture(GL_TEXTURE0 + _uiSlot);

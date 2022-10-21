@@ -230,11 +230,11 @@ void main()
 	for (int i = 0; i < uni_iSpotLightNum; i++) SpotLight(uni_SpotLight[i]);
 
 	//Calculate Final Fragment Colour
-	fs_v4Colour = vec4(1.0f, 0.0f, 0.0f, 1.0f);//mix(vec4(1.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 1.0f, 0.0f, 1.0f), texture(uni_samp2DHeightMap, uvs).y);
+	fs_v4Colour = mix(vec4(1.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 1.0f, 0.0f, 1.0f), texture(uni_samp2DHeightMap, uvs).y);
 	fs_v4Colour = fs_v4Colour * vec4(g_v3Diffuse, 1.0f);
 	fs_v4Colour += g_fSpecular * vec4(1.0f);
-	//fs_v4Colour += vec4(RimColour(), 1.0f);
+	fs_v4Colour += vec4(RimColour(), 1.0f);
 	fs_v4Colour *= 1.0f - g_fShadow;
-	//fs_v4Colour += uni_v4AmbientColour.rgb * uni_v4AmbientColour.w;
+	fs_v4Colour += uni_v4AmbientColour.rgb * uni_v4AmbientColour.w;
 	//fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);
 }

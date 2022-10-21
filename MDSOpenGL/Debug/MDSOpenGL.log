@@ -1,15 +1,2 @@
 ﻿  AssesmentGameManager.cpp
-  CubeSkybox.cpp
-  GameObject.cpp
-  GenerateMesh.cpp
-  GeoSphere.cpp
-  GeoStar.cpp
-  Lights.cpp
-  Main.cpp
-  Mesh.cpp
-  QuadMousePick.cpp
-  TessModel.cpp
-  TextLabel.cpp
-  TinyObjectLoader.cpp
-  Generating Code...
   MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe

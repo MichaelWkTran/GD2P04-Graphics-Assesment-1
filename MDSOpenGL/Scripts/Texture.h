@@ -32,7 +32,7 @@ public:
 	operator int() const;
 	explicit operator int* ();
 	const unsigned int GetID() const;
-	void Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int&& _uiSlot = 0);
+	void Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int _uiSlot = 0);
 	void Bind() const;
 	static void Unbind();
 };

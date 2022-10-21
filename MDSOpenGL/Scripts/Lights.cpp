@@ -76,11 +76,13 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			//Update light index
 			uiSpotLightIndex++;
 		}
+		else
+		{
+			continue;
+		}
 		
 		//Set CLight uniforms
 		_Shader.Uniform4f(strUniformObject + ".v4LightColour", pLight->m_v4LightColour);
-		_Shader.UniformMatrix4fv(strUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pLight->GetProjection());
-		pLight->m_pShadowMapTexture->Uniform(_Shader, strUniformObject + ".samp2DShadowMap", 10); //[Change Unit Later]
 	}
 
 	//Set the uniforms for how may lights are in the world for each type
@@ -93,23 +95,59 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 	_Shader.Uniform4f("uni_v4AmbientColour", m_v4AmbientColour);
 }
 
-void CLight::UpdateShadowUniforms()
+void CLight::UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot)
 {
 	if (m_setLightsInWorld.size() <= 0U) return;
 
-	//Update the projection matricies for all the lights
+	unsigned int uiInfinitePointLightIndex = 0U;
+	unsigned int uiPointLightIndex = 0U;
+	unsigned int uiDirectionalLightIndex = 0U;
+	unsigned int uiSpotLightIndex = 0U;
+
 	for (auto& pLight : m_setLightsInWorld)
-		pLight->UpdateProjectionMatrix();
-	
+	{
+		//Get Uniform Struct name
+		std::string strUniformObject = "";
+		if (auto pObject = dynamic_cast<CInfinitePointLight*>(pLight))
+		{
+			strUniformObject = std::string("uni_InfinitePointLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+			uiInfinitePointLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CPointLight*>(pLight))
+		{
+			strUniformObject = std::string("uni_PointLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+			uiPointLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CDirectionalLight*>(pLight))
+		{
+			strUniformObject = std::string("uni_DirectionalLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+			uiDirectionalLightIndex++;
+		}
+		else if (auto pObject = dynamic_cast<CSpotLight*>(pLight))
+		{
+			strUniformObject = std::string("uni_SpotLight") + '[' + std::to_string(uiInfinitePointLightIndex) + ']';
+			uiSpotLightIndex++;
+		}
+
+		//Set Shadow Uniforms
+		_Shader.UniformMatrix4fv(strUniformObject + ".mat4VPMatrix", 1, GL_FALSE, pLight->GetProjection());
+		pLight->m_pShadowMapTexture->Uniform(_Shader, strUniformObject + ".samp2DShadowMap", _uiSlot);
+	}
+}
+
+void CLight::UpdateShadowMaps()
+{
+	if (m_setLightsInWorld.size() <= 0U) return;
+
 	//Set the shader of the meshes creating shadows
 	std::queue<std::shared_ptr<CShader>> queueOriginalShaders;
 	for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
 	{
-		if (!(*i)->m_bHaveShadows) continue;
+		if ((*i)->m_pShadowShader == nullptr) continue;
 
 		//Store original shader and set the mesh shader as the shadow map shader
 		queueOriginalShaders.emplace((*i)->m_pShader);
-		(*i)->m_pShader = m_pShadowMapShader;
+		(*i)->m_pShader = (*i)->m_pShadowShader;
 	}
 
 	//Enable depth test
@@ -118,17 +156,23 @@ void CLight::UpdateShadowUniforms()
 	//Draw the light framebuffers
 	for (auto& pLight : m_setLightsInWorld)
 	{
+		//Update the projection matricies for all the lights
+		pLight->UpdateProjectionMatrix();
+
 		//Set light viewport and buffer
 		glViewport(0, 0, e_uViewPortW, e_uViewPortH);
 		glBindFramebuffer(GL_FRAMEBUFFER, pLight->GetFrameBuffer());
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		//Set shadow map shader projection uniform
-		m_pShadowMapShader->UniformMatrix4fv("uni_mat4LightProjection", 1, false, pLight->GetProjection());
+		GetShadowMapShader()->UniformMatrix4fv("uni_mat4LightProjection", 1, false, pLight->GetProjection());
 
 		//Draw scene
 		for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
+		{
+			if ((*i)->m_pShadowShader == nullptr) continue;
 			(*i)->Draw(GetMainCamera());
+		}
 	}
 
 	//Unbind frame buffer and return viewport to original properties
@@ -139,19 +183,24 @@ void CLight::UpdateShadowUniforms()
 	//Restore the original shader to the mesh
 	for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
 	{
-		if (!(*i)->m_bHaveShadows) continue;
-
+		if ((*i)->m_pShadowShader == nullptr) continue;
+		
 		//Store original shader and set the mesh shader as the shadow map shader
 		(*i)->m_pShader = queueOriginalShaders.front();
 		queueOriginalShaders.pop();
 	}
 }
 
+const std::shared_ptr<CShader>& CLight::GetShadowMapShader()
+{
+	if (m_pShadowMapShader == nullptr) m_pShadowMapShader = std::make_shared<CShader>("ShadowMap.vert", "Empty.frag");
+	return m_pShadowMapShader;
+}
+
 CLight::CLight(glm::vec4 _v4LightColour)
 {
 	m_setLightsInWorld.emplace(this);
-	if (m_pShadowMapShader == nullptr) m_pShadowMapShader = std::make_shared<CShader>("ShadowMap.vert", "Empty.frag");
-
+	
 	//Initialise Light
 	m_v4LightColour = _v4LightColour;
 	m_mat4Projection = glm::mat4(1.0f);
@@ -181,10 +230,8 @@ CLight::CLight(glm::vec4 _v4LightColour)
 
 	//Check Frame Buffer Validation
 	GLenum uiStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (uiStatus != GL_FRAMEBUFFER_COMPLETE)
-	{
-		printf("FB error, status: 0x%x\n", uiStatus);
-	}
+	if (uiStatus != GL_FRAMEBUFFER_COMPLETE) printf("FB error, status: 0x%x\n", uiStatus);
+	
 }
 
 CLight::~CLight()

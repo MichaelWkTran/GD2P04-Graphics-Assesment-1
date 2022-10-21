@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Lights.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -23,6 +24,7 @@ template<class T>
 inline CMesh<T>::CMesh()
 {
 	m_pShader = nullptr;
+	m_pShadowShader = CLight::GetShadowMapShader();
 	m_pDrawMethod = [](CMesh<T>& _Mesh)
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
@@ -44,6 +46,7 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 	m_ElementBuffer.SetIndicies(_vIndicies);
 	m_mapTextures = _mapTextures;
 	m_pShader = _pShader;
+	m_pShadowShader = CLight::GetShadowMapShader();
 	m_pDrawMethod = [](CMesh<T>& _Mesh)
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
@@ -126,13 +129,16 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	m_pShader->Uniform3f("uni_v3CameraPosition", _Camera.m_Transform.GetPosition());
 	m_pShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, _Camera.GetCameraMatrix());
 
+	//Set Shadow Uniforms
+	if (m_pShadowShader != nullptr) CLight::UpdateShadowUniforms(*m_pShader, m_mapTextures.size() + 1U);
+
 	//Set Texture Uniforms
-	int iUnit = 0;
+	unsigned int uiSlot = 0;
 	for (auto& pTexture : m_mapTextures)
 	{
 		if (pTexture.second == nullptr) continue;
-		pTexture.second->Uniform(*m_pShader, pTexture.first, iUnit);
-		iUnit++;
+		pTexture.second->Uniform(*m_pShader, pTexture.first, uiSlot);
+		uiSlot++;
 	}
 
 	//Draw Mesh
@@ -141,7 +147,6 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	m_pDrawMethod(*this);
 	m_VertexArray.Unbind();
 	m_pShader->Deactivate();
-
 	CTexture::Unbind();
 }
 

@@ -20,6 +20,7 @@ float fTime = 0;
 #include "GeoSphere.h"
 #include "GenerateMesh.h"
 #include "TessModel.h"
+#include "Player.h"
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CAssesmentGameManager()
@@ -28,31 +29,28 @@ float fTime = 0;
 CAssesmentGameManager::CAssesmentGameManager()
 {
 	//Set Key Inputs
-	e_setKeyCallbackFunctions.emplace
-	(
-		[](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
-		{
-			CAssesmentGameManager* pGameManager = ((CAssesmentGameManager*)&GetGameManager());
-			if (_iAction != GLFW_PRESS) return;
+	e_setKeyCallbackFunctions.emplace([](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
+	{
+		CAssesmentGameManager* pGameManager = ((CAssesmentGameManager*)&GetGameManager());
+		if (_iAction != GLFW_PRESS) return;
 
-			switch (_iKey)
-			{
-			//Change Frame Buffer Effect
-			case GLFW_KEY_1:
-				pGameManager->m_FrameBufferEffect = FrameBufferEffect::None;
-				break;
-			case GLFW_KEY_2:
-				pGameManager->m_FrameBufferEffect = FrameBufferEffect::Rain;
-				break;
-			case GLFW_KEY_3:
-				pGameManager->m_FrameBufferEffect = FrameBufferEffect::ChromaticAberration;
-				break;
-			case GLFW_KEY_4:
-				pGameManager->m_FrameBufferEffect = FrameBufferEffect::CRT;
-				break;
-			}
+		switch (_iKey)
+		{
+		//Change Frame Buffer Effect
+		case GLFW_KEY_1:
+			pGameManager->m_FrameBufferEffect = FrameBufferEffect::None;
+			break;
+		case GLFW_KEY_2:
+			pGameManager->m_FrameBufferEffect = FrameBufferEffect::Rain;
+			break;
+		case GLFW_KEY_3:
+			pGameManager->m_FrameBufferEffect = FrameBufferEffect::ChromaticAberration;
+			break;
+		case GLFW_KEY_4:
+			pGameManager->m_FrameBufferEffect = FrameBufferEffect::CRT;
+			break;
 		}
-	);
+	});
 
 	//Setup frame and render buffer
 	{
@@ -93,7 +91,7 @@ CAssesmentGameManager::CAssesmentGameManager()
 		stVertex{glm::vec3(-1.0f,  1.0f, 0.0f), {}, glm::vec2(0.0f, 1.0f)},
 		stVertex{glm::vec3( 1.0f,  1.0f, 0.0f), {}, glm::vec2(1.0f, 1.0f)}
 		});
-
+		m_RenderQuad.m_pShadowShader = nullptr;
 		m_RenderQuad.SetIndicies({0, 1, 2, 1, 3, 2});
 
 		//Setup default frame buffer effect
@@ -144,11 +142,30 @@ CAssesmentGameManager::CAssesmentGameManager()
 		new CCubeSkybox(2000.0f, pCubeMapDirectories);
 	}
 
-	(new CGeoSphere())->m_Transform.SetPosition(glm::vec3(0.0f, 30.0f, 0.0f));
-	(new CGeoStar())->m_Transform.SetPosition(glm::vec3(-10.0f, 30.0f, 0.0f));
-	new CTessModel();
-	
+	(new CGeoSphere())->m_Transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+	(new CGeoStar())->m_Transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
+	(new CTessModel())->m_Transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
+	(new CPlayer)->m_Transform.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	{
+		CGameObject* pPlaneObject = new CGameObject();
+		gm::GeneratePlane(pPlaneObject->m_Mesh, glm::vec3(1.0f) * 100.0f);
+		pPlaneObject->m_Mesh.m_pShader = pDiffuse;
+		pPlaneObject->m_Transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
+		pPlaneObject->m_Transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+	}
+	{
+		CGameObject* pAsymmetricalObject = new CGameObject;
+		GetObjModelData(pAsymmetricalObject->m_Mesh, "Resources/Models/AsymmetricalObject.obj");
+		pAsymmetricalObject->m_Transform.SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+		pAsymmetricalObject->m_Mesh.m_pShader = pDiffuse;
+		pAsymmetricalObject->m_Mesh.m_pDrawMethod = [](CMesh<>& _Mesh)
+		{
+			glDrawArrays(GL_TRIANGLES, 0, _Mesh.GetVerticies().size());
+		};
+	}
+
 	//Setup Lighting
+	new CDirectionalLight;
 	new CDirectionalLight;
 	CLight::UpdateLightUniforms(*pDiffuse);
 }
@@ -168,9 +185,8 @@ void CAssesmentGameManager::Update()
 	UpdateObjectsInWorld();
 
 	//Update the shadows
-	CLight::UpdateShadowUniforms();
-	CLight::UpdateLightUniforms(*m_mapShaders.find("Diffuse")->second.get());
-
+	CLight::UpdateShadowMaps();
+	
 	//Draw the scene to the frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
 	

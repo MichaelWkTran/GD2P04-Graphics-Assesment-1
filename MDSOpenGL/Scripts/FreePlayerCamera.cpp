@@ -36,10 +36,10 @@ void CFreePlayerCamera::Update()
 	//Handles key inputs
 	glm::vec3 v3Velocity(0.0f, 0.0f, 0.0f);
 
-	if (glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(m_pWindow, GLFW_KEY_UP) == GLFW_PRESS)	v3Velocity += fSpeed * m_Transform.Forward();
-	if (glfwGetKey(m_pWindow, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(m_pWindow, GLFW_KEY_DOWN) == GLFW_PRESS)	v3Velocity += fSpeed * -m_Transform.Forward();
-	if (glfwGetKey(m_pWindow, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(m_pWindow, GLFW_KEY_LEFT) == GLFW_PRESS)	v3Velocity += fSpeed * -glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
-	if (glfwGetKey(m_pWindow, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(m_pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS) v3Velocity += fSpeed * glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_UP) == GLFW_PRESS)	v3Velocity += fSpeed * m_Transform.Forward();
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_S) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_DOWN) == GLFW_PRESS)	v3Velocity += fSpeed * -m_Transform.Forward();
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_A) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_LEFT) == GLFW_PRESS)	v3Velocity += fSpeed * -glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_D) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS) v3Velocity += fSpeed * glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
 	if (glfwGetKey(m_pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)													v3Velocity += fSpeed * v3Up;
 	if (glfwGetKey(m_pWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)												v3Velocity += fSpeed * -v3Up;
 

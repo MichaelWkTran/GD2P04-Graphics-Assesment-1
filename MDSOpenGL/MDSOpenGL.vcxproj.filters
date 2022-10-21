@@ -73,6 +73,9 @@
     <ClCompile Include="Scripts\TessModel.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Player.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Main.h">
@@ -148,6 +151,9 @@
       <Filter>Assesment</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\TessModel.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Player.h">
       <Filter>Assesment</Filter>
     </ClInclude>
   </ItemGroup>

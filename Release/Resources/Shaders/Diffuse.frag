@@ -35,36 +35,25 @@ uniform float uni_fReflectionStrength = 0;
 uniform samplerCube uni_sampCubeSkybox;
 
 //Light Structs
-struct stLight
-{
-	vec4 v4LightColour;
-	mat4 mat4VPMatrix;
-};
-
 struct stInfinitePointLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
-	//samplerCube samp2DShadowMap;
 };
 
 struct stPointLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec4 v4LightColour;
 	float fAttenuationExponent;
 	float fAttenuationLinear;
 	float fAttenuationConstant;
 	mat4 mat4VPMatrix;
-	//samplerCube samp2DShadowMap;
 };
 
 struct stDirectionalLight
 {
-	stLight Base;
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
 	mat4 mat4VPMatrix;
@@ -73,7 +62,6 @@ struct stDirectionalLight
 
 struct stSpotLight
 {
-	stLight Base;
 	vec3 v3LightPosition;
 	vec3 v3LightDirection;
 	vec4 v4LightColour;
@@ -126,11 +114,6 @@ void UpdateDiffuseSpecular(vec3 _v3LightColour, vec3 _v3LightDirection, float _f
 	float fSpecularAmount = pow(max(dot(vs_v3Normal, v3HalfwayVector), 0.0f), uni_fShininess);
 
 	g_fSpecular += fSpecularAmount * uni_fSpecularStrength * _fIntensity;
-}
-
-void UpdateShadows(vec4 fragPosLightSpace, sampler2D shadowMap)
-{
-	
 }
 
 vec3 RimColour()
@@ -200,6 +183,8 @@ void DirectionalLight(stDirectionalLight _Light)
 	// Sets ndcSpace to cull space
 	if(ndcSpace.z <= 1.0f)
 	{
+		float fShadow = 0.0f;
+
 		// Get from [-1, 1] range to [0, 1] range just like the shadow map
 		ndcSpace = (ndcSpace + 1.0f) / 2.0f;
 		float currentDepth = ndcSpace.z;
@@ -210,17 +195,17 @@ void DirectionalLight(stDirectionalLight _Light)
 		int sampleRadius = 2;
 		vec2 pixelSize = 1.0 / textureSize(_Light.samp2DShadowMap, 0);
 		for(int y = -sampleRadius; y <= sampleRadius; y++)
-		{
 		    for(int x = -sampleRadius; x <= sampleRadius; x++)
 		    {
 		        float closestDepth = texture(_Light.samp2DShadowMap, ndcSpace.xy + vec2(x, y) * pixelSize).r;
-				if (currentDepth > closestDepth + bias)
-					g_fShadow += 1.0f;     
+				if (currentDepth > closestDepth + bias) fShadow += 1.0f;     
 		    }    
-		}
+		
 		// Get average shadow
-		g_fShadow /= pow((sampleRadius * 2 + 1), 2);
-
+		fShadow /= pow((sampleRadius * 2 + 1), 2);
+		
+		//Combine shadow
+		g_fShadow += fShadow;
 	}
 }
 
@@ -249,7 +234,7 @@ void main()
 	vec4 v4DiffuseTexture = vec4(1.0f);
 	if (textureSize(uni_samp2DDiffuse0, 0) != vec2(1,1)) v4DiffuseTexture *= texture(uni_samp2DDiffuse0, vs_v2TextureCoord);
 	vec4 v4SpecularTexture = vec4(1.0f);
-	 if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4SpecularTexture = texture(uni_samp2DSpecular0, vs_v2TextureCoord);
+	if (textureSize(uni_samp2DSpecular0, 0) != vec2(1,1)) v4SpecularTexture = texture(uni_samp2DSpecular0, vs_v2TextureCoord);
 	
 	//Calculate Diffuse and Specular Colours	
 	for (int i = 0; i < uni_iInfPointLightNum; i++) InfinitePointLight(uni_InfinitePointLight[i]);
@@ -277,7 +262,7 @@ void main()
 	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse), 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_fSpecular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
-	fs_v4Colour *= 1.0f - g_fShadow;
+	fs_v4Colour *= max(1.0f - g_fShadow, 0.0f);
 	fs_v4Colour += uni_v4AmbientColour.rgb * uni_v4AmbientColour.w;
 	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);
 }

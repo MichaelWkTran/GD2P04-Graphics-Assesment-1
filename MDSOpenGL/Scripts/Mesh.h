@@ -43,7 +43,7 @@ protected:
 	bool m_bUpdateVertexArray;
 	static std::set<CBaseMesh*> Meshes;
 
-	CBaseMesh() { Meshes.emplace(this); m_bHaveShadows = true; m_bUpdateVertexArray = false; };
+	CBaseMesh() { Meshes.emplace(this); m_bUpdateVertexArray = false; };
 	~CBaseMesh() { Meshes.erase(this); };
 
 public:
@@ -55,8 +55,8 @@ public:
 	CTransform m_Transform;
 	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_mapTextures;
 	std::shared_ptr<CShader> m_pShader;
-	bool m_bHaveShadows;
-
+	std::shared_ptr<CShader> m_pShadowShader;
+	
 	const std::vector<unsigned int> GetIndicies() const;
 	void SetIndicies(const std::vector<unsigned int> _vIndicies);
 	virtual void Draw(const CCamera& _Camera) = 0;

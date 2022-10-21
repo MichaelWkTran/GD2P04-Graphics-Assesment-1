@@ -18,6 +18,7 @@ class CTexture;
 class CLight
 {
 private:
+	static std::shared_ptr<CShader> m_pShadowMapShader;
 	static std::set<CLight*> m_setLightsInWorld;
 
 protected:
@@ -28,12 +29,13 @@ protected:
 	virtual void UpdateProjectionMatrix() = 0;
 
 public:
-	static std::shared_ptr<CShader> m_pShadowMapShader;
 	CTexture* m_pShadowMapTexture;
 	static glm::vec4 m_v4AmbientColour;
 	static void UpdateLightUniforms(CShader& _Shader);
-	static void UpdateShadowUniforms();
-	static const std::set<CLight*>& GetLightsInWorld() { return m_setLightsInWorld; };
+	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot = 10);
+	static void UpdateShadowMaps();
+	static const std::set<CLight*>& GetLightsInWorld() { return m_setLightsInWorld; }
+	static const std::shared_ptr<CShader>& GetShadowMapShader();
 
 	glm::vec4 m_v4LightColour;
 	

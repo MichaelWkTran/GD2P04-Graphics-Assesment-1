@@ -183,6 +183,8 @@ void DirectionalLight(stDirectionalLight _Light)
 	// Sets ndcSpace to cull space
 	if(ndcSpace.z <= 1.0f)
 	{
+		float fShadow = 0.0f;
+
 		// Get from [-1, 1] range to [0, 1] range just like the shadow map
 		ndcSpace = (ndcSpace + 1.0f) / 2.0f;
 		float currentDepth = ndcSpace.z;
@@ -193,17 +195,17 @@ void DirectionalLight(stDirectionalLight _Light)
 		int sampleRadius = 2;
 		vec2 pixelSize = 1.0 / textureSize(_Light.samp2DShadowMap, 0);
 		for(int y = -sampleRadius; y <= sampleRadius; y++)
-		{
 		    for(int x = -sampleRadius; x <= sampleRadius; x++)
 		    {
 		        float closestDepth = texture(_Light.samp2DShadowMap, ndcSpace.xy + vec2(x, y) * pixelSize).r;
-				if (currentDepth > closestDepth + bias)
-					g_fShadow += 1.0f;     
+				if (currentDepth > closestDepth + bias) fShadow += 1.0f;     
 		    }    
-		}
+		
 		// Get average shadow
-		g_fShadow /= pow((sampleRadius * 2 + 1), 2);
-
+		fShadow /= pow((sampleRadius * 2 + 1), 2);
+		
+		//Combine shadow
+		g_fShadow += fShadow;
 	}
 }
 
@@ -260,7 +262,7 @@ void main()
 	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse), 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_fSpecular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
-	fs_v4Colour *= 1.0f - g_fShadow;
+	fs_v4Colour *= max(1.0f - g_fShadow, 0.0f);
 	fs_v4Colour += uni_v4AmbientColour.rgb * uni_v4AmbientColour.w;
 	fs_v4Colour = vec4(MixFogColour(fs_v4Colour).rgb, 1.0f);
 }
