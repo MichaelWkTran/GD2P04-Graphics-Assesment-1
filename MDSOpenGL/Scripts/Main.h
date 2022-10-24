@@ -12,21 +12,21 @@
 #include <set>
 
 //Window
-extern unsigned int e_uViewPortW, e_uViewPortH;
+extern unsigned int e_viewPortW, e_viewPortH;
 extern GLFWwindow* e_pMainWindow;
 
 //Time
 extern float e_fPreviousTimestep;
-extern float e_fDeltatime;
+extern float e_deltatime;
 extern float e_fMaxDeltatime;
 
 //Input
-extern std::set<void(*)(GLFWwindow*,int,int,int,int)> e_setKeyCallbackFunctions;
+extern std::set<void(*)(GLFWwindow*,int,int,int,int)> e_keyCallbackFunctions;
 extern char e_charCodePoint;
 extern bool e_bCodePointFound;
 
 extern std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
-extern glm::vec2 e_v2MousePosition;
+extern glm::vec2 e_mousePosition;
 extern glm::vec2 e_v2MouseNDCPosition;
 
 void UpdateMousePosition();

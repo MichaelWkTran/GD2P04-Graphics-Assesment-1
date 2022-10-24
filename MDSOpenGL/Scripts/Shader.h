@@ -21,7 +21,7 @@ private:
 
 public:
 	static const char* m_strDirective;
-	void(*m_pDefaultUniform)(CShader& _Shader);
+	void(*m_defaultUniform)(CShader& _Shader);
 
 	CShader
 	(

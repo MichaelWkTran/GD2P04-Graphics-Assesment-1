@@ -7,7 +7,7 @@
 CTessModel::CTessModel()
 {
 	//Set Texture
-	m_Mesh.m_mapTextures.emplace("uni_samp2DHeightMap", std::make_shared<CTexture>("Height Maps/coastMountain513.jpg"));
+	m_mesh.m_textures.emplace("uni_samp2DHeightMap", std::make_shared<CTexture>("Height Maps/coastMountain513.jpg"));
 
 	//Set Mesh Verticies
 	std::vector<stVertex> vVerticies;
@@ -38,19 +38,19 @@ CTessModel::CTessModel()
 		vVerticies[i].v3Position -= (float)uiSegmentWidthHeight * fPlaneScale * 0.5f * glm::vec3(1.0f, 0.0f, 1.0f);
 	}
 
-	m_Mesh.SetVerticies(vVerticies);
+	m_mesh.SetVerticies(vVerticies);
 
 	//Set Mesh Draw Method
-	m_Mesh.m_pDrawMethod = [](CMesh<>& _Mesh)
+	m_mesh.m_drawMethod = [](CMesh<>& _Mesh)
 	{
 		glDrawArrays(GL_PATCHES, 0, _Mesh.GetVerticies().size());
 	};
 
 	//Set Mesh Shader
-	m_Mesh.m_pShader = std::make_shared<CShader>("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
+	m_mesh.m_shader = std::make_shared<CShader>("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
 
 	//Set Mesh Attributes
-	m_Mesh.m_VertexArray.Bind(); m_Mesh.m_VertexArray.Bind(); m_Mesh.m_ElementBuffer.Bind();
+	m_mesh.m_VertexArray.Bind(); m_mesh.m_VertexArray.Bind(); m_mesh.m_ElementBuffer.Bind();
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	stVertex::LinkAttributes();
 	CVertexArray::Unbind(); CVertexBuffer<stVertex>::Unbind(); CElementBuffer::Unbind();
@@ -58,6 +58,6 @@ CTessModel::CTessModel()
 
 void CTessModel::Draw()
 {
-	CLight::UpdateLightUniforms(*m_Mesh.m_pShader.get());
+	CLight::UpdateLightUniforms(*m_mesh.m_shader.get());
 	CGameObject::Draw();
 }

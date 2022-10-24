@@ -18,10 +18,10 @@ class CGameManager
 	friend CUpdatedObject;
 
 private:
-	static CGameManager* m_pSingleton;
+	static CGameManager* m_singleton;
 
 protected:
-	std::deque<CUpdatedObject*> m_dequeUpdatedObject;
+	std::deque<CUpdatedObject*> m_updatedObjects;
 	~CGameManager();
 
 public:
@@ -31,9 +31,9 @@ public:
 	CGameManager& operator= (const CGameManager&) = delete;
 	
 	const std::deque<CUpdatedObject*>& GetUpdatedObjects() const;
-	void DestroyImmediate(CUpdatedObject*&& _pUpdatedObject);
-	void DestroyImmediate(CUpdatedObject*& _pUpdatedObject);
-	void DestroyImmediate(unsigned int _uiIndex);
+	void DestroyImmediate(CUpdatedObject*&& _updatedObject);
+	void DestroyImmediate(CUpdatedObject*& _updatedObject);
+	void DestroyImmediate(unsigned int _index);
 	void Clear();
 
 	void UpdateObjectsInWorld();

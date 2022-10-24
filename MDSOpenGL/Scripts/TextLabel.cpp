@@ -50,7 +50,7 @@ CTextLabel::CTextLabel
 	m_uVAlign = 0;
 	m_v2Scale = glm::vec2(1.0f, 1.0f);
 	m_v3Colour = glm::vec3(1.0f, 1.0f, 1.0f);
-	m_mat4Projection = glm::ortho(0.0f, (float)e_uViewPortW, 0.0f, (float)e_uViewPortH, 0.0f, 100.0f);
+	m_mat4Projection = glm::ortho(0.0f, (float)e_viewPortW, 0.0f, (float)e_viewPortH, 0.0f, 100.0f);
 	
 	//Update m_v2Size
 	UpdateSize();

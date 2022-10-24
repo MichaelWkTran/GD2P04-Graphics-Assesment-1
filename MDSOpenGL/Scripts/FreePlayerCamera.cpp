@@ -12,16 +12,14 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <iostream>
 
-const glm::vec3 v3Up = glm::vec3(0.0f, 1.0f, 0.0f);
-
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CFreePlayerCamera()
 //	 Purpose: Initalise the free camera variables. 
 
 CFreePlayerCamera::CFreePlayerCamera()
 {
-	m_pWindow = e_pMainWindow;
-	m_bFirstClick = false;
+	m_window = e_pMainWindow;
+	m_firstClick = false;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -30,66 +28,67 @@ CFreePlayerCamera::CFreePlayerCamera()
 
 void CFreePlayerCamera::Update()
 {
-	float fSpeed = 10.0f;
-	float fSensitivity = 30.0f;
+	const glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+	float speed = 10.0f;
+	float sensitivity = 30.0f;
 	
 	//Handles key inputs
-	glm::vec3 v3Velocity(0.0f, 0.0f, 0.0f);
+	glm::vec3 velocity(0.0f, 0.0f, 0.0f);
 
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_UP) == GLFW_PRESS)	v3Velocity += fSpeed * m_Transform.Forward();
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_S) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_DOWN) == GLFW_PRESS)	v3Velocity += fSpeed * -m_Transform.Forward();
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_A) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_LEFT) == GLFW_PRESS)	v3Velocity += fSpeed * -glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_D) == GLFW_PRESS || */glfwGetKey(m_pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS) v3Velocity += fSpeed * glm::normalize(glm::cross(m_Transform.Forward(), v3Up));
-	if (glfwGetKey(m_pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)													v3Velocity += fSpeed * v3Up;
-	if (glfwGetKey(m_pWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)												v3Velocity += fSpeed * -v3Up;
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS)	velocity += speed * m_transform.Forward();
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_S) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS)	velocity += speed * -m_transform.Forward();
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_A) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS)	velocity += speed * -glm::normalize(glm::cross(m_transform.Forward(), up));
+	if (/*glfwGetKey(m_pWindow, GLFW_KEY_D) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS) velocity += speed * glm::normalize(glm::cross(m_transform.Forward(), up));
+	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)													velocity += speed * up;
+	if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)												velocity += speed * -up;
 
-	m_Transform.SetPosition(m_Transform.GetPosition() + (v3Velocity * e_fDeltatime));
+	m_transform.SetPosition(m_transform.GetPosition() + (velocity * e_deltatime));
 
 	//Handles mouse inputs
-	if (glfwGetMouseButton(m_pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		//Hides mouse cursor
-		glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 		//Prevents camera from jumping on the first click
-		if (m_bFirstClick)
+		if (m_firstClick)
 		{
-			e_v2MousePosition = glm::vec2(e_uViewPortW / 2, e_uViewPortH / 2);
-			glfwSetCursorPos(m_pWindow, e_v2MousePosition.x, e_v2MousePosition.y);
-			m_bFirstClick = false;
+			e_mousePosition = glm::vec2(e_viewPortW / 2, e_viewPortH / 2);
+			glfwSetCursorPos(m_window, e_mousePosition.x, e_mousePosition.y);
+			m_firstClick = false;
 		}
 
 		//Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
 		//and then "transforms" them into degrees 
-		float fRotX = fSensitivity * (e_v2MousePosition.x - (e_uViewPortW / 2)) * e_fDeltatime;
-		float fRotY = fSensitivity * (e_v2MousePosition.y - (e_uViewPortH / 2)) * e_fDeltatime;
+		float rotX = sensitivity * (e_mousePosition.x - (e_viewPortW / 2)) * e_deltatime;
+		float rotY = sensitivity * (e_mousePosition.y - (e_viewPortH / 2)) * e_deltatime;
 		
 		//Calculates upcoming vertical change in the Orientation
-		glm::vec3 v3Orientation = glm::rotate(m_Transform.Forward(), glm::radians(-fRotY), glm::normalize(glm::cross(m_Transform.Forward(), v3Up)));;
+		glm::vec3 v3Orientation = glm::rotate(m_transform.Forward(), glm::radians(-rotY), glm::normalize(glm::cross(m_transform.Forward(), up)));;
 
 		//Decides whether or not the next vertical Orientation is legal or not
-		if (abs(glm::angle(v3Orientation, v3Up) - glm::radians(90.0f)) > glm::radians(85.0f))
+		if (abs(glm::angle(v3Orientation, up) - glm::radians(90.0f)) > glm::radians(85.0f))
 		{
-			v3Orientation = m_Transform.Forward();
+			v3Orientation = m_transform.Forward();
 		}
 
 		//Rotates the Orientation left and right
-		v3Orientation = glm::rotate(v3Orientation, glm::radians(-fRotX), v3Up);
+		v3Orientation = glm::rotate(v3Orientation, glm::radians(-rotX), up);
 
 		//Set New Orientation
-		m_Transform.LookAt(m_Transform.GetPosition() + v3Orientation);
+		m_transform.LookAt(m_transform.GetPosition() + v3Orientation);
 
 		//Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
-		glfwSetCursorPos(m_pWindow, (e_uViewPortW / 2), (e_uViewPortH / 2));
-		e_v2MousePosition = glm::vec2(e_uViewPortW / 2, e_uViewPortH / 2);
+		glfwSetCursorPos(m_window, (e_viewPortW / 2), (e_viewPortH / 2));
+		e_mousePosition = glm::vec2(e_viewPortW / 2, e_viewPortH / 2);
 	}
-	else if (glfwGetMouseButton(m_pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+	else if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
 		//Unhides cursor since camera is not looking around anymore
-		glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		//Makes sure the next time the camera looks around it doesn't jump
-		m_bFirstClick = true;
+		m_firstClick = true;
 	}
 
 	CCamera::Update();

@@ -15,19 +15,19 @@ class CGameObject : public CUpdatedObject
 {
 public:
 	//Refrencing variables
-	std::set<const char*> m_setTags;
+	std::set<const char*> m_tags;
 
 	//Transformation variables
-	CTransform m_Transform;
+	CTransform m_transform;
 	
 	//Rendering variables
-	CMesh<> m_Mesh;
-	bool m_bVisible;
+	CMesh<> m_mesh;
+	bool m_visible;
 
 	//Methods
 	CGameObject();
 
-	const bool TagExists(const char* _pTagName);
+	const bool TagExists(const char* _tagName);
 
 	virtual void Draw() override;
 };

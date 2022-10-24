@@ -23,9 +23,9 @@ std::set<CBaseMesh*> CBaseMesh::Meshes;
 template<class T>
 inline CMesh<T>::CMesh()
 {
-	m_pShader = nullptr;
-	m_pShadowShader = CLight::GetShadowMapShader();
-	m_pDrawMethod = [](CMesh<T>& _Mesh)
+	m_shader = nullptr;
+	m_shadowShader = CLight::GetShadowMapShader();
+	m_drawMethod = [](CMesh<T>& _Mesh)
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 	};
@@ -44,10 +44,10 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
 	m_ElementBuffer.SetIndicies(_vIndicies);
-	m_mapTextures = _mapTextures;
-	m_pShader = _pShader;
-	m_pShadowShader = CLight::GetShadowMapShader();
-	m_pDrawMethod = [](CMesh<T>& _Mesh)
+	m_textures = _mapTextures;
+	m_shader = _pShader;
+	m_shadowShader = CLight::GetShadowMapShader();
+	m_drawMethod = [](CMesh<T>& _Mesh)
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 	};
@@ -112,7 +112,7 @@ template<class T>
 inline void CMesh<T>::Draw(const CCamera& _Camera)
 {
 	//Dont draw if no shader is assigned or m_VertexBuffer have no verticies
-	if (m_pShader == nullptr || m_VertexBuffer.GetVertices().empty()) return void();
+	if (m_shader == nullptr || m_VertexBuffer.GetVertices().empty()) return void();
 
 	//Update vertex array if its vertex data has changed
 	if (m_bUpdateVertexArray)
@@ -122,31 +122,31 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	}
 
 	//Set GameObject Uniform
-	m_pShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_Transform.GetModel());
+	m_shader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_transform.GetModel());
 
 	//Set Mesh Uniforms
-	m_pShader->ResetUniforms();
-	m_pShader->Uniform3f("uni_v3CameraPosition", _Camera.m_Transform.GetPosition());
-	m_pShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, _Camera.GetCameraMatrix());
+	m_shader->ResetUniforms();
+	m_shader->Uniform3f("uni_v3CameraPosition", _Camera.m_transform.GetPosition());
+	m_shader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, _Camera.GetCameraMatrix());
 
 	//Set Shadow Uniforms
-	if (m_pShadowShader != nullptr) CLight::UpdateShadowUniforms(*m_pShader, m_mapTextures.size() + 1U);
+	if (m_shadowShader != nullptr) CLight::UpdateShadowUniforms(*m_shader, m_textures.size() + 1U);
 
 	//Set Texture Uniforms
 	unsigned int uiSlot = 0;
-	for (auto& pTexture : m_mapTextures)
+	for (auto& pTexture : m_textures)
 	{
 		if (pTexture.second == nullptr) continue;
-		pTexture.second->Uniform(*m_pShader, pTexture.first, uiSlot);
+		pTexture.second->Uniform(*m_shader, pTexture.first, uiSlot);
 		uiSlot++;
 	}
 
 	//Draw Mesh
-	m_pShader->Activate();
+	m_shader->Activate();
 	m_VertexArray.Bind();
-	m_pDrawMethod(*this);
+	m_drawMethod(*this);
 	m_VertexArray.Unbind();
-	m_pShader->Deactivate();
+	m_shader->Deactivate();
 	CTexture::Unbind();
 }
 

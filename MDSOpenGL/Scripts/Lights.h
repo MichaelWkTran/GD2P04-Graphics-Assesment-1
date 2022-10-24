@@ -18,50 +18,50 @@ class CTexture;
 class CLight
 {
 private:
-	static std::shared_ptr<CShader> m_pShadowMapShader;
-	static std::set<CLight*> m_setLightsInWorld;
+	static std::shared_ptr<CShader> m_shadowMapShader;
+	static std::set<CLight*> m_lightsInWorld;
 
 protected:
-	unsigned int m_uiFrameBuffer;
-	glm::mat4 m_mat4Projection;
-	bool m_bUpdateProjectionMatrix;
+	unsigned int m_frameBuffer;
+	glm::mat4 m_projectionMatrix;
+	bool m_updateProjectionMatrix;
 
 	virtual void UpdateProjectionMatrix() = 0;
 
 public:
-	CTexture* m_pShadowMapTexture;
-	static glm::vec4 m_v4AmbientColour;
+	CTexture* m_shadowMapTexture;
+	static glm::vec4 m_ambientColour;
 	static void UpdateLightUniforms(CShader& _Shader);
-	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot = 10);
+	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _slot);
 	static void UpdateShadowMaps();
-	static const std::set<CLight*>& GetLightsInWorld() { return m_setLightsInWorld; }
+	static const std::set<CLight*>& GetLightsInWorld() { return m_lightsInWorld; }
 	static const std::shared_ptr<CShader>& GetShadowMapShader();
 
-	glm::vec4 m_v4LightColour;
+	glm::vec4 m_lightColour;
 	
 	//Methods
-	CLight(glm::vec4 _v4LightColour = glm::vec4(1.0f));
+	CLight(glm::vec4 _lightColour);
 	virtual ~CLight();
 
-	const glm::mat4 GetProjection()
+	const glm::mat4 GetProjectionMatrix()
 	{
-		return m_mat4Projection;
+		return m_projectionMatrix;
 	}
-	void SetProjection(const glm::mat4 _mat4Projection)
+	void SetProjection(const glm::mat4 _projection)
 	{
-		m_mat4Projection = _mat4Projection;
-		m_bUpdateProjectionMatrix = true;
+		m_projectionMatrix = _projection;
+		m_updateProjectionMatrix = true;
 	}
 	unsigned int GetFrameBuffer()
 	{
-		return m_uiFrameBuffer;
+		return m_frameBuffer;
 	}
 };
 
 class CInfinitePointLight : public CLight
 {
 private:
-	glm::vec3 m_v3Position;
+	glm::vec3 m_position;
 
 protected:
 	virtual void UpdateProjectionMatrix() override
@@ -70,26 +70,26 @@ protected:
 	}
 
 public:
-	CInfinitePointLight(glm::vec3 _v3Position = {}, glm::vec4 _v4LightColour = glm::vec4(1.0f)) : CLight(_v4LightColour)
+	CInfinitePointLight(glm::vec3 _position = {}, glm::vec4 _lightColour = glm::vec4(1.0f)) : CLight(_lightColour)
 	{
-		m_v3Position = _v3Position;
+		m_position = _position;
 	};
 
 	const glm::vec3 GetPosition()
 	{
-		return m_v3Position;
+		return m_position;
 	}
 	const void SetPosition(glm::vec3 _v3Position)
 	{
-		m_v3Position = _v3Position;
-		m_bUpdateProjectionMatrix = true;
+		m_position = _v3Position;
+		m_updateProjectionMatrix = true;
 	}
 };
 
 class CPointLight : public CLight
 {
 private:
-	glm::vec3 m_v3Position;
+	glm::vec3 m_position;
 
 protected:
 	virtual void UpdateProjectionMatrix() override
@@ -98,67 +98,67 @@ protected:
 	}
 
 public:
-	float m_fAttenuationExponent;
-	float m_fAttenuationLinear;
-	float m_fAttenuationConstant;
+	float m_attenuationExponent;
+	float m_attenuationLinear;
+	float m_attenuationConstant;
 
 	//Methods
 	CPointLight
 	(
-		glm::vec3 _v3Position = {}, glm::vec4 _v4LightColour = glm::vec4(1.0f),
-		float _fAttenuationExponent = 3.0f,
-		float _fAttenuationLinear = 0.7f,
-		float _fAttenuationConstant = 1.0f
-	) : CLight(_v4LightColour)
+		glm::vec3 _position = {}, glm::vec4 _lightColour = glm::vec4(1.0f),
+		float _attenuationExponent = 3.0f,
+		float _attenuationLinear = 0.7f,
+		float _attenuationConstant = 1.0f
+	) : CLight(_lightColour)
 	{
-		m_v3Position = _v3Position;
-		m_fAttenuationExponent = 3.0f;
-		m_fAttenuationLinear = 0.7f;
-		m_fAttenuationConstant = 1.0f;
+		m_position = _position;
+		m_attenuationExponent = 3.0f;
+		m_attenuationLinear = 0.7f;
+		m_attenuationConstant = 1.0f;
 	}
 
 	const glm::vec3 GetPosition()
 	{
-		return m_v3Position;
+		return m_position;
 	}
-	const void SetPosition(glm::vec3 _v3Position)
+	const void SetPosition(glm::vec3 _position)
 	{
-		m_v3Position = _v3Position;
-		m_bUpdateProjectionMatrix = true;
+		m_position = _position;
+		m_updateProjectionMatrix = true;
 	}
 };
 
 class CDirectionalLight : public CLight
 {
 private:
-	glm::vec3 m_v3LightDirection;
+	glm::vec3 m_lightDirection;
 	
 protected:
 	virtual void UpdateProjectionMatrix() override;
 
 public:
-	CDirectionalLight(glm::vec4 _v4LightColour = glm::vec4(1.0f), glm::vec3 _v3LightDirection = glm::vec3(-1.0f,-1.0f,1.0f))
-		: CLight(_v4LightColour)
+	CDirectionalLight(glm::vec4 _lightColour = glm::vec4(1.0f), glm::vec3 _lightDirection = glm::vec3(-1.0f,-1.0f,1.0f))
+		: CLight(_lightColour)
 	{
-		m_v3LightDirection = _v3LightDirection;
+		m_lightDirection = _lightDirection;
 	}
 
 	const glm::vec3 GetLightDirection()
 	{
-		return m_v3LightDirection;
+		return m_lightDirection;
 	}
-	void SetLightDirection(const glm::vec3 _v3LightDirection)
+	void SetLightDirection(const glm::vec3 _lightDirection)
 	{
-		m_v3LightDirection = _v3LightDirection;
-		m_bUpdateProjectionMatrix = true;
+		m_lightDirection = _lightDirection;
+		m_updateProjectionMatrix = true;
 	}
 };
 
 class CSpotLight : public CLight
 {
 private:
-	glm::vec3 m_v3Position;
-	glm::vec3 m_v3LightDirection;
+	glm::vec3 m_position;
+	glm::vec3 m_lightDirection;
 
 protected:
 	virtual void UpdateProjectionMatrix() override
@@ -167,40 +167,40 @@ protected:
 	}
 
 public:
-	float m_fOuterCone;
-	float m_fInnerCone;
+	float m_outerCone;
+	float m_innerCone;
 
 	//Methods
 	CSpotLight
 	(
-		glm::vec3 _v3Position = {},
-		glm::vec4 _v4LightColour = glm::vec4(1.0f),
-		glm::vec3 _v3LightDirection = glm::vec3(0.0f, -1.0f, 0.0f),
-		float _fOuterCone = 0.9f, float _fInnerCone = 0.95f
-	) : CLight(_v4LightColour)
+		glm::vec3 _position = {},
+		glm::vec4 _lightColour = glm::vec4(1.0f),
+		glm::vec3 _lightDirection = glm::vec3(0.0f, -1.0f, 0.0f),
+		float _outerCone = 0.9f, float _innerCone = 0.95f
+	) : CLight(_lightColour)
 	{
-		m_v3Position = _v3Position;
-		m_v3LightDirection = _v3LightDirection;
-		m_fOuterCone = _fOuterCone;
-		m_fInnerCone = _fInnerCone;
+		m_position = _position;
+		m_lightDirection = _lightDirection;
+		m_outerCone = _outerCone;
+		m_innerCone = _innerCone;
 	}
 
 	const glm::vec3 GetPosition()
 	{
-		return m_v3Position;
+		return m_position;
 	}
-	const void SetPosition(glm::vec3 _v3Position)
+	const void SetPosition(glm::vec3 _position)
 	{
-		m_v3Position = _v3Position;
-		m_bUpdateProjectionMatrix = true;
+		m_position = _position;
+		m_updateProjectionMatrix = true;
 	}
 	const glm::vec3 GetLightDirection()
 	{
-		return m_v3LightDirection;
+		return m_lightDirection;
 	}
-	void SetLightDirection(const glm::vec3 _v3LightDirection)
+	void SetLightDirection(const glm::vec3 _lightDirection)
 	{
-		m_v3LightDirection = _v3LightDirection;
-		m_bUpdateProjectionMatrix = true;
+		m_lightDirection = _lightDirection;
+		m_updateProjectionMatrix = true;
 	}
 };

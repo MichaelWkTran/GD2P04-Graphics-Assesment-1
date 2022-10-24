@@ -4,7 +4,7 @@
 class CGeoSphere : public CGameObject
 {
 public:
-	static CShader* m_pNormalShader;
+	static CShader* m_normalShader;
 
 	CGeoSphere();
 

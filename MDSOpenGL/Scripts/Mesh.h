@@ -52,10 +52,10 @@ public:
 	
 	CVertexArray m_VertexArray;
 	CElementBuffer m_ElementBuffer;
-	CTransform m_Transform;
-	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_mapTextures;
-	std::shared_ptr<CShader> m_pShader;
-	std::shared_ptr<CShader> m_pShadowShader;
+	CTransform m_transform;
+	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_textures;
+	std::shared_ptr<CShader> m_shader;
+	std::shared_ptr<CShader> m_shadowShader;
 	
 	const std::vector<unsigned int> GetIndicies() const;
 	void SetIndicies(const std::vector<unsigned int> _vIndicies);
@@ -67,7 +67,7 @@ class CMesh : public CBaseMesh
 {
 public:
 	CVertexBuffer<T> m_VertexBuffer;
-	void (*m_pDrawMethod)(CMesh<T>& _Mesh);
+	void (*m_drawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
 	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader = nullptr);

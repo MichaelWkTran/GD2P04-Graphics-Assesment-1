@@ -26,7 +26,7 @@ const char* CShader::m_strDirective = "Resources/Shaders/";
 
 CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _strFragmentFile, void(*_pDefaultUniform)(CShader& _Shader))
 {
-	m_pDefaultUniform = _pDefaultUniform;
+	m_defaultUniform = _pDefaultUniform;
 
 	//Create Program
 	m_uiID = glCreateProgram();
@@ -195,9 +195,9 @@ void CShader::Deactivate()
 
 void CShader::ResetUniforms()
 {
-	if (m_pDefaultUniform != nullptr)
+	if (m_defaultUniform != nullptr)
 	{
-		m_pDefaultUniform(*this);
+		m_defaultUniform(*this);
 	}
 }
 

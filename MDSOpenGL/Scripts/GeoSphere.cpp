@@ -4,15 +4,15 @@
 #include "Shader.h"
 #include "AssesmentGameManager.h"
 
-CShader* CGeoSphere::m_pNormalShader = nullptr;
+CShader* CGeoSphere::m_normalShader = nullptr;
 
 CGeoSphere::CGeoSphere()
 {
-	gm::GenerateSphere(m_Mesh, 0.5f, 20);
-	m_Mesh.m_pShader = (*dynamic_cast<CAssesmentGameManager*>(&GetGameManager())->m_mapShaders.find("Diffuse")).second;
+	gm::GenerateSphere(m_mesh, 0.5f, 20);
+	m_mesh.m_shader = (*dynamic_cast<CAssesmentGameManager*>(&GetGameManager())->m_shaders.find("Diffuse")).second;
 	
 	//Create normal shader
-	if (m_pNormalShader == nullptr) m_pNormalShader = new CShader("Normal.vert", "Normal.geom", "Normal.frag");
+	if (m_normalShader == nullptr) m_normalShader = new CShader("Normal.vert", "Normal.geom", "Normal.frag");
 }
 
 void CGeoSphere::Draw()
@@ -21,14 +21,14 @@ void CGeoSphere::Draw()
 	CGameObject::Draw();
 
 	//Draw Normals
-	m_pNormalShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());
-	m_pNormalShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_Transform.GetModel());
+	m_normalShader->UniformMatrix4fv("uni_mat4CameraMatrix", 1, GL_FALSE, GetMainCamera().GetCameraMatrix());
+	m_normalShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_transform.GetModel());
 
-	m_pNormalShader->Activate();
-	m_Mesh.m_VertexArray.Bind();
+	m_normalShader->Activate();
+	m_mesh.m_VertexArray.Bind();
 	
-	glDrawArrays(GL_POINTS, 0, m_Mesh.GetVerticies().size());
+	glDrawArrays(GL_POINTS, 0, m_mesh.GetVerticies().size());
 	
 	CVertexArray::Unbind();
-	m_pNormalShader->Deactivate();
+	m_normalShader->Deactivate();
 }

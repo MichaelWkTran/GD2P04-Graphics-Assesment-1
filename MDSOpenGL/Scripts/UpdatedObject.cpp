@@ -16,5 +16,5 @@ CUpdatedObject::CUpdatedObject()
 {
 	m_bStartCalled = false;
 	m_bDeleteUpdatedObject = false;
-	GetGameManager().m_dequeUpdatedObject.emplace_back(this);
+	GetGameManager().m_updatedObjects.emplace_back(this);
 }

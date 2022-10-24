@@ -24,13 +24,13 @@ enum class FrameBufferEffect
 class CAssesmentGameManager : public CGameManager
 {
 private:
-	unsigned int m_uiFrameBuffer;
-	unsigned int m_uiRenderBuffer;
-	CMesh<> m_RenderQuad;
+	unsigned int m_frameBuffer;
+	unsigned int m_renderBuffer;
+	CMesh<> m_renderQuad;
 
 public:
-	std::map<const char* /*Shader name*/, std::shared_ptr<CShader>> m_mapShaders;
-	FrameBufferEffect m_FrameBufferEffect;
+	std::map<const char* /*Shader name*/, std::shared_ptr<CShader>> m_shaders;
+	FrameBufferEffect m_frameBufferEffect;
 
 	CAssesmentGameManager();
 	~CAssesmentGameManager();

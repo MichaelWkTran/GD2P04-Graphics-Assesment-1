@@ -5,7 +5,7 @@
 /*  DATE: Aug 23rd, 2022																								*/
 /************************************************************************************************************************/
 
-float fTime = 0;
+float g_time = 0;
 
 #include "AssesmentGameManager.h"
 #include "Camera.h" //For accessing the camera
@@ -29,25 +29,25 @@ float fTime = 0;
 CAssesmentGameManager::CAssesmentGameManager()
 {
 	//Set Key Inputs
-	e_setKeyCallbackFunctions.emplace([](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
+	e_keyCallbackFunctions.emplace([](GLFWwindow* _window, int _key, int _scanCode, int _action, int _mods)
 	{
 		CAssesmentGameManager* pGameManager = ((CAssesmentGameManager*)&GetGameManager());
-		if (_iAction != GLFW_PRESS) return;
+		if (_action != GLFW_PRESS) return;
 
-		switch (_iKey)
+		switch (_key)
 		{
 		//Change Frame Buffer Effect
 		case GLFW_KEY_1:
-			pGameManager->m_FrameBufferEffect = FrameBufferEffect::None;
+			pGameManager->m_frameBufferEffect = FrameBufferEffect::None;
 			break;
 		case GLFW_KEY_2:
-			pGameManager->m_FrameBufferEffect = FrameBufferEffect::Rain;
+			pGameManager->m_frameBufferEffect = FrameBufferEffect::Rain;
 			break;
 		case GLFW_KEY_3:
-			pGameManager->m_FrameBufferEffect = FrameBufferEffect::ChromaticAberration;
+			pGameManager->m_frameBufferEffect = FrameBufferEffect::ChromaticAberration;
 			break;
 		case GLFW_KEY_4:
-			pGameManager->m_FrameBufferEffect = FrameBufferEffect::CRT;
+			pGameManager->m_frameBufferEffect = FrameBufferEffect::CRT;
 			break;
 		}
 	});
@@ -55,28 +55,28 @@ CAssesmentGameManager::CAssesmentGameManager()
 	//Setup frame and render buffer
 	{
 		//Create frame buffer
-		glGenFramebuffers(1, &m_uiFrameBuffer);
+		glGenFramebuffers(1, &m_frameBuffer);
 
 		//Bind frame buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
 		//Create and attach texture to frame buffer
-		CTexture* pRenderTexture = new CTexture();
-		m_RenderQuad.m_mapTextures.emplace("renderTexture", pRenderTexture);
-		pRenderTexture->Bind();
+		CTexture* renderTexture = new CTexture();
+		m_renderQuad.m_textures.emplace("renderTexture", renderTexture);
+		renderTexture->Bind();
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, e_uViewPortW, e_uViewPortH, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, e_viewPortW, e_viewPortH, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *pRenderTexture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *renderTexture, 0);
 
-		pRenderTexture->Unbind();
+		renderTexture->Unbind();
 
 		//Create Render buffer
-		glGenRenderbuffers(1, &m_uiRenderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, m_uiRenderBuffer);
+		glGenRenderbuffers(1, &m_renderBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
 
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, e_uViewPortW, e_uViewPortH);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_uiRenderBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, e_viewPortW, e_viewPortH);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_renderBuffer);
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			std::cout << "ERROR: Framebuffer is is not complete";
@@ -85,51 +85,51 @@ CAssesmentGameManager::CAssesmentGameManager()
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		//Setup render quad mesh 
-		m_RenderQuad.SetVerticies({
+		m_renderQuad.SetVerticies({
 		stVertex{glm::vec3(-1.0f, -1.0f, 0.0f), {}, glm::vec2(0.0f, 0.0f)},
 		stVertex{glm::vec3( 1.0f, -1.0f, 0.0f), {}, glm::vec2(1.0f, 0.0f)},
 		stVertex{glm::vec3(-1.0f,  1.0f, 0.0f), {}, glm::vec2(0.0f, 1.0f)},
 		stVertex{glm::vec3( 1.0f,  1.0f, 0.0f), {}, glm::vec2(1.0f, 1.0f)}
 		});
-		m_RenderQuad.m_pShadowShader = nullptr;
-		m_RenderQuad.SetIndicies({0, 1, 2, 1, 3, 2});
+		m_renderQuad.m_shadowShader = nullptr;
+		m_renderQuad.SetIndicies({0, 1, 2, 1, 3, 2});
 
 		//Setup default frame buffer effect
-		m_FrameBufferEffect = FrameBufferEffect::None;
+		m_frameBufferEffect = FrameBufferEffect::None;
 
 		//Create Shaders
-		m_mapShaders.emplace("FrameBuffer",			std::make_shared<CShader>("FrameBuffer.vert", "FrameBuffer.frag"));
-		m_mapShaders.emplace("Rain",				std::make_shared<CShader>("FrameBuffer.vert", "Rain.frag"));
-		m_mapShaders.emplace("ChromaticAberration", std::make_shared<CShader>("FrameBuffer.vert", "ChromaticAberration.frag"));
-		m_mapShaders.emplace("CRT",					std::make_shared<CShader>("FrameBuffer.vert", "CRT.frag"));
+		m_shaders.emplace("FrameBuffer",			std::make_shared<CShader>("FrameBuffer.vert", "FrameBuffer.frag"));
+		m_shaders.emplace("Rain",				std::make_shared<CShader>("FrameBuffer.vert", "Rain.frag"));
+		m_shaders.emplace("ChromaticAberration", std::make_shared<CShader>("FrameBuffer.vert", "ChromaticAberration.frag"));
+		m_shaders.emplace("CRT",					std::make_shared<CShader>("FrameBuffer.vert", "CRT.frag"));
 
 		//Set texture to render quad mesh
-		m_RenderQuad.m_mapTextures.emplace("noise", new CTexture("Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
+		m_renderQuad.m_textures.emplace("noise", new CTexture("Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
 	}
 
 	//Create Shaders
-	std::shared_ptr<CShader>pDiffuse(std::make_shared<CShader>("Diffuse.vert", "Diffuse.frag"));
-	pDiffuse->m_pDefaultUniform = [](CShader& _Shader)
+	std::shared_ptr<CShader>diffuse(std::make_shared<CShader>("Diffuse.vert", "Diffuse.frag"));
+	diffuse->m_defaultUniform = [](CShader& _shader)
 	{
 		//Light Uniforms
-		_Shader.Uniform1f("uni_fSpecularStrength", 0.3f);
-		_Shader.Uniform1f("uni_fShininess", 16.0f);
+		_shader.Uniform1f("uni_fSpecularStrength", 0.3f);
+		_shader.Uniform1f("uni_fShininess", 16.0f);
 
-		_Shader.Uniform1f("uni_fRimExponent", 16.0f);
-		_Shader.Uniform1f("uni_fShininess", 16.0f);
-		_Shader.Uniform4f("uni_v4RimColour", 1.0f, 1.0f, 1.0f, 0.0f);
+		_shader.Uniform1f("uni_fRimExponent", 16.0f);
+		_shader.Uniform1f("uni_fShininess", 16.0f);
+		_shader.Uniform4f("uni_v4RimColour", 1.0f, 1.0f, 1.0f, 0.0f);
 
-		_Shader.Uniform1f("uni_fReflectionStrength", 0.0f);
+		_shader.Uniform1f("uni_fReflectionStrength", 0.0f);
 	};
-	m_mapShaders.emplace("Diffuse", pDiffuse);
+	m_shaders.emplace("Diffuse", diffuse);
 
 	//Setup Camera
 	GetMainCamera().SetFarPlane(4000.0f);
-	GetMainCamera().m_Transform.Move(glm::vec3(0, 0, 5));
+	GetMainCamera().m_transform.Move(glm::vec3(0, 0, 5));
 
 	//Draw Skybox
 	{
-		const char* pCubeMapDirectories[6]
+		const char* cubeMapDirectories[6]
 		{
 			"Cubemaps/MountainOutpost/Right.jpg",
 			"Cubemaps/MountainOutpost/Left.jpg",
@@ -139,40 +139,40 @@ CAssesmentGameManager::CAssesmentGameManager()
 			"Cubemaps/MountainOutpost/Front.jpg"
 		};
 	
-		new CCubeSkybox(2000.0f, pCubeMapDirectories);
+		new CCubeSkybox(2000.0f, cubeMapDirectories);
 	}
 
-	(new CGeoSphere())->m_Transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
-	(new CGeoStar())->m_Transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
-	(new CTessModel())->m_Transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
-	(new CPlayer)->m_Transform.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	(new CGeoSphere())->m_transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+	(new CGeoStar())->m_transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
+	(new CTessModel())->m_transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
+	(new CPlayer)->m_transform.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	{
-		CGameObject* pPlaneObject = new CGameObject();
-		gm::GeneratePlane(pPlaneObject->m_Mesh, glm::vec3(1.0f) * 100.0f);
-		pPlaneObject->m_Mesh.m_pShader = pDiffuse;
-		pPlaneObject->m_Transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
-		pPlaneObject->m_Transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+		CGameObject* planeObject = new CGameObject();
+		gm::GeneratePlane(planeObject->m_mesh, glm::vec3(1.0f) * 100.0f);
+		planeObject->m_mesh.m_shader = diffuse;
+		planeObject->m_transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
+		planeObject->m_transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
 	}
-	{
-		CGameObject* pAsymmetricalObject = new CGameObject;
-		GetObjModelData(pAsymmetricalObject->m_Mesh, "Resources/Models/AsymmetricalObject.obj");
-		pAsymmetricalObject->m_Transform.SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
-		pAsymmetricalObject->m_Mesh.m_pShader = pDiffuse;
-		pAsymmetricalObject->m_Mesh.m_pDrawMethod = [](CMesh<>& _Mesh)
+	/*{
+		CGameObject* asymmetricalObject = new CGameObject;
+		GetObjModelData(asymmetricalObject->m_mesh, "Resources/Models/AsymmetricalObject.obj");
+		asymmetricalObject->m_transform.SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+		asymmetricalObject->m_mesh.m_shader = diffuse;
+		asymmetricalObject->m_mesh.m_drawMethod = [](CMesh<>& _Mesh)
 		{
 			glDrawArrays(GL_TRIANGLES, 0, _Mesh.GetVerticies().size());
 		};
-	}
+	}*/
 
 	//Setup Lighting
 	new CDirectionalLight;
 	new CDirectionalLight;
-	CLight::UpdateLightUniforms(*pDiffuse);
+	CLight::UpdateLightUniforms(*diffuse);
 }
 
 CAssesmentGameManager::~CAssesmentGameManager()
 {
-	glDeleteFramebuffers(1, &m_uiFrameBuffer);
+	glDeleteFramebuffers(1, &m_frameBuffer);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ void CAssesmentGameManager::Update()
 	CLight::UpdateShadowMaps();
 	
 	//Draw the scene to the frame buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, m_uiFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 	
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -201,29 +201,29 @@ void CAssesmentGameManager::Update()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	switch (m_FrameBufferEffect)
+	switch (m_frameBufferEffect)
 	{
 	case FrameBufferEffect::None:
-		m_RenderQuad.m_pShader = (*m_mapShaders.find("FrameBuffer")).second;
+		m_renderQuad.m_shader = (*m_shaders.find("FrameBuffer")).second;
 		break;
 	case FrameBufferEffect::Rain:
-		m_RenderQuad.m_pShader = (*m_mapShaders.find("Rain")).second;
-		fTime += e_fDeltatime;
-		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		m_renderQuad.m_shader = (*m_shaders.find("Rain")).second;
+		g_time += e_deltatime;
+		m_renderQuad.m_shader->Uniform1f("iTime", g_time);
 		break;
 	case FrameBufferEffect::ChromaticAberration:
-		m_RenderQuad.m_pShader = (*m_mapShaders.find("ChromaticAberration")).second;
-		fTime += e_fDeltatime;
-		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		m_renderQuad.m_shader = (*m_shaders.find("ChromaticAberration")).second;
+		g_time += e_deltatime;
+		m_renderQuad.m_shader->Uniform1f("iTime", g_time);
 		break;
 	case FrameBufferEffect::CRT:
-		m_RenderQuad.m_pShader = (*m_mapShaders.find("CRT")).second;
-		fTime += e_fDeltatime;
-		m_RenderQuad.m_pShader->Uniform1f("iTime", fTime);
+		m_renderQuad.m_shader = (*m_shaders.find("CRT")).second;
+		g_time += e_deltatime;
+		m_renderQuad.m_shader->Uniform1f("iTime", g_time);
 		break;
 	}
 	
-	m_RenderQuad.Draw(GetMainCamera());
+	m_renderQuad.Draw(GetMainCamera());
 	
 	glEnable(GL_DEPTH_TEST);
 

@@ -15,7 +15,7 @@
 #include <glm/gtx/vector_angle.hpp>
 
 
-CCamera* CCamera::m_pMainCamera = nullptr;
+CCamera* CCamera::m_mainCamera = nullptr;
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CCamera()
@@ -24,29 +24,29 @@ CCamera* CCamera::m_pMainCamera = nullptr;
 CCamera::CCamera()
 {
 	//Set the main camera if not assigned yet
-	if (m_pMainCamera == nullptr) m_pMainCamera = this;
+	if (m_mainCamera == nullptr) m_mainCamera = this;
 
 	//Set camera viewport
-	m_uv2ViewPort.x = e_uViewPortW;
-	m_uv2ViewPort.y = e_uViewPortH;
+	m_viewPort.x = e_viewPortW;
+	m_viewPort.y = e_viewPortH;
 	
 	//Set camera view mode
-	m_bIsPerspective = true;
+	m_isPerspective = true;
 	
 	//Set view specefic variables
-	m_fFieldOfView = 45.0f;
-	m_fOrthographicScale = 1;
+	m_fieldOfView = 45.0f;
+	m_orthographicScale = 1;
 	
 	//Set far and near plane
-	m_fNearPlane = 0.1f;
-	m_fFarPlane = 100.0f;
+	m_nearPlane = 0.1f;
+	m_farPlane = 100.0f;
 
 	//Set camera matrices
-	m_mat4View = glm::mat4(1.0f);
-	m_mat4Projection = glm::mat4(1.0f);
-	m_mat4Camera = glm::mat4(1.0f);
+	m_viewMatrix = glm::mat4(1.0f);
+	m_projectionMatrix = glm::mat4(1.0f);
+	m_cameraMatrix = glm::mat4(1.0f);
 
-	m_bUpdateProjectionMatrix = true;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -55,8 +55,8 @@ CCamera::CCamera()
 
 CCamera::~CCamera()
 {
-	//Set m_pMainCamera to null if it is destroyed
-	if (m_pMainCamera == this) m_pMainCamera = nullptr;
+	//Set m_mainCamera to null if it is destroyed
+	if (m_mainCamera == this) m_mainCamera = nullptr;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -67,12 +67,9 @@ CCamera::~CCamera()
 CCamera& CCamera::MainCamera()
 {
 	//If a main camera does not exist, create a free camera
-	if (m_pMainCamera == nullptr)
-	{
-		m_pMainCamera = new CFreePlayerCamera();
-	}
+	if (m_mainCamera == nullptr) m_mainCamera = new CFreePlayerCamera();
 
-	return *m_pMainCamera;
+	return *m_mainCamera;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -82,7 +79,7 @@ CCamera& CCamera::MainCamera()
 
 const glm::mat4 CCamera::GetViewMatrix() const
 {
-	return m_mat4View;
+	return m_viewMatrix;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -92,7 +89,7 @@ const glm::mat4 CCamera::GetViewMatrix() const
 
 const glm::mat4 CCamera::GetProjectionMatrix() const
 {
-	return m_mat4Projection;
+	return m_projectionMatrix;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +99,7 @@ const glm::mat4 CCamera::GetProjectionMatrix() const
 
 const glm::mat4 CCamera::GetCameraMatrix() const
 {
-	return m_mat4Camera;
+	return m_cameraMatrix;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -112,17 +109,17 @@ const glm::mat4 CCamera::GetCameraMatrix() const
 
 const glm::uvec2 CCamera::GetViewPort() const
 {
-	return m_uv2ViewPort;
+	return m_viewPort;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetViewPort()
 //	 Purpose: Sets the viewport size of the camera where the passed in _uv2ViewPort is the new viewport
 
-void CCamera::SetViewPort(const glm::uvec2 _uv2ViewPort)
+void CCamera::SetViewPort(const glm::uvec2 _viewPort)
 {
-	m_uv2ViewPort = _uv2ViewPort;
-	m_bUpdateProjectionMatrix = true;
+	m_viewPort = _viewPort;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -132,17 +129,17 @@ void CCamera::SetViewPort(const glm::uvec2 _uv2ViewPort)
 
 const bool CCamera::GetProjection() const
 {
-	return m_bIsPerspective;
+	return m_isPerspective;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetProjection()
 //	 Purpose: Sets the view mode of the camera. If the boolean given is true, the camera is set to perspective mode, otherwise, it is set to orthographic mode
 
-void CCamera::SetProjection(const bool _bIsPerspective)
+void CCamera::SetProjection(const bool _isPerspective)
 {
-	m_bIsPerspective = _bIsPerspective;
-	m_bUpdateProjectionMatrix = true;
+	m_isPerspective = _isPerspective;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -151,20 +148,20 @@ void CCamera::SetProjection(const bool _bIsPerspective)
 //			  otherwise it will return the field of view in degrees.
 //	 Returns: The field of view in radians if _bInRadians is true, otherwise it will return the field of view in degrees.
 
-const float CCamera::GetFieldOfView(const bool _bInRadians)
+const float CCamera::GetFieldOfView(const bool _inRadians = false)
 {
-	if (_bInRadians) return glm::radians(m_fFieldOfView);
-	else return m_fFieldOfView;
+	if (_inRadians) return glm::radians(m_fieldOfView);
+	else return m_fieldOfView;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetFieldOfView()
 //	 Purpose: Sets the new field of view of the camera, _fFieldOfView. If the field of view is in radians, then _bIsRadians must be set to true.
 
-void CCamera::SetFieldOfView(const float _fFieldOfView, const bool _bIsRadians)
+void CCamera::SetFieldOfView(const float _fieldOfView, const bool _isRadians = false)
 {
-	m_fFieldOfView = _bIsRadians ? glm::degrees(_fFieldOfView) : _fFieldOfView;
-	m_bUpdateProjectionMatrix = true;
+	m_fieldOfView = _isRadians ? glm::degrees(_fieldOfView) : _fieldOfView;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -174,17 +171,17 @@ void CCamera::SetFieldOfView(const float _fFieldOfView, const bool _bIsRadians)
 
 const float CCamera::GetOrthographicScale() const
 {
-	return m_fOrthographicScale;
+	return m_orthographicScale;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetOrthographicScale()
 //	 Purpose: Sets the new orthographic scale, _fOrthographicScale, of the camera.
 
-void CCamera::SetOrthographicScale(const float _fOrthographicScale)
+void CCamera::SetOrthographicScale(const float _orthographicScale)
 {
-	m_fOrthographicScale = _fOrthographicScale;
-	m_bUpdateProjectionMatrix = true;
+	m_orthographicScale = _orthographicScale;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -194,17 +191,17 @@ void CCamera::SetOrthographicScale(const float _fOrthographicScale)
 
 const float CCamera::GetNearPlane() const
 {
-	return m_fNearPlane;
+	return m_nearPlane;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetNearPlane()
 //	 Purpose: Sets the new near plane distance, _fNearPlane, of the camera
 
-void CCamera::SetNearPlane(const float _fNearPlane)
+void CCamera::SetNearPlane(const float _nearPlane)
 {
-	m_fNearPlane = _fNearPlane;
-	m_bUpdateProjectionMatrix = true;
+	m_nearPlane = _nearPlane;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -214,17 +211,17 @@ void CCamera::SetNearPlane(const float _fNearPlane)
 
 const float CCamera::GetFarPlane() const
 {
-	return m_fFarPlane;
+	return m_farPlane;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: SetFarPlane()
 //	 Purpose: Sets the new far plane distance of the camera, _fFarPlane.
 
-void CCamera::SetFarPlane(const float _fFarPlane)
+void CCamera::SetFarPlane(const float _farPlane)
 {
-	m_fFarPlane = _fFarPlane;
-	m_bUpdateProjectionMatrix = true;
+	m_farPlane = _farPlane;
+	m_updateProjectionMatrix = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -233,29 +230,29 @@ void CCamera::SetFarPlane(const float _fFarPlane)
 
 void CCamera::Update()
 {
-	if (m_bUpdateProjectionMatrix)
+	if (m_updateProjectionMatrix)
 	{
-		if (m_bIsPerspective)
+		if (m_isPerspective)
 		{
-			m_mat4Projection = glm::perspective
+			m_projectionMatrix = glm::perspective
 			(
-				glm::radians(m_fFieldOfView),
-				((float)m_uv2ViewPort.x) / ((float)m_uv2ViewPort.y),
-				m_fNearPlane, m_fFarPlane
+				glm::radians(m_fieldOfView),
+				((float)m_viewPort.x) / ((float)m_viewPort.y),
+				m_nearPlane, m_farPlane
 			);
 		}
 		else
 		{
-			float fHalfViewPortW = (((float)m_uv2ViewPort.x) / 2) / m_fOrthographicScale;
-			float fHalfViewPortH = (((float)m_uv2ViewPort.y) / 2) / m_fOrthographicScale;
+			float halfViewPortW = (((float)m_viewPort.x) / 2) / m_orthographicScale;
+			float halfViewPortH = (((float)m_viewPort.y) / 2) / m_orthographicScale;
 
-			m_mat4Projection = glm::ortho(fHalfViewPortW, -fHalfViewPortW, fHalfViewPortH, -fHalfViewPortH, m_fNearPlane, m_fFarPlane);
+			m_projectionMatrix = glm::ortho(halfViewPortW, -halfViewPortW, halfViewPortH, -halfViewPortH, m_nearPlane, m_farPlane);
 		}
 
-		m_bUpdateProjectionMatrix = false;
+		m_updateProjectionMatrix = false;
 	}
 
 	//Update the view and camera matrices
-	m_mat4View = glm::lookAt(m_Transform.GetPosition(), m_Transform.GetPosition() + m_Transform.Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
-	m_mat4Camera = m_mat4Projection * m_mat4View;
+	m_viewMatrix = glm::lookAt(m_transform.GetPosition(), m_transform.GetPosition() + m_transform.Forward(), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_cameraMatrix = m_projectionMatrix * m_viewMatrix;
 }

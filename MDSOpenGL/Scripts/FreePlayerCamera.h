@@ -11,8 +11,8 @@
 class CFreePlayerCamera : public CCamera
 {
 public:
-	GLFWwindow* m_pWindow;
-	bool m_bFirstClick;
+	GLFWwindow* m_window;
+	bool m_firstClick;
 
 	CFreePlayerCamera();
 	

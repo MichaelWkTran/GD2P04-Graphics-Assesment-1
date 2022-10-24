@@ -16,18 +16,18 @@
 class CCamera : public CUpdatedObject
 {
 protected:
-	glm::uvec2 m_uv2ViewPort;
-	bool m_bIsPerspective;
-	float m_fFieldOfView; //Value is in degrees
-	float m_fOrthographicScale;
-	float m_fNearPlane, m_fFarPlane;
+	glm::uvec2 m_viewPort;
+	bool m_isPerspective;
+	float m_fieldOfView; //Value is in degrees
+	float m_orthographicScale;
+	float m_nearPlane, m_farPlane;
 
-	bool m_bUpdateProjectionMatrix;
-	glm::mat4 m_mat4View, m_mat4Projection, m_mat4Camera;
+	bool m_updateProjectionMatrix;
+	glm::mat4 m_viewMatrix, m_projectionMatrix, m_cameraMatrix;
 
 public:
-	static CCamera* m_pMainCamera;
-	CTransform m_Transform;
+	static CCamera* m_mainCamera;
+	CTransform m_transform;
 
 	CCamera();
 	~CCamera();
@@ -36,12 +36,12 @@ public:
 	const glm::mat4 GetViewMatrix() const;
 	const glm::mat4 GetProjectionMatrix() const;
 	const glm::mat4 GetCameraMatrix() const;
-	const glm::uvec2 GetViewPort() const; void SetViewPort(const glm::uvec2 _uv2ViewPort);
-	const bool GetProjection() const; void SetProjection(const bool _bIsPerspective);
-	const float GetFieldOfView(bool _bInRadians = false); void SetFieldOfView(const float _fFieldOfView, const bool _bIsRadians = false);
-	const float GetOrthographicScale() const; void SetOrthographicScale(const float _fOrthographicScale);
-	const float GetNearPlane() const; void SetNearPlane(const float _fNearPlane);
-	const float GetFarPlane() const; void SetFarPlane(const float _fFarPlane);
+	const glm::uvec2 GetViewPort() const; void SetViewPort(const glm::uvec2 _viewPort);
+	const bool GetProjection() const; void SetProjection(const bool _perspective);
+	const float GetFieldOfView(bool _inRadians); void SetFieldOfView(const float _fieldOfView, const bool _isRadians);
+	const float GetOrthographicScale() const; void SetOrthographicScale(const float _orthographicScale);
+	const float GetNearPlane() const; void SetNearPlane(const float _nearPlane);
+	const float GetFarPlane() const; void SetFarPlane(const float _farPlane);
 
 	virtual void Update() override;
 };

@@ -12,7 +12,7 @@
 
 #pragma region Window
 
-unsigned int e_uViewPortW = 800, e_uViewPortH = 800;
+unsigned int e_viewPortW = 800, e_viewPortH = 800;
 GLFWwindow* e_pMainWindow = nullptr;
 
 #pragma endregion
@@ -20,19 +20,19 @@ GLFWwindow* e_pMainWindow = nullptr;
 #pragma region Time
 
 float e_fPreviousTimestep = 0.0f;
-float e_fDeltatime = 0.0f;
+float e_deltatime = 0.0f;
 float e_fMaxDeltatime = 1.0f/60.0f;
 
 #pragma endregion
 
 #pragma region Input
 
-std::set<void(*)(GLFWwindow*, int, int, int, int)> e_setKeyCallbackFunctions;
+std::set<void(*)(GLFWwindow*, int, int, int, int)> e_keyCallbackFunctions;
 char e_charCodePoint = 0;
 bool e_bCodePointFound = false;
 
 std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
-glm::vec2 e_v2MousePosition;
+glm::vec2 e_mousePosition;
 glm::vec2 e_v2MouseNDCPosition;
 glm::vec3 e_v3MouseRayDirection;
 
@@ -41,14 +41,14 @@ void UpdateMousePosition()
     double XPos, YPos;
     glfwGetCursorPos(e_pMainWindow, &XPos, &YPos);
 
-    e_v2MousePosition.x = (float)XPos;
-    e_v2MousePosition.y = (float)YPos;
+    e_mousePosition.x = (float)XPos;
+    e_mousePosition.y = (float)YPos;
 
     //Update Mouse NDC Position
     e_v2MouseNDCPosition = glm::vec2
     (
-        (2.0f * e_v2MousePosition.x) / ((float)e_uViewPortW - 1.0f),
-        (1.0f - (2.0f * e_v2MousePosition.y)) / (float)e_uViewPortH
+        (2.0f * e_mousePosition.x) / ((float)e_viewPortW - 1.0f),
+        (1.0f - (2.0f * e_mousePosition.y)) / (float)e_viewPortH
     );
     
     glm::vec4 v4ClipCoord = glm::vec4(e_v2MouseNDCPosition.x, e_v2MouseNDCPosition.y, -1.0f, 1.0f);
@@ -93,7 +93,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Set up Window
-    e_pMainWindow = glfwCreateWindow(e_uViewPortW, e_uViewPortH, "LearnOpenGL", NULL, NULL);
+    e_pMainWindow = glfwCreateWindow(e_viewPortW, e_viewPortH, "LearnOpenGL", NULL, NULL);
     if (e_pMainWindow == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -111,7 +111,7 @@ int main()
     }
 
     //Setup Window Viewport
-    glViewport(0, 0, (int)e_uViewPortW, (int)e_uViewPortH);
+    glViewport(0, 0, (int)e_viewPortW, (int)e_viewPortH);
     glfwSetFramebufferSizeCallback(e_pMainWindow, [](GLFWwindow* _pMainWindow, int _iWidth, int _iHeight)
     {
         glViewport(0, 0, _iWidth, _iHeight);
@@ -141,7 +141,7 @@ int main()
         e_pMainWindow,
         [](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
         {
-            for (auto& i : e_setKeyCallbackFunctions) i(_pWindow, _iKey, _iScanCode, _iAction, _iMods);
+            for (auto& i : e_keyCallbackFunctions) i(_pWindow, _iKey, _iScanCode, _iAction, _iMods);
         }
     );
 
@@ -159,16 +159,16 @@ int main()
     {
         //Update Deltatime
         float fCurrentTimestep = (float)glfwGetTime();
-        e_fDeltatime = fCurrentTimestep - e_fPreviousTimestep;
-        if (e_fDeltatime > e_fMaxDeltatime) e_fDeltatime = e_fMaxDeltatime;
+        e_deltatime = fCurrentTimestep - e_fPreviousTimestep;
+        if (e_deltatime > e_fMaxDeltatime) e_deltatime = e_fMaxDeltatime;
         e_fPreviousTimestep = fCurrentTimestep;
 
         //Update Window Size
         {
             int x, y;
             glfwGetWindowSize(e_pMainWindow, &x, &y);
-            e_uViewPortW = x;
-            e_uViewPortH = y;
+            e_viewPortW = x;
+            e_viewPortH = y;
         }
 
         //Inputs

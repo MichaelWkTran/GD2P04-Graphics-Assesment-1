@@ -20,8 +20,8 @@
 CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6])
 {
 	//Set Shader
-	if (m_Mesh.m_pShader == nullptr) m_Mesh.m_pShader = std::make_shared<CShader>("CubeMap.vert", "CubeMap.frag");
-	m_Mesh.m_pShadowShader = nullptr;
+	if (m_Mesh.m_shader == nullptr) m_Mesh.m_shader = std::make_shared<CShader>("CubeMap.vert", "CubeMap.frag");
+	m_Mesh.m_shadowShader = nullptr;
 
 	//Generate Mesh
 	gm::GenerateFlatCube(m_Mesh, glm::vec3(1.0f, 1.0f, 1.0f) * _fSize);
@@ -38,7 +38,7 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 
 	//Set up texture
 	std::shared_ptr<CTexture>pTexture(std::make_shared<CTexture>(GL_TEXTURE_CUBE_MAP));
-	m_Mesh.m_mapTextures.emplace(std::make_pair("uni_sampCube", pTexture));
+	m_Mesh.m_textures.emplace(std::make_pair("uni_sampCube", pTexture));
 	pTexture->Bind();
 
 	int iImageWidth, iImageHeight, iImageComponents;
@@ -79,7 +79,7 @@ void CCubeSkybox::UpdateLightUniforms(CShader* _pShader)
 	//[Texture slot is zero]
 
 	_pShader->Activate();
-	 m_Mesh.m_mapTextures[0]->Uniform(*_pShader, "uni_sampSkybox");
+	 m_Mesh.m_textures[0]->Uniform(*_pShader, "uni_sampSkybox");
 	CTexture::Unbind();
 	_pShader->Deactivate();
 }

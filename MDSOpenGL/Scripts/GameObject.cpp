@@ -14,7 +14,7 @@
 
 CGameObject::CGameObject()
 {
-	m_bVisible = true;
+	m_visible = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -22,9 +22,9 @@ CGameObject::CGameObject()
 //	 Purpose: Check whether the tag, _pTagName, exists in m_setTags 
 //	 Returns: Whether the tag, _pTagName, exists in in m_setTags
 
-const bool CGameObject::TagExists(const char* _pTagName)
+const bool CGameObject::TagExists(const char* _tagName)
 {
-	if (m_setTags.find(_pTagName) != m_setTags.end()) return true;
+	if (m_tags.find(_tagName) != m_tags.end()) return true;
 	else return false;
 }
 
@@ -34,6 +34,6 @@ const bool CGameObject::TagExists(const char* _pTagName)
 
 void CGameObject::Draw()
 {
-	m_Mesh.m_Transform = m_Transform;
-	m_Mesh.Draw(GetMainCamera());
+	m_mesh.m_transform = m_transform;
+	m_mesh.Draw(GetMainCamera());
 }
