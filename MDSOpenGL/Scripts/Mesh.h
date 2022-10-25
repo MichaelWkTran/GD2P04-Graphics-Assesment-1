@@ -40,18 +40,18 @@ struct stVertex
 class CBaseMesh
 {
 protected:
-	bool m_bUpdateVertexArray;
-	static std::set<CBaseMesh*> Meshes;
+	bool m_updateVertexArray;
+	static std::set<CBaseMesh*> meshes;
 
-	CBaseMesh() { Meshes.emplace(this); m_bUpdateVertexArray = false; };
-	~CBaseMesh() { Meshes.erase(this); };
+	CBaseMesh() { meshes.emplace(this); m_updateVertexArray = false; };
+	~CBaseMesh() { meshes.erase(this); };
 
 public:
-	static std::set<CBaseMesh*>::iterator GetMeshesBegin() { return Meshes.begin(); }
-	static std::set<CBaseMesh*>::iterator GetMeshesEnd() { return Meshes.end(); }
+	static std::set<CBaseMesh*>::iterator GetMeshesBegin() { return meshes.begin(); }
+	static std::set<CBaseMesh*>::iterator GetMeshesEnd() { return meshes.end(); }
 	
-	CVertexArray m_VertexArray;
-	CElementBuffer m_ElementBuffer;
+	CVertexArray m_vertexArray;
+	CElementBuffer m_elementBuffer;
 	CTransform m_transform;
 	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_textures;
 	std::shared_ptr<CShader> m_shader;

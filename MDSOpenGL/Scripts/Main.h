@@ -13,22 +13,22 @@
 
 //Window
 extern unsigned int e_viewPortW, e_viewPortH;
-extern GLFWwindow* e_pMainWindow;
+extern GLFWwindow* e_mainWindow;
 
 //Time
-extern float e_fPreviousTimestep;
+extern float e_previousTimestep;
 extern float e_deltatime;
-extern float e_fMaxDeltatime;
+extern float e_maxDeltatime;
 
 //Input
 extern std::set<void(*)(GLFWwindow*,int,int,int,int)> e_keyCallbackFunctions;
-extern char e_charCodePoint;
-extern bool e_bCodePointFound;
+extern char e_codePoint;
+extern bool e_codePointFound;
 
-extern std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
+extern std::set<void(*)(GLFWwindow*, int, int, int)> e_mouseCallbackFunctions;
 extern glm::vec2 e_mousePosition;
-extern glm::vec2 e_v2MouseNDCPosition;
+extern glm::vec2 e_mouseNDCPosition;
 
 void UpdateMousePosition();
 void UpdateInputPressed();
-void TextInput(GLFWwindow* _pWindow, unsigned int _iCodePoint);
+void TextInput(GLFWwindow* _window, unsigned int _codePoint);

@@ -67,9 +67,7 @@ CTextLabel::CTextLabel
 
 	m_VertexArray.Bind(); m_VertexBuffer.Bind(); m_ElementBuffer.Bind();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 4, NULL, GL_DYNAMIC_DRAW);
-	
-	m_VertexArray.LinkAttribute(0, 4, GL_FLOAT, 4 * sizeof(float), (void*)0);
-	
+	stVertex::LinkAttributes();
 	m_VertexBuffer.Unbind(); m_VertexArray.Unbind(); m_ElementBuffer.Unbind();
 }
 

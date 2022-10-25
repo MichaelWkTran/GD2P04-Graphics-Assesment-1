@@ -18,7 +18,7 @@
 
 CFreePlayerCamera::CFreePlayerCamera()
 {
-	m_window = e_pMainWindow;
+	m_window = e_mainWindow;
 	m_firstClick = false;
 }
 

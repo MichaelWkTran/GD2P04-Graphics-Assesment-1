@@ -13,45 +13,45 @@
 #pragma region Window
 
 unsigned int e_viewPortW = 800, e_viewPortH = 800;
-GLFWwindow* e_pMainWindow = nullptr;
+GLFWwindow* e_mainWindow = nullptr;
 
 #pragma endregion
 
 #pragma region Time
 
-float e_fPreviousTimestep = 0.0f;
+float e_previousTimestep = 0.0f;
 float e_deltatime = 0.0f;
-float e_fMaxDeltatime = 1.0f/60.0f;
+float e_maxDeltatime = 1.0f/60.0f;
 
 #pragma endregion
 
 #pragma region Input
 
 std::set<void(*)(GLFWwindow*, int, int, int, int)> e_keyCallbackFunctions;
-char e_charCodePoint = 0;
-bool e_bCodePointFound = false;
+char e_codePoint = 0;
+bool e_codePointFound = false;
 
-std::set<void(*)(GLFWwindow*, int, int, int)> e_setMouseCallbackFunctions;
+std::set<void(*)(GLFWwindow*, int, int, int)> e_mouseCallbackFunctions;
 glm::vec2 e_mousePosition;
-glm::vec2 e_v2MouseNDCPosition;
+glm::vec2 e_mouseNDCPosition;
 glm::vec3 e_v3MouseRayDirection;
 
 void UpdateMousePosition()
 {
     double XPos, YPos;
-    glfwGetCursorPos(e_pMainWindow, &XPos, &YPos);
+    glfwGetCursorPos(e_mainWindow, &XPos, &YPos);
 
     e_mousePosition.x = (float)XPos;
     e_mousePosition.y = (float)YPos;
 
     //Update Mouse NDC Position
-    e_v2MouseNDCPosition = glm::vec2
+    e_mouseNDCPosition = glm::vec2
     (
         (2.0f * e_mousePosition.x) / ((float)e_viewPortW - 1.0f),
         (1.0f - (2.0f * e_mousePosition.y)) / (float)e_viewPortH
     );
     
-    glm::vec4 v4ClipCoord = glm::vec4(e_v2MouseNDCPosition.x, e_v2MouseNDCPosition.y, -1.0f, 1.0f);
+    glm::vec4 v4ClipCoord = glm::vec4(e_mouseNDCPosition.x, e_mouseNDCPosition.y, -1.0f, 1.0f);
 
     //Homogeneous Clip Space to Eye space
     glm::mat4 mat4InvProj = glm::inverse(GetMainCamera().GetProjectionMatrix());
@@ -68,13 +68,13 @@ void UpdateMousePosition()
 
 void UpdateInputPressed()
 {
-    e_bCodePointFound = false;
+    e_codePointFound = false;
 }
 
 void TextInput(GLFWwindow* _pWindow, unsigned int _iCodePoint)
 {
-    e_bCodePointFound = true;
-    e_charCodePoint = _iCodePoint;
+    e_codePointFound = true;
+    e_codePoint = _iCodePoint;
 }
 
 #pragma endregion
@@ -93,14 +93,14 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Set up Window
-    e_pMainWindow = glfwCreateWindow(e_viewPortW, e_viewPortH, "LearnOpenGL", NULL, NULL);
-    if (e_pMainWindow == NULL)
+    e_mainWindow = glfwCreateWindow(e_viewPortW, e_viewPortH, "LearnOpenGL", NULL, NULL);
+    if (e_mainWindow == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(e_pMainWindow);
+    glfwMakeContextCurrent(e_mainWindow);
 
     //Initializing GLEW
     if (glewInit() != GLEW_OK)
@@ -112,7 +112,7 @@ int main()
 
     //Setup Window Viewport
     glViewport(0, 0, (int)e_viewPortW, (int)e_viewPortH);
-    glfwSetFramebufferSizeCallback(e_pMainWindow, [](GLFWwindow* _pMainWindow, int _iWidth, int _iHeight)
+    glfwSetFramebufferSizeCallback(e_mainWindow, [](GLFWwindow* _pMainWindow, int _iWidth, int _iHeight)
     {
         glViewport(0, 0, _iWidth, _iHeight);
         //e_uViewPortW = (int)_iWidth;
@@ -138,7 +138,7 @@ int main()
     //-------------------------------------------------------------------------------------
     glfwSetKeyCallback
     (
-        e_pMainWindow,
+        e_mainWindow,
         [](GLFWwindow* _pWindow, int _iKey, int _iScanCode, int _iAction, int _iMods)
         {
             for (auto& i : e_keyCallbackFunctions) i(_pWindow, _iKey, _iScanCode, _iAction, _iMods);
@@ -147,26 +147,26 @@ int main()
 
     glfwSetMouseButtonCallback
     (
-        e_pMainWindow,
+        e_mainWindow,
         [](GLFWwindow* _pWindow, int _iButton, int _iAction, int _iMods)
         {
-            for (auto& i : e_setMouseCallbackFunctions) i(_pWindow, _iButton, _iAction, _iMods);
+            for (auto& i : e_mouseCallbackFunctions) i(_pWindow, _iButton, _iAction, _iMods);
         }
     );
 
     //Game Loop
-    while (!glfwWindowShouldClose(e_pMainWindow))
+    while (!glfwWindowShouldClose(e_mainWindow))
     {
         //Update Deltatime
         float fCurrentTimestep = (float)glfwGetTime();
-        e_deltatime = fCurrentTimestep - e_fPreviousTimestep;
-        if (e_deltatime > e_fMaxDeltatime) e_deltatime = e_fMaxDeltatime;
-        e_fPreviousTimestep = fCurrentTimestep;
+        e_deltatime = fCurrentTimestep - e_previousTimestep;
+        if (e_deltatime > e_maxDeltatime) e_deltatime = e_maxDeltatime;
+        e_previousTimestep = fCurrentTimestep;
 
         //Update Window Size
         {
             int x, y;
-            glfwGetWindowSize(e_pMainWindow, &x, &y);
+            glfwGetWindowSize(e_mainWindow, &x, &y);
             e_viewPortW = x;
             e_viewPortH = y;
         }
@@ -182,11 +182,11 @@ int main()
         GetGameManager().Update();
 
         //Check and call events and swap the buffers
-        glfwSwapBuffers(e_pMainWindow);
+        glfwSwapBuffers(e_mainWindow);
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(e_pMainWindow);
+    glfwDestroyWindow(e_mainWindow);
     glfwTerminate();
     return 0;
 }

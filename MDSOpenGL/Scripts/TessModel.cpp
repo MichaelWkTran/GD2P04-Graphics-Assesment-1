@@ -50,7 +50,7 @@ CTessModel::CTessModel()
 	m_mesh.m_shader = std::make_shared<CShader>("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
 
 	//Set Mesh Attributes
-	m_mesh.m_VertexArray.Bind(); m_mesh.m_VertexArray.Bind(); m_mesh.m_ElementBuffer.Bind();
+	m_mesh.m_vertexArray.Bind(); m_mesh.m_vertexArray.Bind(); m_mesh.m_elementBuffer.Bind();
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	stVertex::LinkAttributes();
 	CVertexArray::Unbind(); CVertexBuffer<stVertex>::Unbind(); CElementBuffer::Unbind();

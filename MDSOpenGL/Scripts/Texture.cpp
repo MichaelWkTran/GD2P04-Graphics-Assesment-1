@@ -63,15 +63,13 @@ const unsigned int CTexture::GetID() const
 	return m_uiID;
 }
 
-void CTexture::Uniform(unsigned int _uiShaderID, std::string _strUniformName, unsigned int _uiSlot)
+void CTexture::Uniform(unsigned int _shaderID, std::string _uniformName, unsigned int _slot)
 {
-	glUseProgram(_uiShaderID);
-	glActiveTexture(GL_TEXTURE0 + _uiSlot);
+	glUseProgram(_shaderID);
+	glActiveTexture(GL_TEXTURE0 + _slot);
 	Bind();
-	glUniform1i(glGetUniformLocation(_uiShaderID, _strUniformName.c_str()), _uiSlot);
+	glUniform1i(glGetUniformLocation(_shaderID, _uniformName.c_str()), _slot);
 	glUseProgram(0);
-
-	_uiSlot = 0U;
 }
 
 void CTexture::Bind() const

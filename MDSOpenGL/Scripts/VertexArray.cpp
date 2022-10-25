@@ -37,23 +37,6 @@ const unsigned int& CVertexArray::GetID()
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: GetModel()
-//	 Purpose: Assigns attributes to verticies.
-
-void CVertexArray::LinkAttribute
-(
-    unsigned int _uiLayout,
-    unsigned int _uiNumComponents,
-    GLenum _GLeType,
-    GLsizeiptr _Stride,
-    void* _pOffset
-)
-{
-    glEnableVertexAttribArray(_uiLayout);
-    glVertexAttribPointer(_uiLayout, _uiNumComponents, _GLeType, GL_FALSE, _Stride, _pOffset);
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-// Procedure: GetModel()
 //	 Purpose: Bind vertex array
 
 void CVertexArray::Bind()

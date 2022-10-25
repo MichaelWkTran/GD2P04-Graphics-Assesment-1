@@ -1,5 +1,6 @@
 ﻿  AssesmentGameManager.cpp
   Camera.cpp
+  ParticleSystem.cpp
   Player.cpp
   TessModel.cpp
   GeoSphere.cpp
@@ -22,54 +23,14 @@ D:\Projects\GD2P02-1\MDSOpenGL\Scripts\GenerateTexture.cpp(77,23): warning C4244
   Mesh.cpp
   QuadMousePick.cpp
   Shader.cpp
-  TextLabel.cpp
-  Running Code Analysis for C/C++...
   Generating Code...
   Compiling...
+  TextLabel.cpp
+D:\Projects\GD2P02-1\MDSOpenGL\Scripts\TextLabel.cpp(71,16): error C2039: 'LinkAttribute': is not a member of 'CVertexArray'
+D:\Projects\GD2P02-1\MDSOpenGL\Scripts\VertexArray.h(12): message : see declaration of 'CVertexArray'
   Texture.cpp
   TinyObjectLoader.cpp
   Transform.cpp
   UpdatedObject.cpp
   VertexArray.cpp
-  Running Code Analysis for C/C++...
   Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-freetyped.lib(autofit.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(autofit.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftbase.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftbase.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftbitmap.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftbitmap.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftinit.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftinit.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(bdf.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(bdf.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(cff.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(cff.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(type1cid.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(type1cid.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftgzip.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftgzip.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftlzw.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftlzw.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(pcf.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(pcf.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(pfr.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(pfr.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(psaux.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(psaux.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(pshinter.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(pshinter.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(psnames.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(psnames.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(raster.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(raster.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(sfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(sfnt.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(smooth.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(smooth.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(truetype.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(truetype.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(type1.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(type1.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(type42.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(winfnt.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftsystem.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftsystem.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-freetyped.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'freetyped.lib(ftdebug.obj)' or at 'D:\Projects\GD2P02-1\Debug\freetype.pdb'; linking object as if no debug info
-  MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\Mesh.cpp(149): warning C6031: Return value ignored: 'std::shared_ptr<CShader>::->'.
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\QuadMousePick.cpp(12): warning C26495: Variable 'CQuadMousePick::m_bIsIntersecting' is uninitialized. Always initialize a member variable (type.6).
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\TextLabel.cpp(25): warning C26820: This is a potentially expensive copy operation. Consider using a reference unless a copy is required (p.9).
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\TextLabel.cpp(131): warning C26820: This is a potentially expensive copy operation. Consider using a reference unless a copy is required (p.9).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\stb\stb_image.h(6861): warning C6262: Function uses '34968' bytes of stack.  Consider moving some data to heap.
-D:\Projects\GD2P02-1\MDSOpenGL\Include\stb\stb_image.h(6946): warning C6262: Function uses '34932' bytes of stack.  Consider moving some data to heap.
-D:\Projects\GD2P02-1\MDSOpenGL\Include\stb\stb_image_write.h(832): warning C6386: Buffer overrun while writing to 'p'.
-D:\Projects\GD2P02-1\MDSOpenGL\Include\stb\stb_image_write.h(1159): warning C6385: Reading invalid data from 'line_buffer'.
-D:\Projects\GD2P02-1\MDSOpenGL\Include\stb\stb_image_write.h(1186): warning C6386: Buffer overrun while writing to 'o'.
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(918): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(943): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(1575): warning C26498: The function 'std::numeric_limits<float>::epsilon' is constexpr, mark variable 'epsilon' constexpr if compile-time evaluation is desired (con.5).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(179): warning C26495: Variable 'tinyobj::texture_option_t::type' is uninitialized. Always initialize a member variable (type.6).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(323): warning C26495: Variable 'tinyobj::material_t::diffuse' is uninitialized. Always initialize a member variable (type.6).
-D:\Projects\GD2P02-1\MDSOpenGL\Include\TinyObjLoader\tiny_obj_loader.h(343): warning C26495: Variable 'tinyobj::skin_weight_t::vertex_id' is uninitialized. Always initialize a member variable (type.6).

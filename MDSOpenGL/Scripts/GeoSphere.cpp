@@ -25,7 +25,7 @@ void CGeoSphere::Draw()
 	m_normalShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_transform.GetModel());
 
 	m_normalShader->Activate();
-	m_mesh.m_VertexArray.Bind();
+	m_mesh.m_vertexArray.Bind();
 	
 	glDrawArrays(GL_POINTS, 0, m_mesh.GetVerticies().size());
 	

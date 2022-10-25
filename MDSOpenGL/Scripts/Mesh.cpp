@@ -14,7 +14,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-std::set<CBaseMesh*> CBaseMesh::Meshes;
+std::set<CBaseMesh*> CBaseMesh::meshes;
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CMesh()
@@ -29,7 +29,7 @@ inline CMesh<T>::CMesh()
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 	};
-	m_bUpdateVertexArray = false;
+	m_updateVertexArray = false;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ template<class T>
 inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader)
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
-	m_ElementBuffer.SetIndicies(_vIndicies);
+	m_elementBuffer.SetIndicies(_vIndicies);
 	m_textures = _mapTextures;
 	m_shader = _pShader;
 	m_shadowShader = CLight::GetShadowMapShader();
@@ -51,15 +51,15 @@ inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _
 	{
 		glDrawElements(GL_TRIANGLES, _Mesh.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 	};
-	m_bUpdateVertexArray = true;
+	m_updateVertexArray = true;
 }
 
 template<class T>
 void CMesh<T>::UpdateVertexArray()
 {
-	m_VertexArray.Bind(); m_VertexBuffer.Bind(); m_ElementBuffer.Bind();
+	m_vertexArray.Bind(); m_VertexBuffer.Bind(); m_elementBuffer.Bind();
 	T::LinkAttributes();
-	m_VertexArray.Unbind(); m_VertexBuffer.Unbind(); m_ElementBuffer.Unbind();
+	m_vertexArray.Unbind(); m_VertexBuffer.Unbind(); m_elementBuffer.Unbind();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ template<class T>
 inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
-	m_bUpdateVertexArray = true;
+	m_updateVertexArray = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 
 const std::vector<unsigned int> CBaseMesh::GetIndicies() const
 {
-	return m_ElementBuffer.GetIndicies();
+	return m_elementBuffer.GetIndicies();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -100,8 +100,8 @@ const std::vector<unsigned int> CBaseMesh::GetIndicies() const
 
 void CBaseMesh::SetIndicies(const std::vector<unsigned int> _vIndicies)
 {
-	m_ElementBuffer.SetIndicies(_vIndicies);
-	m_bUpdateVertexArray = true;
+	m_elementBuffer.SetIndicies(_vIndicies);
+	m_updateVertexArray = true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -115,9 +115,9 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	if (m_shader == nullptr || m_VertexBuffer.GetVertices().empty()) return void();
 
 	//Update vertex array if its vertex data has changed
-	if (m_bUpdateVertexArray)
+	if (m_updateVertexArray)
 	{
-		m_bUpdateVertexArray = false;
+		m_updateVertexArray = false;
 		UpdateVertexArray();
 	}
 
@@ -133,19 +133,19 @@ inline void CMesh<T>::Draw(const CCamera& _Camera)
 	if (m_shadowShader != nullptr) CLight::UpdateShadowUniforms(*m_shader, m_textures.size() + 1U);
 
 	//Set Texture Uniforms
-	unsigned int uiSlot = 0;
-	for (auto& pTexture : m_textures)
+	unsigned int slot = 0;
+	for (auto& texture : m_textures)
 	{
-		if (pTexture.second == nullptr) continue;
-		pTexture.second->Uniform(*m_shader, pTexture.first, uiSlot);
-		uiSlot++;
+		if (texture.second == nullptr) continue;
+		texture.second->Uniform(*m_shader, texture.first, slot);
+		slot++;
 	}
 
 	//Draw Mesh
 	m_shader->Activate();
-	m_VertexArray.Bind();
+	m_vertexArray.Bind();
 	m_drawMethod(*this);
-	m_VertexArray.Unbind();
+	m_vertexArray.Unbind();
 	m_shader->Deactivate();
 	CTexture::Unbind();
 }
