@@ -14,7 +14,7 @@
 #include "GameObject.h"
 #include <queue>
 
-std::shared_ptr<CShader> CLight::m_shadowMapShader = nullptr;
+CShader* CLight::m_shadowMapShader = nullptr;
 std::set<CLight*> CLight::m_lightsInWorld;
 glm::vec4 CLight::m_ambientColour = glm::vec4(1.0f, 1.0f, 1.0f, 0.2f);
 
@@ -140,7 +140,7 @@ void CLight::UpdateShadowMaps()
 	if (m_lightsInWorld.size() <= 0U) return;
 
 	//Set the shader of the meshes creating shadows
-	std::queue<std::shared_ptr<CShader>> originalShaders;
+	std::queue<CShader*> originalShaders;
 	for (auto i = CBaseMesh::GetMeshesBegin(); i != CBaseMesh::GetMeshesEnd(); i++)
 	{
 		if ((*i)->m_shadowShader == nullptr) continue;
@@ -191,9 +191,9 @@ void CLight::UpdateShadowMaps()
 	}
 }
 
-const std::shared_ptr<CShader>& CLight::GetShadowMapShader()
+CShader*& CLight::GetShadowMapShader()
 {
-	if (m_shadowMapShader == nullptr) m_shadowMapShader = std::make_shared<CShader>("ShadowMap.vert", "Empty.frag");
+	if (m_shadowMapShader == nullptr) m_shadowMapShader = new CShader("ShadowMap.vert", "Empty.frag");
 	return m_shadowMapShader;
 }
 

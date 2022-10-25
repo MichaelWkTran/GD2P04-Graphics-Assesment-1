@@ -20,7 +20,7 @@
 CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6])
 {
 	//Set Shader
-	if (m_Mesh.m_shader == nullptr) m_Mesh.m_shader = std::make_shared<CShader>("CubeMap.vert", "CubeMap.frag");
+	if (m_Mesh.m_shader == nullptr) m_Mesh.m_shader = new CShader("CubeMap.vert", "CubeMap.frag");
 	m_Mesh.m_shadowShader = nullptr;
 
 	//Generate Mesh
@@ -37,9 +37,9 @@ CCubeSkybox::CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]
 	m_Mesh.SetIndicies(vIndicies);
 
 	//Set up texture
-	std::shared_ptr<CTexture>pTexture(std::make_shared<CTexture>(GL_TEXTURE_CUBE_MAP));
-	m_Mesh.m_textures.emplace(std::make_pair("uni_sampCube", pTexture));
-	pTexture->Bind();
+	CTexture* texture = new CTexture(GL_TEXTURE_CUBE_MAP);
+	m_Mesh.m_textures.emplace(std::make_pair("uni_sampCube", texture));
+	texture->Bind();
 
 	int iImageWidth, iImageHeight, iImageComponents;
 	stbi_set_flip_vertically_on_load(false);

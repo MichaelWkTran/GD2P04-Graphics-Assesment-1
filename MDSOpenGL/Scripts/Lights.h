@@ -10,7 +10,6 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <set>
-#include <memory>
 
 class CShader;
 class CTexture;
@@ -18,7 +17,7 @@ class CTexture;
 class CLight
 {
 private:
-	static std::shared_ptr<CShader> m_shadowMapShader;
+	static CShader* m_shadowMapShader;
 	static std::set<CLight*> m_lightsInWorld;
 
 protected:
@@ -35,7 +34,7 @@ public:
 	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _slot);
 	static void UpdateShadowMaps();
 	static const std::set<CLight*>& GetLightsInWorld() { return m_lightsInWorld; }
-	static const std::shared_ptr<CShader>& GetShadowMapShader();
+	static CShader*& GetShadowMapShader();
 
 	glm::vec4 m_lightColour;
 	

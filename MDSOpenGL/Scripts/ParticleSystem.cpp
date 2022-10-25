@@ -3,10 +3,22 @@
 
 CParticleSystem::CParticleSystem()
 {
-	m_particles = 4000U;
+	//m_particles = 4000U;
 }
 
 CParticleSystem::~CParticleSystem()
+{
+}
+
+void CParticleSystem::Draw()
+{
+}
+
+CParticle::CParticle()
+{
+}
+
+CParticle::~CParticle()
 {
 }
 

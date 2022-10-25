@@ -39,12 +39,13 @@ inline CMesh<T>::CMesh()
 //			  _mapTextures is the textures stored in the mesh.
 //			  _pShader is the shader used by the mesh. 
 
+
 template<class T>
-inline CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader)
+CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _textures, CShader* _pShader)
 {
 	m_VertexBuffer.SetVertices(_vVerticies);
 	m_elementBuffer.SetIndicies(_vIndicies);
-	m_textures = _mapTextures;
+	m_textures = _textures;
 	m_shader = _pShader;
 	m_shadowShader = CLight::GetShadowMapShader();
 	m_drawMethod = [](CMesh<T>& _Mesh)

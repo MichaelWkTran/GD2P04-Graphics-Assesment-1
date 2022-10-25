@@ -98,17 +98,17 @@ CAssesmentGameManager::CAssesmentGameManager()
 		m_frameBufferEffect = FrameBufferEffect::None;
 
 		//Create Shaders
-		m_shaders.emplace("FrameBuffer",			std::make_shared<CShader>("FrameBuffer.vert", "FrameBuffer.frag"));
-		m_shaders.emplace("Rain",				std::make_shared<CShader>("FrameBuffer.vert", "Rain.frag"));
-		m_shaders.emplace("ChromaticAberration", std::make_shared<CShader>("FrameBuffer.vert", "ChromaticAberration.frag"));
-		m_shaders.emplace("CRT",					std::make_shared<CShader>("FrameBuffer.vert", "CRT.frag"));
+		m_shaders.emplace("FrameBuffer",		 new CShader("FrameBuffer.vert", "FrameBuffer.frag"));
+		m_shaders.emplace("Rain",				 new CShader("FrameBuffer.vert", "Rain.frag"));
+		m_shaders.emplace("ChromaticAberration", new CShader("FrameBuffer.vert", "ChromaticAberration.frag"));
+		m_shaders.emplace("CRT",				 new CShader("FrameBuffer.vert", "CRT.frag"));
 
 		//Set texture to render quad mesh
 		m_renderQuad.m_textures.emplace("noise", new CTexture("Noise.png", GL_RGB, GL_UNSIGNED_BYTE));
 	}
 
 	//Create Shaders
-	std::shared_ptr<CShader>diffuse(std::make_shared<CShader>("Diffuse.vert", "Diffuse.frag"));
+	CShader* diffuse = new CShader("Diffuse.vert", "Diffuse.frag");
 	diffuse->m_defaultUniform = [](CShader& _shader)
 	{
 		//Light Uniforms

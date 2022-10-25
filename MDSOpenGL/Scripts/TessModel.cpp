@@ -7,7 +7,7 @@
 CTessModel::CTessModel()
 {
 	//Set Texture
-	m_mesh.m_textures.emplace("uni_samp2DHeightMap", std::make_shared<CTexture>("Height Maps/coastMountain513.jpg"));
+	m_mesh.m_textures.emplace("uni_samp2DHeightMap", new CTexture("Height Maps/coastMountain513.jpg"));
 
 	//Set Mesh Verticies
 	std::vector<stVertex> vVerticies;
@@ -47,7 +47,7 @@ CTessModel::CTessModel()
 	};
 
 	//Set Mesh Shader
-	m_mesh.m_shader = std::make_shared<CShader>("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
+	m_mesh.m_shader = new CShader("Tessellation.vert", "Tessellation.tesc", "Tessellation.tese", "Tessellation.frag");
 
 	//Set Mesh Attributes
 	m_mesh.m_vertexArray.Bind(); m_mesh.m_vertexArray.Bind(); m_mesh.m_elementBuffer.Bind();
@@ -58,6 +58,6 @@ CTessModel::CTessModel()
 
 void CTessModel::Draw()
 {
-	CLight::UpdateLightUniforms(*m_mesh.m_shader.get());
+	CLight::UpdateLightUniforms(*m_mesh.m_shader);
 	CGameObject::Draw();
 }

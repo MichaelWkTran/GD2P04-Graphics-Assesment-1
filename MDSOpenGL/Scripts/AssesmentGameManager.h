@@ -9,7 +9,6 @@
 #include "GameManager.h"
 #include "Mesh.h"
 #include <map>
-#include <memory>
 
 class CTexture;
 
@@ -29,7 +28,7 @@ private:
 	CMesh<> m_renderQuad;
 
 public:
-	std::map<const char* /*Shader name*/, std::shared_ptr<CShader>> m_shaders;
+	std::map<const char* /*Shader name*/, CShader*> m_shaders;
 	FrameBufferEffect m_frameBufferEffect;
 
 	CAssesmentGameManager();

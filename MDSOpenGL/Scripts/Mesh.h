@@ -11,7 +11,6 @@
 #include "ElementBuffer.h"
 #include <map>
 #include <set>
-#include <memory>
 #include "Transform.h"
 
 class CTexture;
@@ -53,9 +52,9 @@ public:
 	CVertexArray m_vertexArray;
 	CElementBuffer m_elementBuffer;
 	CTransform m_transform;
-	std::map<const char* /*Uniform Name*/, std::shared_ptr<CTexture>> m_textures;
-	std::shared_ptr<CShader> m_shader;
-	std::shared_ptr<CShader> m_shadowShader;
+	std::map<const char* /*Uniform Name*/, CTexture*> m_textures;
+	CShader* m_shader;
+	CShader* m_shadowShader;
 	
 	const std::vector<unsigned int> GetIndicies() const;
 	void SetIndicies(const std::vector<unsigned int> _vIndicies);
@@ -70,7 +69,9 @@ public:
 	void (*m_drawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
-	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, std::shared_ptr<CTexture>>& _mapTextures, std::shared_ptr<CShader> _pShader = nullptr);
+	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies,
+		std::map<const char*, CTexture*>& _textures,
+		CShader* _pShader = nullptr);
 
 	void UpdateVertexArray();
 	const std::vector<T> GetVerticies() const;

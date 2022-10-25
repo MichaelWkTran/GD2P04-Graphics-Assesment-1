@@ -6,6 +6,7 @@
 
 class CParticle
 {
+public:
 	glm::vec3 m_position;
 	glm::vec3 m_velocity;
 	float m_elapsedTime;
@@ -17,6 +18,8 @@ class CParticle
 
 class CParticleSystem : public CUpdatedObject
 {
+	friend CParticle;
+
 private:
 	unsigned int m_particleCount;
 
