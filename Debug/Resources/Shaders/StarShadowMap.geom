@@ -46,22 +46,22 @@ void main()
     GeometryVerticies[10].v2TextureCoordinate = vec2( 0.5f,   0.429f);
 
     //Create Triangle Segment
-    for (int segmentIndex = 0; segmentIndex < 5; segmentIndex++)
+    for (int iSegmentIndex = 0; iSegmentIndex < 5; iSegmentIndex++)
     {
-        int iVertexIndex = segmentIndex * 2;
+        int iVertexIndex = iSegmentIndex * 2;
         gl_Position = uni_mat4LightProjection * vec4(GeometryVerticies[iVertexIndex].v3Position, 0.0f);
         gl_Position += vs_v4Position[0];
         v2TextureCoordinate = GeometryVerticies[iVertexIndex].v2TextureCoordinate;
         EmitVertex();
 
-        if (segmentIndex == 0) { iVertexIndex = 9; }
-        else { iVertexIndex = (segmentIndex * 2) - 1; }
+        if (iSegmentIndex == 0) { iVertexIndex = 9; }
+        else { iVertexIndex = (iSegmentIndex * 2) - 1; }
         gl_Position = uni_mat4LightProjection * vec4(GeometryVerticies[iVertexIndex].v3Position, 0.0f);
         gl_Position += vs_v4Position[0];
         v2TextureCoordinate = GeometryVerticies[iVertexIndex].v2TextureCoordinate;
         EmitVertex();
 
-        iVertexIndex = (segmentIndex * 2) + 1;
+        iVertexIndex = (iSegmentIndex * 2) + 1;
         gl_Position = uni_mat4LightProjection * vec4(GeometryVerticies[iVertexIndex].v3Position, 0.0f);
         gl_Position += vs_v4Position[0];
         v2TextureCoordinate = GeometryVerticies[iVertexIndex].v2TextureCoordinate;

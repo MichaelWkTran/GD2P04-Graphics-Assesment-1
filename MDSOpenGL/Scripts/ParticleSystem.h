@@ -4,6 +4,7 @@
 #include "UpdatedObject.h"
 #include "Mesh.h"
 
+class CTexture;
 class CShader;
 class CParticle;
 
@@ -13,6 +14,7 @@ class CParticleSystem : public CUpdatedObject
 
 private:
 	static CShader* m_particleShader;
+	static CTexture* m_particleTexture;
 	unsigned int m_particleCount;
 	std::vector<CParticle> m_particles;
 

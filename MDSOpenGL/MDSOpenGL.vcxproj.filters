@@ -76,6 +76,9 @@
     <ClCompile Include="Scripts\ParticleSystem.cpp">
       <Filter>Library</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\MathUtils.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Main.h">
@@ -154,6 +157,9 @@
       <Filter>Assesment</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\ParticleSystem.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\MathUtils.h">
       <Filter>Library</Filter>
     </ClInclude>
   </ItemGroup>

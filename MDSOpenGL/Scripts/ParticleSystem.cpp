@@ -3,12 +3,16 @@
 #include "Shader.h"
 #include "MathUtils.h"
 #include "Camera.h"
+#include "Texture.h"
+#include <glm/gtc/type_ptr.hpp>
 
 CShader* CParticleSystem::m_particleShader = nullptr;
+CTexture* CParticleSystem::m_particleTexture = nullptr;
 
 CParticleSystem::CParticleSystem(unsigned int _particleCount)
 {
 	if (m_particleShader == nullptr) m_particleShader = new CShader("Particle.vert", "Particle.geom", "Particle.frag");
+	if (m_particleTexture == nullptr) m_particleTexture = new CTexture("SmokeParticle.png", GL_RGBA);
 	m_position = {};
 
 	//Create Particles
@@ -51,23 +55,33 @@ void CParticleSystem::Update()
 
 void CParticleSystem::Draw()
 {
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(GL_FALSE);
-
 	glUseProgram(*m_particleShader);
+
+	//Assign Uniforms
+	glUniformMatrix4fv(glGetUniformLocation(*m_particleShader, "uni_mat4CameraMatrix"), 1, GL_FALSE, glm::value_ptr(GetMainCamera().GetCameraMatrix()));
 
 	glUniform3f(glGetUniformLocation(*m_particleShader, "uni_cameraUp"),
 		GetMainCamera().m_transform.Up().x, GetMainCamera().m_transform.Up().y, GetMainCamera().m_transform.Up().z);
+
 	glUniform3f(glGetUniformLocation(*m_particleShader, "uni_cameraRight"),
 		GetMainCamera().m_transform.Right().x, GetMainCamera().m_transform.Right().y, GetMainCamera().m_transform.Right().z);
 
+	glActiveTexture(GL_TEXTURE0);
+	m_particleTexture->Bind();
+	glUniform1i(glGetUniformLocation(*m_particleShader, "uni_samp2DDiffuse0"), 0);
+
+	//Draw Particles
 	glBindVertexArray(m_vertexArray);
 	glDrawArrays(GL_POINTS, 0, m_particleCount);
 	glBindVertexArray(0);
 	
+	//
+	m_particleTexture->Unbind();
 	glUseProgram(0);
-
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);
 }
@@ -83,9 +97,9 @@ void CParticle::ResetToInitialValues()
 	m_elapsedTime = 0.0f;
 	m_position = m_particleSystem->m_position;
 	
-	float minSpreadSpeed = 0.0f; float maxSpreadSpeed = 0.0f;
-	float minRiseSpeed = 0.0f; float maxRiseSpeed = 0.0f;
-	float minElapsedTime = 1.0f; float maxElapsedTime = 1.5f;
+	float minSpreadSpeed = 1.0f; float maxSpreadSpeed = 2.0f;
+	float minRiseSpeed = 3.0f; float maxRiseSpeed = 4.0f;
+	float minElapsedTime = 5.0f; float maxElapsedTime = 6.0f;
 
 	m_velocity = glm::vec3(
 		cosf(2.0f * glm::pi<float>() * glm::Lerp(minSpreadSpeed, maxSpreadSpeed, (float)rand()/(double)RAND_MAX)),
@@ -98,10 +112,10 @@ void CParticle::ResetToInitialValues()
 
 void CParticle::Update()
 {
-	m_velocity.y += -0.2f * e_deltatime;
-	m_position += m_velocity;
+	m_velocity.y += -1.0f * e_deltatime;
+	m_position += m_velocity * e_deltatime;
 	
 	//Reset the particle if its elapsed time has finished
-	m_elapsedTime -= e_deltatime / 100.0f;
+	m_elapsedTime -= e_deltatime;
 	if (m_elapsedTime <= 0.0f) ResetToInitialValues();
 }
