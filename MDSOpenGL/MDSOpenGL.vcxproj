@@ -154,7 +154,6 @@
     <ClCompile Include="Scripts\AssesmentGameManager.cpp" />
     <ClCompile Include="Scripts\Camera.cpp" />
     <ClCompile Include="Scripts\ParticleSystem.cpp" />
-    <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\TessModel.cpp" />
     <ClCompile Include="Scripts\GeoSphere.cpp" />
     <ClCompile Include="Scripts\CubeSkybox.cpp" />
@@ -182,7 +181,6 @@
     <ClInclude Include="Scripts\AssesmentGameManager.h" />
     <ClInclude Include="Scripts\Camera.h" />
     <ClInclude Include="Scripts\ParticleSystem.h" />
-    <ClInclude Include="Scripts\Player.h" />
     <ClInclude Include="Scripts\TessModel.h" />
     <ClInclude Include="Scripts\GeoSphere.h" />
     <ClInclude Include="Scripts\CubeSkybox.h" />
