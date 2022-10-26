@@ -95,7 +95,7 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 	_Shader.Uniform4f("uni_v4AmbientColour", m_ambientColour);
 }
 
-void CLight::UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot = 10)
+void CLight::UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot)
 {
 	if (m_lightsInWorld.size() <= 0U) return;
 
@@ -197,7 +197,7 @@ CShader*& CLight::GetShadowMapShader()
 	return m_shadowMapShader;
 }
 
-CLight::CLight(glm::vec4 _lightColour = glm::vec4(1.0f))
+CLight::CLight(glm::vec4 _lightColour)
 {
 	m_lightsInWorld.emplace(this);
 	

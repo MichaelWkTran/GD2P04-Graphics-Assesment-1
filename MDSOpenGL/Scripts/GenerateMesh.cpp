@@ -51,7 +51,7 @@ void gm::GenerateCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,1.0f
 // Procedure: GenerateFlatCube()
 //	 Purpose: Generates a cube mesh with flat shading and assigns it to _Mesh. _v3Scale is the size of the generated cube applied to the vertices themselves rather than the transform of the mesh
 
-void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale/* = glm::vec3(1.0f,1.0f,1.0f)*/)
+void gm::GenerateFlatCube(CMesh<>& _Mesh, glm::vec3 _v3Scale)
 {
 	std::vector<stVertex> vVertices =
 	{

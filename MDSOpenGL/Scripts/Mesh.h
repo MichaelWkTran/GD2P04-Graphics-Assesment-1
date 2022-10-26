@@ -42,7 +42,13 @@ protected:
 	bool m_updateVertexArray;
 	static std::set<CBaseMesh*> meshes;
 
-	CBaseMesh() { meshes.emplace(this); m_updateVertexArray = false; };
+	CBaseMesh()
+	{
+		meshes.emplace(this);
+		m_updateVertexArray = false;
+		m_shader = nullptr;
+		m_shadowShader = nullptr;
+	};
 	~CBaseMesh() { meshes.erase(this); };
 
 public:
@@ -65,17 +71,17 @@ template <class T = stVertex>
 class CMesh : public CBaseMesh
 {
 public:
-	CVertexBuffer<T> m_VertexBuffer;
+	CVertexBuffer<T> m_vertexBuffer;
 	void (*m_drawMethod)(CMesh<T>& _Mesh);
 
 	CMesh();
-	CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies,
+	CMesh(std::vector<T>& _verticies, std::vector<unsigned int>& _indicies,
 		std::map<const char*, CTexture*>& _textures,
 		CShader* _pShader = nullptr);
 
 	void UpdateVertexArray();
 	const std::vector<T> GetVerticies() const;
-	void SetVerticies(const std::vector<T> _vVerticies);
+	void SetVerticies(const std::vector<T> _verticies);
 	
-	virtual void Draw(const CCamera& _Camera) override;
+	virtual void Draw(const CCamera& _camera) override;
 };

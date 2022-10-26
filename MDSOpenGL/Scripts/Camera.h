@@ -38,7 +38,7 @@ public:
 	const glm::mat4 GetCameraMatrix() const;
 	const glm::uvec2 GetViewPort() const; void SetViewPort(const glm::uvec2 _viewPort);
 	const bool GetProjection() const; void SetProjection(const bool _perspective);
-	const float GetFieldOfView(bool _inRadians); void SetFieldOfView(const float _fieldOfView, const bool _isRadians);
+	const float GetFieldOfView(bool _inRadians = false); void SetFieldOfView(const float _fieldOfView, const bool _isRadians = false);
 	const float GetOrthographicScale() const; void SetOrthographicScale(const float _orthographicScale);
 	const float GetNearPlane() const; void SetNearPlane(const float _nearPlane);
 	const float GetFarPlane() const; void SetFarPlane(const float _farPlane);

@@ -20,7 +20,7 @@ float g_time = 0;
 #include "GeoSphere.h"
 #include "GenerateMesh.h"
 #include "TessModel.h"
-#include "Player.h"
+#include "ParticleSystem.h"
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CAssesmentGameManager()
@@ -145,27 +145,9 @@ CAssesmentGameManager::CAssesmentGameManager()
 	(new CGeoSphere())->m_transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	(new CGeoStar())->m_transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
 	(new CTessModel())->m_transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
-	(new CPlayer)->m_transform.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	{
-		CGameObject* planeObject = new CGameObject();
-		gm::GeneratePlane(planeObject->m_mesh, glm::vec3(1.0f) * 100.0f);
-		planeObject->m_mesh.m_shader = diffuse;
-		planeObject->m_transform.SetRotationEuler(glm::vec3(-90.0f, 0.0f, 0.0f));
-		planeObject->m_transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	}
-	/*{
-		CGameObject* asymmetricalObject = new CGameObject;
-		GetObjModelData(asymmetricalObject->m_mesh, "Resources/Models/AsymmetricalObject.obj");
-		asymmetricalObject->m_transform.SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
-		asymmetricalObject->m_mesh.m_shader = diffuse;
-		asymmetricalObject->m_mesh.m_drawMethod = [](CMesh<>& _Mesh)
-		{
-			glDrawArrays(GL_TRIANGLES, 0, _Mesh.GetVerticies().size());
-		};
-	}*/
+	new CParticleSystem;
 
 	//Setup Lighting
-	new CDirectionalLight;
 	new CDirectionalLight;
 	CLight::UpdateLightUniforms(*diffuse);
 }

@@ -9,6 +9,8 @@
 #include "GameManager.h"
 #include "Camera.h"
 #include <iostream> 
+#include <time.h>
+#include <random>
 
 #pragma region Window
 
@@ -34,15 +36,15 @@ bool e_codePointFound = false;
 std::set<void(*)(GLFWwindow*, int, int, int)> e_mouseCallbackFunctions;
 glm::vec2 e_mousePosition;
 glm::vec2 e_mouseNDCPosition;
-glm::vec3 e_v3MouseRayDirection;
+glm::vec3 e_mouseRayDirection;
 
 void UpdateMousePosition()
 {
-    double XPos, YPos;
-    glfwGetCursorPos(e_mainWindow, &XPos, &YPos);
+    double posX, posY;
+    glfwGetCursorPos(e_mainWindow, &posX, &posY);
 
-    e_mousePosition.x = (float)XPos;
-    e_mousePosition.y = (float)YPos;
+    e_mousePosition.x = (float)posX;
+    e_mousePosition.y = (float)posY;
 
     //Update Mouse NDC Position
     e_mouseNDCPosition = glm::vec2
@@ -51,19 +53,19 @@ void UpdateMousePosition()
         (1.0f - (2.0f * e_mousePosition.y)) / (float)e_viewPortH
     );
     
-    glm::vec4 v4ClipCoord = glm::vec4(e_mouseNDCPosition.x, e_mouseNDCPosition.y, -1.0f, 1.0f);
+    glm::vec4 clipCoord = glm::vec4(e_mouseNDCPosition.x, e_mouseNDCPosition.y, -1.0f, 1.0f);
 
     //Homogeneous Clip Space to Eye space
-    glm::mat4 mat4InvProj = glm::inverse(GetMainCamera().GetProjectionMatrix());
-    glm::vec4 v4EyeCoords = mat4InvProj * v4ClipCoord;
+    glm::mat4 invProjMatrix = glm::inverse(GetMainCamera().GetProjectionMatrix());
+    glm::vec4 eyeCoords = invProjMatrix * clipCoord;
 
     // Manually set z and w to mean forward direction and a vector and not a point.
-    v4EyeCoords = glm::vec4(v4EyeCoords.x, v4EyeCoords.y, -1.0f, 0.0f);
+    eyeCoords = glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
 
     //Eyespace to World space
-    glm::mat4 mat4InvView = glm::inverse(GetMainCamera().GetViewMatrix());
-    glm::vec4 v4RayWorld = mat4InvView * v4EyeCoords;
-    e_v3MouseRayDirection = glm::normalize(glm::vec3(v4RayWorld));
+    glm::mat4 invViewMatrix = glm::inverse(GetMainCamera().GetViewMatrix());
+    glm::vec4 rayWorld = invViewMatrix * eyeCoords;
+    e_mouseRayDirection = glm::normalize(rayWorld);
 }
 
 void UpdateInputPressed()
@@ -131,6 +133,8 @@ int main()
     glEnable(GL_MULTISAMPLE);
 
     #pragma endregion
+
+    srand(time(0));
 
     //Set up Game Manager
     new CAssesmentGameManager;

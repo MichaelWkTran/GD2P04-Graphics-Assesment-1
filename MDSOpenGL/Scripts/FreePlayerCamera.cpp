@@ -35,12 +35,12 @@ void CFreePlayerCamera::Update()
 	//Handles key inputs
 	glm::vec3 velocity(0.0f, 0.0f, 0.0f);
 
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS)	velocity += speed * m_transform.Forward();
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_S) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS)	velocity += speed * -m_transform.Forward();
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_A) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS)	velocity += speed * -glm::normalize(glm::cross(m_transform.Forward(), up));
-	if (/*glfwGetKey(m_pWindow, GLFW_KEY_D) == GLFW_PRESS || */glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS) velocity += speed * glm::normalize(glm::cross(m_transform.Forward(), up));
-	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)													velocity += speed * up;
-	if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)												velocity += speed * -up;
+	if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(m_window, GLFW_KEY_UP)	   == GLFW_PRESS) velocity += speed * m_transform.Forward();
+	if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(m_window, GLFW_KEY_DOWN)  == GLFW_PRESS) velocity += speed * -m_transform.Forward();
+	if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(m_window, GLFW_KEY_LEFT)  == GLFW_PRESS) velocity += speed * -m_transform.Right();
+	if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS) velocity += speed * m_transform.Right();
+	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)													  velocity += speed * up;
+	if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)											  velocity += speed * -up;
 
 	m_transform.SetPosition(m_transform.GetPosition() + (velocity * e_deltatime));
 
@@ -68,9 +68,7 @@ void CFreePlayerCamera::Update()
 
 		//Decides whether or not the next vertical Orientation is legal or not
 		if (abs(glm::angle(v3Orientation, up) - glm::radians(90.0f)) > glm::radians(85.0f))
-		{
 			v3Orientation = m_transform.Forward();
-		}
 
 		//Rotates the Orientation left and right
 		v3Orientation = glm::rotate(v3Orientation, glm::radians(-rotX), up);

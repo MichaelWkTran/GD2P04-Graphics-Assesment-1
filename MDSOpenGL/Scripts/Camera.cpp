@@ -148,7 +148,7 @@ void CCamera::SetProjection(const bool _isPerspective)
 //			  otherwise it will return the field of view in degrees.
 //	 Returns: The field of view in radians if _bInRadians is true, otherwise it will return the field of view in degrees.
 
-const float CCamera::GetFieldOfView(const bool _inRadians = false)
+const float CCamera::GetFieldOfView(const bool _inRadians)
 {
 	if (_inRadians) return glm::radians(m_fieldOfView);
 	else return m_fieldOfView;
@@ -158,7 +158,7 @@ const float CCamera::GetFieldOfView(const bool _inRadians = false)
 // Procedure: SetFieldOfView()
 //	 Purpose: Sets the new field of view of the camera, _fFieldOfView. If the field of view is in radians, then _bIsRadians must be set to true.
 
-void CCamera::SetFieldOfView(const float _fieldOfView, const bool _isRadians = false)
+void CCamera::SetFieldOfView(const float _fieldOfView, const bool _isRadians)
 {
 	m_fieldOfView = _isRadians ? glm::degrees(_fieldOfView) : _fieldOfView;
 	m_updateProjectionMatrix = true;

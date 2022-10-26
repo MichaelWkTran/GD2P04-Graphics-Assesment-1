@@ -31,7 +31,7 @@ public:
 	CTexture* m_shadowMapTexture;
 	static glm::vec4 m_ambientColour;
 	static void UpdateLightUniforms(CShader& _Shader);
-	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _slot);
+	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _slot = 10);
 	static void UpdateShadowMaps();
 	static const std::set<CLight*>& GetLightsInWorld() { return m_lightsInWorld; }
 	static CShader*& GetShadowMapShader();
@@ -39,7 +39,7 @@ public:
 	glm::vec4 m_lightColour;
 	
 	//Methods
-	CLight(glm::vec4 _lightColour);
+	CLight(glm::vec4 _lightColour = glm::vec4(1.0f));
 	virtual ~CLight();
 
 	const glm::mat4 GetProjectionMatrix()

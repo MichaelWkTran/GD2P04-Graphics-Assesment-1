@@ -6,68 +6,56 @@
 /************************************************************************************************************************/
 
 #include "GenerateTexture.h"
-#include <math.h>
+#include "MathUtils.h"
 
 float Smooth(float, float, int);
-float Lerp(float, float, float);
-float CosineInterpolate(float, float, float);
 float SmoothInterpolate(float, float, int);
 
 #pragma region gt namespace methods
 
-float gt::Noise(float _x, float _y, int _iSeed)
+float gt::Noise(float _x, float _y, int _seed)
 {
 	//(n << 13) is the same thing as (n * 2^13)
 	//the (x & 7fffffff) operation is equivaLent to (x mod 2147483648) 
 	
-	int iNoise = _x + _y * _iSeed; 
-	iNoise = (iNoise << 13) ^ iNoise; 
+	int noise = _x + _y * _seed; 
+	noise = (noise << 13) ^ noise; 
 
-	int t = (iNoise * (iNoise * iNoise * 15731 + 789221) + 1376312589) & 0x7fffffff;
+	int t = (noise * (noise * noise * 15731 + 789221) + 1376312589) & 0x7fffffff;
 	double dValue = 1.0 - double(t) * 0.931322574615478515625e-9;
 	
 	return (float)dValue;
 }
 
-float gt::PerlinNoise(float _x, float _y, unsigned int _uiOctaves, float _fZoom, float _fPersistance, int _iSeed)
+float gt::PerlinNoise(float _x, float _y, unsigned int _octaves, float _zoom, float _persistance, int _seed)
 {
-	float fTotal = 0.0f;
+	float total = 0.0f;
 
-	for (unsigned int uiIterations = 0; uiIterations < _uiOctaves - 1U; uiIterations++)
+	for (unsigned int iterations = 0; iterations < _octaves - 1U; iterations++)
 	{
-		float fFrequency = powf(2.0f, (float)uiIterations) / _fZoom;
-		float fAmplitude = powf(_fPersistance, (float)uiIterations);
+		float frequency = powf(2.0f, (float)iterations) / _zoom;
+		float amplitude = powf(_persistance, (float)iterations);
 
-		fTotal += SmoothInterpolate(_x * fFrequency, _y * fFrequency, _iSeed) * fAmplitude;
+		total += SmoothInterpolate(_x * frequency, _y * frequency, _seed) * amplitude;
 	}
 
-	return fTotal;
+	return total;
 }
 
 #pragma endregion
 
-float Smooth(float _x, float _y, int _iSeed)
+float Smooth(float _x, float _y, int _seed)
 {
-	float fCorners = gt::Noise(_x-1.0f, _y-1.0f, _iSeed) + gt::Noise(_x+1.0f, _y-1.0f, _iSeed) + gt::Noise(_x-1.0f, _y+1.0f, _iSeed) + gt::Noise(_x+1.0f, _y+1.0f, _iSeed); fCorners /= 16.0f;
-	float fSides = gt::Noise(_x-1.0f, _y, _iSeed) + gt::Noise(_x+1.0f, _y,	_iSeed) + gt::Noise(_x, _y-1.0f, _iSeed) + gt::Noise(_x , _y+1.0f, _iSeed); fSides /= 8.0f;
-	float fCentre = gt::Noise(_x, _y, _iSeed) / 4.0f;
+	float corners = gt::Noise(_x-1.0f, _y-1.0f, _seed) + gt::Noise(_x+1.0f, _y-1.0f, _seed) + gt::Noise(_x-1.0f, _y+1.0f, _seed) + gt::Noise(_x+1.0f, _y+1.0f, _seed); corners /= 16.0f;
+	float sides = gt::Noise(_x-1.0f, _y, _seed) + gt::Noise(_x+1.0f, _y,	_seed) + gt::Noise(_x, _y-1.0f, _seed) + gt::Noise(_x , _y+1.0f, _seed); sides /= 8.0f;
+	float centre = gt::Noise(_x, _y, _seed) / 4.0f;
 
-	return fCorners + fSides + fCentre;
-}
-
-float Lerp(float _a, float _b, float _t)
-{
-	return _a + ((_b - _a) * _t);
-}
-
-float CosineInterpolate(float _a, float _b, float _t)
-{
-	return Lerp(_a, _b, (1.0f - cosf(_t * 3.14f)) / 2.0f);
+	return corners + sides + centre;
 }
 
 float SmoothInterpolate(float _x, float _y, int _iSeed)
 {
-	float fFractX = _x - int(_x);
+	float fractX = _x - int(_x);
 	float fFractY = _y - int(_y);
 	
 	//Smooths
@@ -78,8 +66,8 @@ float SmoothInterpolate(float _x, float _y, int _iSeed)
 	float v4 = Smooth(int(_x) + 1.0f, int(_y) + 1.0f, _iSeed);
 	
 	//Interpolates
-	float i1 = Lerp(v1, v2, fFractX);
-	float i2 = Lerp(v3, v4, fFractX);
+	float i1 = glm::Lerp(v1, v2, fractX);
+	float i2 = glm::Lerp(v3, v4, fractX);
 	
-	return Lerp(i1, i2, fFractY);
+	return glm::Lerp(i1, i2, fFractY);
 }

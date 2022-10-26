@@ -43,7 +43,7 @@ inline CMesh<T>::CMesh()
 template<class T>
 CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndicies, std::map<const char*, CTexture*>& _textures, CShader* _pShader)
 {
-	m_VertexBuffer.SetVertices(_vVerticies);
+	m_vertexBuffer.SetVertices(_vVerticies);
 	m_elementBuffer.SetIndicies(_vIndicies);
 	m_textures = _textures;
 	m_shader = _pShader;
@@ -58,9 +58,9 @@ CMesh<T>::CMesh(std::vector<T>& _vVerticies, std::vector<unsigned int>& _vIndici
 template<class T>
 void CMesh<T>::UpdateVertexArray()
 {
-	m_vertexArray.Bind(); m_VertexBuffer.Bind(); m_elementBuffer.Bind();
+	m_vertexArray.Bind(); m_vertexBuffer.Bind(); m_elementBuffer.Bind();
 	T::LinkAttributes();
-	m_vertexArray.Unbind(); m_VertexBuffer.Unbind(); m_elementBuffer.Unbind();
+	m_vertexArray.Unbind(); m_vertexBuffer.Unbind(); m_elementBuffer.Unbind();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ void CMesh<T>::UpdateVertexArray()
 template<class T>
 inline const std::vector<T> CMesh<T>::GetVerticies() const
 {
-	return m_VertexBuffer.GetVertices();
+	return m_vertexBuffer.GetVertices();
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ inline const std::vector<T> CMesh<T>::GetVerticies() const
 template<class T>
 inline void CMesh<T>::SetVerticies(const std::vector<T> _vVerticies)
 {
-	m_VertexBuffer.SetVertices(_vVerticies);
+	m_vertexBuffer.SetVertices(_vVerticies);
 	m_updateVertexArray = true;
 }
 
@@ -113,7 +113,7 @@ template<class T>
 inline void CMesh<T>::Draw(const CCamera& _Camera)
 {
 	//Dont draw if no shader is assigned or m_VertexBuffer have no verticies
-	if (m_shader == nullptr || m_VertexBuffer.GetVertices().empty()) return void();
+	if (m_shader == nullptr || m_vertexBuffer.GetVertices().empty()) return void();
 
 	//Update vertex array if its vertex data has changed
 	if (m_updateVertexArray)
