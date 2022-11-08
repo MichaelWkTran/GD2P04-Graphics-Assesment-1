@@ -318,7 +318,6 @@ private:
 	std::vector<BoneTransformationInfo> m_BoneTransformInfo;
 	unsigned int m_NumBones;
 
-	Matrix4f m_GlobalInverseTransform;
 	unsigned int m_boneLocation[100];
 
 	const aiScene* m_pScene;
