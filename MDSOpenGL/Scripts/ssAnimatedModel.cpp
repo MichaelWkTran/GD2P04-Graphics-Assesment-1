@@ -513,7 +513,7 @@ void ssAnimatedModel::ReadNodeHeirarchy(float AnimationTime, const aiNode * pNod
 	if (m_BoneNameToIDMap.find(NodeName) != m_BoneNameToIDMap.end()) {
 		
 		// Global transform
-		Matrix4f globalInverseTransform = glm::inverse(glm::mat4_cast(m_pScene->mRootNode->mTransformation));
+		glm::mat4 globalInverseTransform = glm::inverse(glm::mat4_cast(m_pScene->mRootNode->mTransformation));
 		
 		//m_GlobalInverseTransform = m_pScene->mRootNode->mTransformation; // scene space
 
@@ -531,7 +531,7 @@ void ssAnimatedModel::ReadNodeHeirarchy(float AnimationTime, const aiNode * pNod
 		size_t BoneIndex = m_BoneNameToIDMap[NodeName];
 											 
 		//calculate final bone transformation info
-		m_BoneTransformInfo[BoneIndex].FinalTransformation = globalInverseTransform * // sceneSpace transform 
+		m_BoneTransformInfo[BoneIndex].FinalTransformation = Matrix4f(globalInverseTransform) * // sceneSpace transform 
 															 modalAnimParentTransform *  // modelspace anim transform for current bone
 															 m_BoneTransformInfo[BoneIndex].BoneOffset;  // Inverse Bind Pose matrix - transforms from bind pose to local
 		
