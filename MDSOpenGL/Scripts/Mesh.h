@@ -49,8 +49,7 @@ protected:
 		m_shader = nullptr;
 		m_shadowShader = nullptr;
 	};
-	~CBaseMesh() { meshes.erase(this); };
-
+	
 public:
 	static std::set<CBaseMesh*>::iterator GetMeshesBegin() { return meshes.begin(); }
 	static std::set<CBaseMesh*>::iterator GetMeshesEnd() { return meshes.end(); }
@@ -62,9 +61,13 @@ public:
 	CShader* m_shader;
 	CShader* m_shadowShader;
 	
+	~CBaseMesh()
+	{
+		meshes.erase(this);
+	};
 	const std::vector<unsigned int> GetIndicies() const;
-	void SetIndicies(const std::vector<unsigned int> _vIndicies);
-	virtual void Draw(const CCamera& _Camera) = 0;
+	void SetIndicies(const std::vector<unsigned int> _indicies);
+	virtual void Draw(const CCamera& _camera) = 0;
 };
 
 template <class T = stVertex>

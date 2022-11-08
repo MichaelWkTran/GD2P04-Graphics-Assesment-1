@@ -13,6 +13,10 @@
 
 class CGameObject : public CUpdatedObject
 {
+protected:
+	//Rendering variables
+	CBaseMesh* m_mesh;
+
 public:
 	//Refrencing variables
 	std::set<const char*> m_tags;
@@ -21,13 +25,12 @@ public:
 	CTransform m_transform;
 	
 	//Rendering variables
-	CMesh<> m_mesh;
 	bool m_visible;
 
 	//Methods
 	CGameObject();
-
+	~CGameObject();
 	const bool TagExists(const char* _tagName);
-
+	const CBaseMesh* GetMesh() const;
 	virtual void Draw() override;
 };

@@ -55,7 +55,6 @@ void CParticleSystem::Update()
 
 void CParticleSystem::Draw()
 {
-	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(GL_FALSE);
@@ -112,10 +111,10 @@ void CParticle::ResetToInitialValues()
 
 void CParticle::Update()
 {
-	m_velocity.y += -1.0f * e_deltatime;
-	m_position += m_velocity * e_deltatime;
+	m_velocity.y += -1.0f * e_deltaTime;
+	m_position += m_velocity * e_deltaTime;
 	
 	//Reset the particle if its elapsed time has finished
-	m_elapsedTime -= e_deltatime;
+	m_elapsedTime -= e_deltaTime;
 	if (m_elapsedTime <= 0.0f) ResetToInitialValues();
 }

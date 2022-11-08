@@ -73,11 +73,17 @@
     <ClCompile Include="Scripts\TessModel.cpp">
       <Filter>Assesment</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\ParticleSystem.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\MathUtils.cpp">
       <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\ParticleSystem.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\GPUParticle.cpp">
+      <Filter>Assesment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\ssAnimatedModel.cpp">
+      <Filter>Assesment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,11 +162,17 @@
     <ClInclude Include="Scripts\TessModel.h">
       <Filter>Assesment</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\ParticleSystem.h">
-      <Filter>Library</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\MathUtils.h">
       <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\ParticleSystem.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GPUParticle.h">
+      <Filter>Assesment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\ssAnimatedModel.h">
+      <Filter>Assesment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

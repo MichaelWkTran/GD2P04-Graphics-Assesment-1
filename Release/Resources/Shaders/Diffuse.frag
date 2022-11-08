@@ -259,7 +259,7 @@ void main()
 	}
 
 	//Calculate Final Fragment Colour
-	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * (g_v3Diffuse), 1.0f);
+	fs_v4Colour = uni_v4Colour * vec4(v4DiffuseTexture.rgb * g_v3Diffuse, 1.0f);
 	fs_v4Colour += vec4(v4SpecularTexture.rgb * g_fSpecular, 1.0f);
 	fs_v4Colour += vec4(RimColour(), 1.0f);
 	fs_v4Colour *= max(1.0f - g_fShadow, 0.0f);

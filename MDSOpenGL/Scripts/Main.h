@@ -17,7 +17,7 @@ extern GLFWwindow* e_mainWindow;
 
 //Time
 extern float e_previousTimestep;
-extern float e_deltatime;
+extern float e_deltaTime;
 extern float e_maxDeltatime;
 
 //Input

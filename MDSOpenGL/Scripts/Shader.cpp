@@ -12,24 +12,24 @@
 #include <cerrno>
 #include <glm/gtc/type_ptr.hpp>
 
-const char* CShader::m_strDirective = "Resources/Shaders/";
+const char* CShader::m_directive = "Resources/Shaders/";
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CShader()
 //	 Purpose: Initalises a shader. _pName is the name of the shader which can be used to find it again from the map it is stored in. 
-//			  _strVertexFile is the file directory to the vertex shader file.
+//			  _vertexFile is the file directory to the vertex shader file.
 //			  _strTessControlFile is the file directory to the tessellation control shader file.		  
 //			  _strTessEvaluationFile is the file directory to the tessellation evaluation shader file. 
 //			  _strGeometryFile is the file directory to the geometry shader file.
-//			  _strFragmentFile is the file directory to the fragment shader file.
-//			  _pDefaultUniform is a function pointer used to store the default values of the shader so that it can be used later. 
+//			  _fragmentFile is the file directory to the fragment shader file.
+//			  _defaultUniform is a function pointer used to store the default values of the shader so that it can be used later. 
 
-CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _strFragmentFile, void(*_pDefaultUniform)(CShader& _Shader))
+CShader::CShader(std::string _vertexFile, std::string _strTessControlFile, std::string _strTessEvaluationFile,  std::string _strGeometryFile, std::string _fragmentFile, void(*_defaultUniform)(CShader& _shader))
 {
-	m_defaultUniform = _pDefaultUniform;
+	m_defaultUniform = _defaultUniform;
 
 	//Create Program
-	m_uiID = glCreateProgram();
+	m_ID = glCreateProgram();
 
 	//Set up Shaders
 	auto lamCreateShaders = [&](std::string _strShaderDirectory, int _iShaderType, std::string _strShaderType)->const int
@@ -37,7 +37,7 @@ CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, st
 		if (_strShaderDirectory == "") return -1;
 
 		//Read shader
-		std::string strShaderCode = GetFileContents(m_strDirective + _strShaderDirectory); const char* pVertexSource = strShaderCode.c_str();
+		std::string strShaderCode = GetFileContents(m_directive + _strShaderDirectory); const char* pVertexSource = strShaderCode.c_str();
 		
 		//Create and Compile Shader
 		unsigned int uiShaderID = glCreateShader(_iShaderType);
@@ -48,20 +48,20 @@ CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, st
 		CompileErrors(uiShaderID, _strShaderType);
 
 		//Attach shader to program
-		glAttachShader(m_uiID, uiShaderID);
+		glAttachShader(m_ID, uiShaderID);
 
 		return (int)uiShaderID;
 	};
 
-	int iVertexShader = lamCreateShaders(_strVertexFile, GL_VERTEX_SHADER, "VERTEX");
+	int iVertexShader = lamCreateShaders(_vertexFile, GL_VERTEX_SHADER, "VERTEX");
 	int iTessControlShader = lamCreateShaders(_strTessControlFile, GL_TESS_CONTROL_SHADER, "TESSELLATION_CONTROL_SHADER");
 	int iTessEvaluationShader = lamCreateShaders(_strTessEvaluationFile, GL_TESS_EVALUATION_SHADER, "TESSELLATION_EVALUATION_SHADER");
 	int iGeometryShader = lamCreateShaders(_strGeometryFile, GL_GEOMETRY_SHADER, "GEOMETRY");
-	int iFragmentShader = lamCreateShaders(_strFragmentFile, GL_FRAGMENT_SHADER, "FRAGMENT");
+	int iFragmentShader = lamCreateShaders(_fragmentFile, GL_FRAGMENT_SHADER, "FRAGMENT");
 
 	//Link shaders to program
-	glLinkProgram(m_uiID);
-	CompileErrors(m_uiID, "PROGRAM");
+	glLinkProgram(m_ID);
+	CompileErrors(m_ID, "PROGRAM");
 
 	//Delete Shaders
 	if (iVertexShader		  >= 0)	glDeleteShader(iVertexShader);
@@ -77,7 +77,7 @@ CShader::CShader(std::string _strVertexFile, std::string _strTessControlFile, st
 
 CShader::~CShader()
 {
-	glDeleteProgram(m_uiID);
+	glDeleteProgram(m_ID);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void CShader::CompileErrors(unsigned int _uShader, std::string _pType)
 
 CShader::operator int() const
 {
-	return m_uiID;
+	return m_ID;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ CShader::operator int* ()
 
 const unsigned int& CShader::GetID()
 {
-	return m_uiID;
+	return m_ID;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ const unsigned int& CShader::GetID()
 
 void CShader::Activate()
 {
-	glUseProgram(m_uiID);
+	glUseProgram(m_ID);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ void CShader::Deactivate()
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: ResetUniforms()
-//	 Purpose: Resets the shader uniforms to default uniforms using m_pDefaultUniform
+//	 Purpose: Resets the shader uniforms to default uniforms using m_defaultUniform
 
 void CShader::ResetUniforms()
 {
@@ -208,104 +208,104 @@ void CShader::ResetUniforms()
 void CShader::Uniform1f(std::string _pUniform, float _v0)
 {
 	Activate();
-	glUniform1f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	glUniform1f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0);
 	Deactivate();
 }
 
 void CShader::Uniform2f(std::string _pUniform, float _v0, float _v1)
 {
 	Activate();
-	glUniform2f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	glUniform2f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1);
 	Deactivate();
 }
 
 void CShader::Uniform3f(std::string _pUniform, float _v0, float _v1, float _v2)
 {
 	Activate();
-	glUniform3f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2);
+	glUniform3f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2);
 	Deactivate();
 }
 
 void CShader::Uniform3f(std::string _pUniform, glm::vec3 _v0)
 {
 	Activate();
-	glUniform3f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z);
+	glUniform3f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z);
 	Deactivate();
 }
 
 void CShader::Uniform4f(std::string _pUniform, float _v0, float _v1, float _v2, float _v3)
 {
 	Activate();
-	glUniform4f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	glUniform4f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
 	Deactivate();
 }
 
 void CShader::Uniform4f(std::string _pUniform, glm::vec4 _v0)
 {
 	Activate();
-	glUniform4f(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z, _v0.w);
+	glUniform4f(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0.x, _v0.y, _v0.z, _v0.w);
 	Deactivate();
 }
 
 void CShader::Uniform1i(std::string _pUniform, int _v0)
 {
 	Activate();
-	glUniform1i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	glUniform1i(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0);
 	Deactivate();
 }
 
 void CShader::Uniform2i(std::string _pUniform, int _v0, int _v1)
 {
 	Activate();
-	glUniform2i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	glUniform2i(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1);
 	Deactivate();
 }
 
 void CShader::Uniform3i(std::string _pUniform, int _v0, int _v1, int _v2)
 {
 	Activate();
-	glUniform3i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2);
+	glUniform3i(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2);
 }
 
 void CShader::Uniform4i(std::string _pUniform, int _v0, int _v1, int _v2, int _v3)
 {
 	Activate();
-	glUniform4i(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	glUniform4i(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
 	Deactivate();
 }
 
 void CShader::Uniform1ui(std::string _pUniform, unsigned int _v0)
 {
 	Activate();
-	glUniform1ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0);
+	glUniform1ui(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0);
 	Deactivate();
 }
 
 void CShader::Uniform2ui(std::string _pUniform, unsigned int _v0, unsigned int _v1)
 {
 	Activate();
-	glUniform2ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1);
+	glUniform2ui(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1);
 	Deactivate();
 }
 
 void CShader::Uniform3ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2)
 {
 	Activate();
-	glUniform3ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2);
+	glUniform3ui(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2);
 	Deactivate();
 }
 
 void CShader::Uniform4ui(std::string _pUniform, unsigned int _v0, unsigned int _v1, unsigned int _v2, unsigned int _v3)
 {
 	Activate();
-	glUniform4ui(glGetUniformLocation(m_uiID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
+	glUniform4ui(glGetUniformLocation(m_ID, _pUniform.c_str()), _v0, _v1, _v2, _v3);
 	Deactivate();
 }
 
 void CShader::UniformMatrix4fv(std::string _pUniform, int _iCount, bool _bTranspose, glm::mat4 _v)
 {
 	Activate();
-	glUniformMatrix4fv(glGetUniformLocation(m_uiID, _pUniform.c_str()), _iCount, _bTranspose, glm::value_ptr(_v));
+	glUniformMatrix4fv(glGetUniformLocation(m_ID, _pUniform.c_str()), _iCount, _bTranspose, glm::value_ptr(_v));
 	Deactivate();
 }
 

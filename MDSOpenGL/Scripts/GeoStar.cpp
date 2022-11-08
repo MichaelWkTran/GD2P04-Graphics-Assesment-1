@@ -5,22 +5,27 @@
 
 CGeoStar::CGeoStar()
 {
+	//Create Mesh
+	m_mesh = new CMesh<>();
+	CMesh<>* mesh = (CMesh<>*)m_mesh;
+
 	//Assign the mesh with one vertex
-	m_mesh.SetVerticies(std::vector<stVertex>{ stVertex{} });
+	mesh->SetVerticies(std::vector<stVertex>{ stVertex{} });
 	
 	//Set shaders
-	m_mesh.m_shader = new CShader("Star.vert", "Star.geom", "Star.frag");
-	m_mesh.m_shadowShader = new CShader("StarShadowMap.vert", "StarShadowMap.geom", "Empty.frag");
+	mesh->m_shader = new CShader("Star.vert", "Star.geom", "Star.frag");
+	mesh->m_shadowShader = new CShader("StarShadowMap.vert", "StarShadowMap.geom", "Empty.frag");
 
 	//Setup texture
-	m_mesh.m_textures.emplace(std::make_pair("", new CTexture("Eye.png")));
+	mesh->m_textures.emplace(std::make_pair("", new CTexture("Eye.png")));
 
 	//Set mesh draw method
-	m_mesh.m_drawMethod = [](CMesh<>& _Mesh) { glDrawArrays(GL_POINTS, 0, 1); };
+	mesh->m_drawMethod = [](CMesh<>& _Mesh) { glDrawArrays(GL_POINTS, 0, 1); };
 }
 
 void CGeoStar::Draw()
 {
-	CLight::UpdateLightUniforms(*m_mesh.m_shader);
+	CMesh<>* mesh = (CMesh<>*)m_mesh;
+	CLight::UpdateLightUniforms(*mesh->m_shader);
 	CGameObject::Draw();
 }

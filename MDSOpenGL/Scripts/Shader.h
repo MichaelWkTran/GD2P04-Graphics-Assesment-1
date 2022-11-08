@@ -15,44 +15,43 @@
 class CShader
 {
 private:
-	unsigned int m_uiID;
-
-	void CompileErrors(unsigned int _uShader, std::string _pType);
+	unsigned int m_ID;
 
 public:
-	static const char* m_strDirective;
-	void(*m_defaultUniform)(CShader& _Shader);
+	static const char* m_directive;
+	void(*m_defaultUniform)(CShader& _shader);
 
 	CShader
 	(
-		std::string _strVertexFile,
+		std::string _vertexFile,
 		std::string _strTessControlFile,
 		std::string _strTessEvaluationFile,
 		std::string _strGeometryFile,
-		std::string _strFragmentFile,
-		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
+		std::string _fragmentFile,
+		void(*_defaultUniform)(CShader& _shader) = nullptr
 	);
 	CShader
 	(
-		std::string _strVertexFile,
-		std::string _strFragmentFile,
-		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
-	) : CShader(_strVertexFile, "", "", "", _strFragmentFile, _pDefaultUniform) {}
+		std::string _vertexFile,
+		std::string _fragmentFile,
+		void(*_defaultUniform)(CShader& _shader) = nullptr
+	) : CShader(_vertexFile, "", "", "", _fragmentFile, _defaultUniform) {}
 	CShader
 	(
-		std::string _strVertexFile,
+		std::string _vertexFile,
 		std::string _strGeometryFile,
-		std::string _strFragmentFile,
-		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
-	) : CShader(_strVertexFile, "", "", _strGeometryFile, _strFragmentFile, _pDefaultUniform) {}
+		std::string _fragmentFile,
+		void(*_defaultUniform)(CShader& _shader) = nullptr
+	) : CShader(_vertexFile, "", "", _strGeometryFile, _fragmentFile, _defaultUniform) {}
 	CShader
 	(
-		std::string _strVertexFile,
-		std::string _strTessControlFile,
-		std::string _strTessEvaluationFile,
-		std::string _strFragmentFile,
-		void(*_pDefaultUniform)(CShader& _Shader) = nullptr
-	) : CShader(_strVertexFile, _strTessControlFile, _strTessEvaluationFile, "", _strFragmentFile, _pDefaultUniform) {}
+		std::string _vertexFile,
+		std::string _tessControlFile,
+		std::string _tessEvaluationFile,
+		std::string _fragmentFile,
+		void(*_defaultUniform)(CShader& _shader) = nullptr
+	) : CShader(_vertexFile, _tessControlFile, _tessEvaluationFile, "", _fragmentFile, _defaultUniform) {}
+	
 	CShader(CShader const&) = delete;
 	CShader& operator=(const CShader&) = delete;
 	~CShader();
@@ -64,6 +63,7 @@ public:
 	static void Activate(unsigned int _uiID);
 	static void Deactivate();
 	
+	static void CompileErrors(unsigned int _uShader, std::string _pType);
 	static std::string GetFileContents(std::string _pFileName);
 	
 	void ResetUniforms();

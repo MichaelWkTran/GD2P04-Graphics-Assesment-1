@@ -14,7 +14,13 @@
 
 CGameObject::CGameObject()
 {
+	m_mesh = nullptr;
 	m_visible = true;
+}
+
+CGameObject::~CGameObject()
+{
+	if (m_mesh == nullptr) delete m_mesh;
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -28,12 +34,18 @@ const bool CGameObject::TagExists(const char* _tagName)
 	else return false;
 }
 
+const CBaseMesh* CGameObject::GetMesh() const
+{
+	return m_mesh;
+}
+
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: Draw()
 //	 Purpose: To draw the mesh stored in the game object
 
 void CGameObject::Draw()
 {
-	m_mesh.m_transform = m_transform;
-	m_mesh.Draw(GetMainCamera());
+	CMesh<>* mesh = (CMesh<>*)m_mesh;
+	mesh->m_transform = m_transform;
+	mesh->Draw(GetMainCamera());
 }

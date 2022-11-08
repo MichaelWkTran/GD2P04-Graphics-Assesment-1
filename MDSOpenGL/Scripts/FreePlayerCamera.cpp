@@ -42,7 +42,7 @@ void CFreePlayerCamera::Update()
 	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)													  velocity += speed * up;
 	if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)											  velocity += speed * -up;
 
-	m_transform.SetPosition(m_transform.GetPosition() + (velocity * e_deltatime));
+	m_transform.SetPosition(m_transform.GetPosition() + (velocity * e_deltaTime));
 
 	//Handles mouse inputs
 	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
@@ -60,8 +60,8 @@ void CFreePlayerCamera::Update()
 
 		//Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
 		//and then "transforms" them into degrees 
-		float rotX = sensitivity * (e_mousePosition.x - (e_viewPortW / 2)) * e_deltatime;
-		float rotY = sensitivity * (e_mousePosition.y - (e_viewPortH / 2)) * e_deltatime;
+		float rotX = sensitivity * (e_mousePosition.x - (e_viewPortW / 2)) * e_deltaTime;
+		float rotY = sensitivity * (e_mousePosition.y - (e_viewPortH / 2)) * e_deltaTime;
 		
 		//Calculates upcoming vertical change in the Orientation
 		glm::vec3 v3Orientation = glm::rotate(m_transform.Forward(), glm::radians(-rotY), glm::normalize(glm::cross(m_transform.Forward(), up)));;

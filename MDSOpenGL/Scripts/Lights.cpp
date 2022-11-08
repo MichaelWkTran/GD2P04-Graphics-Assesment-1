@@ -18,7 +18,7 @@ CShader* CLight::m_shadowMapShader = nullptr;
 std::set<CLight*> CLight::m_lightsInWorld;
 glm::vec4 CLight::m_ambientColour = glm::vec4(1.0f, 1.0f, 1.0f, 0.2f);
 
-void CLight::UpdateLightUniforms(CShader& _Shader)
+void CLight::UpdateLightUniforms(CShader& _shader)
 {
 	unsigned int infinitePointLightIndex = 0U;
 	unsigned int pointLightIndex		 = 0U;
@@ -35,7 +35,7 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			uniformStructName = std::string("uni_InfinitePointLight") + '['+std::to_string(infinitePointLightIndex)+']';
 
 			//Set the light uniforms
-			_Shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
+			_shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
 			
 			//Update light index
 			infinitePointLightIndex++;
@@ -45,10 +45,10 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			uniformStructName = std::string("uni_PointLight") + '[' + std::to_string(infinitePointLightIndex) + ']';
 
 			//Set the light uniforms
-			_Shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
-			_Shader.Uniform1f(uniformStructName + ".fAttenuationExponent", object->m_attenuationExponent);
-			_Shader.Uniform1f(uniformStructName + ".fAttenuationLinear", object->m_attenuationLinear);
-			_Shader.Uniform1f(uniformStructName + ".fAttenuationConstant", object->m_attenuationConstant);
+			_shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
+			_shader.Uniform1f(uniformStructName + ".fAttenuationExponent", object->m_attenuationExponent);
+			_shader.Uniform1f(uniformStructName + ".fAttenuationLinear", object->m_attenuationLinear);
+			_shader.Uniform1f(uniformStructName + ".fAttenuationConstant", object->m_attenuationConstant);
 
 			//Update light index
 			pointLightIndex++;
@@ -58,7 +58,7 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			uniformStructName = std::string("uni_DirectionalLight")  + '[' + std::to_string(infinitePointLightIndex) + ']';
 
 			//Set the light uniforms
-			_Shader.Uniform3f(uniformStructName + ".v3LightDirection", object->GetLightDirection());
+			_shader.Uniform3f(uniformStructName + ".v3LightDirection", object->GetLightDirection());
 
 			//Update light index
 			directionalLightIndex++;
@@ -68,10 +68,10 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 			uniformStructName = std::string("uni_SpotLight") + '[' + std::to_string(infinitePointLightIndex) + ']';
 
 			//Set the light uniforms
-			_Shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
-			_Shader.Uniform3f(uniformStructName + ".v3LightDirection", object->GetLightDirection());
-			_Shader.Uniform1f(uniformStructName + ".fOuterCone", object->m_outerCone);
-			_Shader.Uniform1f(uniformStructName + ".fInnerCone", object->m_innerCone);
+			_shader.Uniform3f(uniformStructName + ".v3LightPosition", object->GetPosition());
+			_shader.Uniform3f(uniformStructName + ".v3LightDirection", object->GetLightDirection());
+			_shader.Uniform1f(uniformStructName + ".fOuterCone", object->m_outerCone);
+			_shader.Uniform1f(uniformStructName + ".fInnerCone", object->m_innerCone);
 
 			//Update light index
 			spotLightIndex++;
@@ -82,20 +82,20 @@ void CLight::UpdateLightUniforms(CShader& _Shader)
 		}
 		
 		//Set CLight uniforms
-		_Shader.Uniform4f(uniformStructName + ".v4LightColour", light->m_lightColour);
+		_shader.Uniform4f(uniformStructName + ".v4LightColour", light->m_lightColour);
 	}
 
 	//Set the uniforms for how may lights are in the world for each type
-	_Shader.Uniform1i("uni_iInfinitePointLightNum", infinitePointLightIndex);
-	_Shader.Uniform1i("uni_iPointLightNum", pointLightIndex);
-	_Shader.Uniform1i("uni_iDirectionalLightNum", directionalLightIndex);
-	_Shader.Uniform1i("uni_iSpotLightNum", spotLightIndex);
+	_shader.Uniform1i("uni_iInfinitePointLightNum", infinitePointLightIndex);
+	_shader.Uniform1i("uni_iPointLightNum", pointLightIndex);
+	_shader.Uniform1i("uni_iDirectionalLightNum", directionalLightIndex);
+	_shader.Uniform1i("uni_iSpotLightNum", spotLightIndex);
 
 	//Set uni_v4AmbientColour
-	_Shader.Uniform4f("uni_v4AmbientColour", m_ambientColour);
+	_shader.Uniform4f("uni_v4AmbientColour", m_ambientColour);
 }
 
-void CLight::UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot)
+void CLight::UpdateShadowUniforms(CShader& _shader, unsigned int _uiSlot)
 {
 	if (m_lightsInWorld.size() <= 0U) return;
 
@@ -130,8 +130,8 @@ void CLight::UpdateShadowUniforms(CShader& _Shader, unsigned int _uiSlot)
 		}
 
 		//Set Shadow Uniforms
-		_Shader.UniformMatrix4fv(uniformStructName + ".mat4VPMatrix", 1, GL_FALSE, pLight->GetProjectionMatrix());
-		pLight->m_shadowMapTexture->Uniform(_Shader, uniformStructName + ".samp2DShadowMap", _uiSlot);
+		_shader.UniformMatrix4fv(uniformStructName + ".mat4VPMatrix", 1, GL_FALSE, pLight->GetProjectionMatrix());
+		pLight->m_shadowMapTexture->Uniform(_shader, uniformStructName + ".samp2DShadowMap", _uiSlot);
 	}
 }
 

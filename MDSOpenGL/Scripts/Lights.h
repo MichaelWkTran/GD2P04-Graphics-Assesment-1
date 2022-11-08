@@ -30,8 +30,8 @@ protected:
 public:
 	CTexture* m_shadowMapTexture;
 	static glm::vec4 m_ambientColour;
-	static void UpdateLightUniforms(CShader& _Shader);
-	static void UpdateShadowUniforms(CShader& _Shader, unsigned int _slot = 10);
+	static void UpdateLightUniforms(CShader& _shader);
+	static void UpdateShadowUniforms(CShader& _shader, unsigned int _slot = 10);
 	static void UpdateShadowMaps();
 	static const std::set<CLight*>& GetLightsInWorld() { return m_lightsInWorld; }
 	static CShader*& GetShadowMapShader();

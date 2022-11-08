@@ -15,7 +15,7 @@ class CShader;
 class CCubeSkybox : public CUpdatedObject
 {
 private:
-	CMesh<> m_Mesh;
+	CMesh<> m_mesh;
 
 public:
 	CCubeSkybox(const float _fSize, const char* _pTextureDirectories[6]);

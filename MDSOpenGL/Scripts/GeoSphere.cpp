@@ -8,8 +8,12 @@ CShader* CGeoSphere::m_normalShader = nullptr;
 
 CGeoSphere::CGeoSphere()
 {
-	gm::GenerateSphere(m_mesh, 0.5f, 20);
-	m_mesh.m_shader = (*dynamic_cast<CAssesmentGameManager*>(&GetGameManager())->m_shaders.find("Diffuse")).second;
+	//Create Mesh
+	m_mesh = new CMesh<>();
+	CMesh<>* mesh = (CMesh<>*)m_mesh;
+
+	gm::GenerateSphere(*mesh, 0.5f, 20);
+	mesh->m_shader = (*dynamic_cast<CAssesmentGameManager*>(&GetGameManager())->m_shaders.find("Diffuse")).second;
 	
 	//Create normal shader
 	if (m_normalShader == nullptr) m_normalShader = new CShader("Normal.vert", "Normal.geom", "Normal.frag");
@@ -17,6 +21,8 @@ CGeoSphere::CGeoSphere()
 
 void CGeoSphere::Draw()
 {
+	CMesh<>* mesh = (CMesh<>*)m_mesh;
+
 	//Draw Mesh
 	CGameObject::Draw();
 
@@ -25,9 +31,9 @@ void CGeoSphere::Draw()
 	m_normalShader->UniformMatrix4fv("uni_mat4Model", 1, GL_FALSE, m_transform.GetModel());
 
 	m_normalShader->Activate();
-	m_mesh.m_vertexArray.Bind();
+	mesh->m_vertexArray.Bind();
 	
-	glDrawArrays(GL_POINTS, 0, m_mesh.GetVerticies().size());
+	glDrawArrays(GL_POINTS, 0, mesh->GetVerticies().size());
 	
 	CVertexArray::Unbind();
 	m_normalShader->Deactivate();

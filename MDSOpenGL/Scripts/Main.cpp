@@ -22,7 +22,7 @@ GLFWwindow* e_mainWindow = nullptr;
 #pragma region Time
 
 float e_previousTimestep = 0.0f;
-float e_deltatime = 0.0f;
+float e_deltaTime = 0.0f;
 float e_maxDeltatime = 1.0f/60.0f;
 
 #pragma endregion
@@ -163,8 +163,8 @@ int main()
     {
         //Update Deltatime
         float fCurrentTimestep = (float)glfwGetTime();
-        e_deltatime = fCurrentTimestep - e_previousTimestep;
-        if (e_deltatime > e_maxDeltatime) e_deltatime = e_maxDeltatime;
+        e_deltaTime = fCurrentTimestep - e_previousTimestep;
+        if (e_deltaTime > e_maxDeltatime) e_deltaTime = e_maxDeltatime;
         e_previousTimestep = fCurrentTimestep;
 
         //Update Window Size
