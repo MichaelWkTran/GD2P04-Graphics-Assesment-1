@@ -147,9 +147,9 @@ CAssesmentGameManager::CAssesmentGameManager()
 	//(new ssAnimatedModel("Resources/Models/theDude.DAE", *(new CShader("RiggedDiffuse.vert", "RiggedDiffuse.frag"))))->m_transform.SetScale(0.01f * glm::vec3(1.0f));
 	//(new CGeoSphere())->m_transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	//(new CGeoStar())->m_transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
-	(new CTessModel())->m_transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
+	//(new CTessModel())->m_transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
 	//new CParticleSystem;
-	new CGPUParticleSystem();
+	//new CGPUParticleSystem();
 
 	//Setup Lighting
 	new CDirectionalLight;

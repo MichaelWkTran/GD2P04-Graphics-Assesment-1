@@ -115,7 +115,9 @@ void CGPUParticleSystem::Draw()
 	glEnableVertexAttribArray(0);
 	
 	// Render
+	glBindVertexArray(particleVao);
 	glDrawArrays(GL_POINTS, 0, numParticles);
+	glBindVertexArray(0);
 	
 	// Tidy up
 	m_particleTexture->Unbind();
