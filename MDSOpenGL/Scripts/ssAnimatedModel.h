@@ -223,12 +223,12 @@ public:
 	//stores offset matrix and final transforms matrix for each bone
 	struct BoneTransformationInfo
 	{
-		Matrix4f BoneOffset;
+		glm::mat4 BoneOffset;
 		Matrix4f FinalTransformation;
 
 		BoneTransformationInfo()
 		{
-			BoneOffset.SetZero();// = glm::mat4(); //-->setzero
+			BoneOffset = glm::mat4(0); //-->setzero
 			FinalTransformation.SetZero();  // = glm::mat4();  //--> setzero
 		}
 	};
