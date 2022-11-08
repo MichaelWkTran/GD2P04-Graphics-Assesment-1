@@ -22,7 +22,7 @@
 //	//assert(0); //more bones than we have space for
 //}
 
-ssAnimatedModel::ssAnimatedModel(std::string modelFilname, std::string texFilename, /*Camera *_camera, */unsigned int _program/*, Light * _light*/){
+ssAnimatedModel::ssAnimatedModel(std::string modelFilname, /*Camera *_camera, */unsigned int _program/*, Light * _light*/){
 
 	//camera = _camera;
 	//light = _light;
@@ -71,10 +71,6 @@ ssAnimatedModel::ssAnimatedModel(std::string modelFilname, std::string texFilena
 			//return false;
 			printf("!!!!!!!!!! UNABLE TO LOAD MATERIAL !!!!!!!!!!!!!!!!!!! \n");
 		}
-
-	}else {
-	
-		m_Textures[0] = loadTexture(texFilename);
 
 	}
 
@@ -694,9 +690,8 @@ unsigned int ssAnimatedModel::FindScaling(float AnimationTime, const aiNodeAnim 
 }
 
 
-void ssAnimatedModel::Clear() {
-
-
+void ssAnimatedModel::Clear()
+{
 	for (size_t i = 0; i < m_Textures.size(); i++) {
 		//SAFE_DELETE(m_Textures[i]);
 	}
@@ -711,8 +706,8 @@ void ssAnimatedModel::Clear() {
 	}
 }
 
-void ssAnimatedModel::setBufferandAttributes(){
-
+void ssAnimatedModel::setBufferandAttributes()
+{
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
 
@@ -749,11 +744,10 @@ void ssAnimatedModel::setBufferandAttributes(){
 
 	// Make sure the VAO is not changed from the outside
 	glBindVertexArray(0);
-
 }
 
-unsigned int ssAnimatedModel::loadTexture(std::string texFileName) {
-
+unsigned int ssAnimatedModel::loadTexture(std::string texFileName)
+{
 	unsigned int mtexture;
 
 	//Load texture
@@ -768,37 +762,17 @@ unsigned int ssAnimatedModel::loadTexture(std::string texFileName) {
 	// Load image, create texture and generate mipmaps
 	int width, height;
 	unsigned char* image = stbi_load(texFileName.c_str(), &width, &height, 0, 0);
-	//SOIL_load_image(texFileName.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(image);
-	//SOIL_free_image_data(image);
 
 	printf("\n [loadTexture] fileName %s \n", texFileName.c_str());
 
 	return mtexture;
-
-	//return *(new CTexture(texFileName));
-
 }
 
-///////////////// getter and setters //////////////////////
-
-//void ssAnimatedModel::setPosition(glm::vec3 _position) {
-//	this->position = _position;
-//}
-//
-//void ssAnimatedModel::setRotation(glm::vec3 _rotation) {
-//	this->rotation = _rotation;
-//}
-//
-//void ssAnimatedModel::setScale(glm::vec3 _scale) {
-//	this->scale = _scale;
-//}
-
-
-void ssAnimatedModel::setAnimSpeed(float _animSpeed){
-	 
+void ssAnimatedModel::setAnimSpeed(float _animSpeed)
+{
 	this->animSpeed = _animSpeed;
 	animTick = 1.0f / float(animFps)  * animSpeed;
 }

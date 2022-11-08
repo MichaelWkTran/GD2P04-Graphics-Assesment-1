@@ -1,6 +1,2 @@
-﻿  ssAnimatedModel.cpp
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\ssAnimatedModel.cpp(88,69): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\ssAnimatedModel.cpp(237,20): warning C4018: '<': signed/unsigned mismatch
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\ssAnimatedModel.cpp(274,21): warning C4018: '<': signed/unsigned mismatch
-D:\Projects\GD2P02-1\MDSOpenGL\Scripts\ssAnimatedModel.cpp(364,20): warning C4018: '<': signed/unsigned mismatch
+﻿  GPUParticle.cpp
   MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe

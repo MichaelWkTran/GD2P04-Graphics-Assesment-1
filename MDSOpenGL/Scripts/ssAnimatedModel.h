@@ -214,7 +214,7 @@ enum VB_TYPES {
 class ssAnimatedModel : public CUpdatedObject
 {
 public:
-	ssAnimatedModel(std::string modelFilname, std::string texFilename, /*Camera* _camera, */unsigned int _program/*, Light* _light*/);
+	ssAnimatedModel(std::string modelFilname, /*Camera* _camera, */unsigned int _program/*, Light* _light*/);
 	~ssAnimatedModel();
 
 

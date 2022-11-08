@@ -23,6 +23,7 @@ float g_time = 0;
 #include "ParticleSystem.h"
 #include "ssAnimatedModel.h"
 #include "MathUtils.h"
+#include "GPUParticle.h"
 
 //------------------------------------------------------------------------------------------------------------------------
 // Procedure: CAssesmentGameManager()
@@ -143,11 +144,12 @@ CAssesmentGameManager::CAssesmentGameManager()
 	
 		new CCubeSkybox(2000.0f, cubeMapDirectories);
 	}
-	(new ssAnimatedModel("Resources/Models/theDude.DAE", "Resources/Models/theDude.png", *(new CShader("RiggedDiffuse.vert", "RiggedDiffuse.frag"))));
-	(new CGeoSphere())->m_transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
-	(new CGeoStar())->m_transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
+	//(new ssAnimatedModel("Resources/Models/theDude.DAE", *(new CShader("RiggedDiffuse.vert", "RiggedDiffuse.frag"))))->m_transform.SetScale(0.01f * glm::vec3(1.0f));
+	//(new CGeoSphere())->m_transform.SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+	//(new CGeoStar())->m_transform.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
 	(new CTessModel())->m_transform.SetPosition(glm::vec3(0.0f, -50.0f, 0.0f));
-	new CParticleSystem;
+	//new CParticleSystem;
+	new CGPUParticleSystem();
 
 	//Setup Lighting
 	new CDirectionalLight;

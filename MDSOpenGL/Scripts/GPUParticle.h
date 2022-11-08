@@ -1,7 +1,8 @@
-#pragma once
+	#pragma once
 #include <glm/glm.hpp>
 #include <vector>
 #include "UpdatedObject.h"
+#include "Texture.h"
 
 class CGPUParticleSystem : public CUpdatedObject
 {
@@ -11,6 +12,7 @@ public:
 	unsigned int computeProgram, renderProgram;
 	std::vector<glm::vec4> initialposition;
 	std::vector<glm::vec4> initialvelocity;
+	static CTexture* m_particleTexture;
 
 	CGPUParticleSystem();
 	virtual void Draw();

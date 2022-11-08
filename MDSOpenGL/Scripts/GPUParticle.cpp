@@ -6,8 +6,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 
+CTexture* CGPUParticleSystem::m_particleTexture = nullptr;
+
 CGPUParticleSystem::CGPUParticleSystem()
 {
+	if (m_particleTexture == nullptr) m_particleTexture = new CTexture("SmokeParticle.png", GL_RGBA);
+
 	//Set up Shaders
 	auto lamCreateShaders = [&](unsigned int& _program, std::string _shaderDirectory, int _shaderType, std::string _shaderTypeName)
 	{
@@ -36,10 +40,12 @@ CGPUParticleSystem::CGPUParticleSystem()
 		glDeleteShader(shaderID);
 	};
 
-	lamCreateShaders(computeProgram, "", GL_COMPUTE_SHADER, "COMPUTE");
-	renderProgram = *(new CShader("", ""));
+	lamCreateShaders(computeProgram, "GPUParticle.comp", GL_COMPUTE_SHADER, "COMPUTE");
+	renderProgram = *(new CShader("Particle.vert", "Particle.geom", "Particle.frag"));
 
 	//------------------------------------------------------------------------------------------------------------------------------
+	initialposition.resize(numParticles);
+	initialvelocity.resize(numParticles);
 	for (int i = 0; i < numParticles; i++)
 	{
 		initialposition[i] = glm::vec4(0.0f, 0.0f, 0.0f, ((float)rand()/(double)RAND_MAX) + 0.125);
@@ -88,10 +94,21 @@ void CGPUParticleSystem::Draw()
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+
 	glUseProgram(renderProgram);
-	GLint vpLoc = glGetUniformLocation(renderProgram, "vp");
-	glUniformMatrix4fv(vpLoc, 1, GL_FALSE, glm::value_ptr(GetMainCamera().GetCameraMatrix()));
 	
+	glUniformMatrix4fv(glGetUniformLocation(renderProgram, "uni_mat4CameraMatrix"), 1, GL_FALSE, glm::value_ptr(GetMainCamera().GetCameraMatrix()));
+	
+	glUniform3f(glGetUniformLocation(renderProgram, "uni_cameraUp"),
+		GetMainCamera().m_transform.Up().x, GetMainCamera().m_transform.Up().y, GetMainCamera().m_transform.Up().z);
+
+	glUniform3f(glGetUniformLocation(renderProgram, "uni_cameraRight"),
+		GetMainCamera().m_transform.Right().x, GetMainCamera().m_transform.Right().y, GetMainCamera().m_transform.Right().z);
+
+	glActiveTexture(GL_TEXTURE0);
+	m_particleTexture->Bind();
+	glUniform1i(glGetUniformLocation(renderProgram, "uni_samp2DDiffuse0"), 0);
+
 	// Bind position buffer as GL_ARRAY_BUFFER
 	glBindBuffer(GL_ARRAY_BUFFER, posVbo);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, NULL, 0);
@@ -101,6 +118,7 @@ void CGPUParticleSystem::Draw()
 	glDrawArrays(GL_POINTS, 0, numParticles);
 	
 	// Tidy up
+	m_particleTexture->Unbind();
 	glDisableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glUseProgram(0);
