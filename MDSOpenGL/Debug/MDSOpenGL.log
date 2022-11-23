@@ -1,2 +1,3 @@
-﻿  GPUParticle.cpp
+﻿  Main.cpp
+D:\Projects\GD2P02-1\MDSOpenGL\Scripts\Main.cpp(137,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   MDSOpenGL.vcxproj -> D:\Projects\GD2P02-1\Debug\MDSOpenGL.exe

@@ -139,7 +139,7 @@ int main()
     //Set up Game Manager
     new CAssesmentGameManager;
 
-    //-------------------------------------------------------------------------------------
+    //Set input callbacks
     glfwSetKeyCallback
     (
         e_mainWindow,
@@ -179,7 +179,6 @@ int main()
         UpdateMousePosition();
 
         //Clear Screen
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         
         //Update GameManager
